@@ -1,0 +1,64 @@
+<div class="employer-home-container">
+
+  <!-- Welcome Banner -->
+  <section class="welcome-banner">
+    <h2>Welcome back, {{ employerName }}</h2>
+    <p>Manage your job postings and track applicants</p>
+  </section>
+
+  <!-- Quick Actions -->
+  <section class="quick-actions">
+    <div class="action-card" (click)="goTo('post-job')">
+      <i class="fas fa-plus-circle"></i>
+      <span>Post a Job</span>
+    </div>
+
+    <div class="action-card" (click)="goTo('manage-jobs')">
+      <i class="fas fa-briefcase"></i>
+      <span>Manage Jobs</span>
+    </div>
+
+    <div class="action-card" (click)="goTo('applicants')">
+      <i class="fas fa-users"></i>
+      <span>Applicants</span>
+    </div>
+
+    <div class="action-card" (click)="goTo('massages')">
+      <i class="fas fa-envelope"></i>
+      <span>Messages</span>
+    </div>
+  </section>
+
+  <!-- Active Job Postings -->
+  <section class="active-jobs">
+    <h3>Your Active Jobs</h3>
+    <div class="job-cards">
+      <div class="job-card" *ngFor="let job of activeJobs">
+        <h4>{{ job.title }}</h4>
+        <p>{{ job.location }}</p>
+        <p><strong>Applicants:</strong> {{ job.applicants }}</p>
+        <button (click)="manageJob(job.id)">Manage</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Insights -->
+  <section class="insights">
+    <h3>Company Insights</h3>
+    <ul>
+      <li>Total Jobs Posted: {{ insights.jobsPosted }}</li>
+      <li>Total Applicants: {{ insights.totalApplicants }}</li>
+      <li>Interviews Scheduled: {{ insights.interviews }}</li>
+    </ul>
+  </section>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+    <div class="footer-links">
+      <a (click)="goTo('about')">About</a> |
+      <a (click)="goTo('contact')">Contact</a> |
+      <a (click)="goTo('privacy')">Privacy</a>
+    </div>
+  </footer>
+</div>

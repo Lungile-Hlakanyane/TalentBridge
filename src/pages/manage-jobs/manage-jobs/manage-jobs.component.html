@@ -1,0 +1,42 @@
+<div class="manage-jobs-container">
+
+  <!-- Header -->
+  <section class="page-header">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+    <h2>Manage Jobs</h2>
+    <p>View and manage all the jobs you have posted</p>
+  </section>
+
+  <!-- Jobs List -->
+  <section class="jobs-list">
+    <div class="job-card" *ngFor="let job of jobs">
+      <div class="job-info">
+        <h3>{{ job.title }}</h3>
+        <p><strong>Company:</strong> {{ job.company }}</p>
+        <p><strong>Location:</strong> {{ job.location }}</p>
+        <p><strong>Type:</strong> {{ job.type }}</p>
+        <p>{{ job.description }}</p>
+      </div>
+      <div class="job-actions">
+        <button class="edit-btn" (click)="editJob(job.id)">Edit</button>
+        <button class="delete-btn" (click)="confirmDeleteJob(job)">Delete</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Delete Confirmation Modal (placed OUTSIDE loop) -->
+  <div class="modal-backdrop" *ngIf="showDeleteModal">
+    <div class="modal">
+      <h3>Confirm Delete</h3>
+      <p>Are you sure you want to delete the 
+        <strong>{{ jobToDelete?.title }}</strong> role?</p>
+      <div class="modal-actions">
+        <button class="yes-btn" (click)="deleteJob()">Yes</button>
+        <button class="cancel-btn" (click)="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,26 @@
+<div class="messages-container">
+
+  <!-- Back Button -->
+  <div class="action-back-container">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+  </div>
+
+  <h2 class="page-title">Messages</h2>
+
+  <!-- Chat List -->
+  <div class="chat-list">
+    <div class="chat-card" *ngFor="let chat of chats" (click)="openChat(chat.id)">
+      <div class="chat-info">
+        <h4>{{ chat.sender }}</h4>
+        <p class="last-message">{{ chat.lastMessage }}</p>
+      </div>
+      <div class="chat-meta">
+        <span class="timestamp">{{ chat.timestamp | date:'shortTime' }}</span>
+        <span *ngIf="chat.unreadCount > 0" class="unread-count">{{ chat.unreadCount }}</span>
+      </div>
+    </div>
+  </div>
+
+</div>

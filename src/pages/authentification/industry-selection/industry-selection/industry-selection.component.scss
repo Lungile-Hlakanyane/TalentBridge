@@ -1,0 +1,137 @@
+.industries-container {
+  padding: 20px;
+  background: #f5f7fa;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+
+  .welcome-banner {
+    background: linear-gradient(135deg, #4cafef, #2b90d9);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 25px;
+
+    h2 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+    p {
+      margin-top: 5px;
+      opacity: 0.9;
+    }
+  }
+
+  .industries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+
+    .industry-card {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease, border 0.2s ease;
+
+      i {
+        font-size: 1.8rem;
+        color: #4cafef;
+        margin-bottom: 8px;
+      }
+
+      span {
+        display: block;
+        font-weight: 500;
+        color: #333;
+      }
+
+      &:hover {
+        transform: translateY(-3px);
+      }
+
+      &.selected {
+        border: 2px solid #4cafef;
+        background: #eaf6ff;
+      }
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+
+    .skip-btn {
+      background: #eee;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      color: #555;
+
+      &:hover {
+        background: #ddd;
+      }
+    }
+
+    .submit-btn {
+      background: #4cafef;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 500;
+
+      &:hover {
+        background: #2b90d9;
+      }
+    }
+  }
+}
+
+
+.job-type-section,
+.experience-section {
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+
+  h3 {
+    margin-bottom: 10px;
+    color: #2b2d42;
+  }
+
+  .job-type-options,
+  .experience-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    label {
+      background: #f9f9f9;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      font-size: 0.9rem;
+
+      input {
+        margin-right: 6px;
+      }
+
+      &:hover {
+        background: #eaf6ff;
+        border-color: #4cafef;
+      }
+    }
+  }
+}

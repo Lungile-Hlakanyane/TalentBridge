@@ -1,0 +1,88 @@
+.messages-container {
+  padding: 20px;
+  min-height: 100vh;
+  background: #f5f7fa;
+  font-family: 'Poppins', sans-serif;
+
+  .action-back-container {
+    margin-bottom: 20px;
+
+    .back-text {
+      color: #4cafef;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+
+      i {
+        font-size: 1rem;
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #2b2d42;
+    margin-bottom: 20px;
+  }
+
+  .chat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .chat-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      .chat-info {
+        h4 {
+          margin: 0;
+          color: #333;
+        }
+        .last-message {
+          font-size: 0.9rem;
+          color: #777;
+          margin-top: 3px;
+        }
+      }
+
+      .chat-meta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 5px;
+
+        .timestamp {
+          font-size: 0.75rem;
+          color: #aaa;
+        }
+
+        .unread-count {
+          background: #4cafef;
+          color: white;
+          font-size: 0.75rem;
+          padding: 2px 6px;
+          border-radius: 12px;
+        }
+      }
+    }
+  }
+}

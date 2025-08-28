@@ -1,0 +1,38 @@
+<div class="my-applications-container">
+
+  <!-- Back Button -->
+  <div class="action-back-container">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+  </div>
+
+  <h2 class="page-title">My Applications</h2>
+  
+  <div class="applications-list">
+    <div class="application-card" *ngFor="let app of applications">
+      <h4>{{ app.jobTitle }}</h4>
+      <p class="company">{{ app.company }}</p>
+      <p class="status">Status: <span [ngClass]="app.status.toLowerCase()">{{ app.status }}</span></p>
+      <p class="applied-date">Applied on: {{ app.appliedDate | date:'mediumDate' }}</p>
+      <button (click)="viewApplication(app.id)">View</button>
+    </div>
+  </div>
+
+   <!-- Bottom Section -->
+  <div class="applications-footer">
+    <p class="footer-text">Looking for more opportunities?</p>
+    <button class="browse-btn" (click)="browseJobs('/view-jobs')">Browse Jobs</button>
+  </div>
+
+   <!-- Footer -->
+  <footer class="page-footer">
+    <p>&copy; 2025 TalentBridge. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="#">About</a>
+      <a href="#">Support</a>
+      <a href="#">Contact</a>
+    </div>
+  </footer>
+
+</div>

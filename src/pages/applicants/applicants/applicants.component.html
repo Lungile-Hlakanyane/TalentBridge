@@ -1,0 +1,28 @@
+<div class="applicants-container">
+
+  <!-- Header -->
+  <section class="page-header">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+    <h2>Applicants</h2>
+    <p>Review the list of candidates who applied for your jobs</p>
+  </section>
+
+  <!-- Applicants List -->
+  <section class="applicants-list">
+    <div class="applicant-card" *ngFor="let applicant of applicants">
+      <div class="applicant-info">
+        <h3>{{ applicant.name }}</h3>
+        <p><strong>Email:</strong> {{ applicant.email }}</p>
+        <p><strong>Phone:</strong> {{ applicant.phone }}</p>
+        <p><strong>Applied for:</strong> {{ applicant.appliedFor }}</p>
+        <p><strong>Experience:</strong> {{ applicant.experience }}</p>
+      </div>
+      <div class="applicant-actions">
+        <button class="view-btn" (click)="viewProfile(applicant.id)">View Profile</button>
+      </div>
+    </div>
+  </section>
+
+</div>

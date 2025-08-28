@@ -1,0 +1,65 @@
+<div class="candidate-profile-container">
+
+  <!-- Header -->
+  <section class="page-header">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+    <h2>Candidate Profile</h2>
+    <p>Review detailed information of the candidate</p>
+  </section>
+
+  <!-- Candidate Info Card -->
+  <section class="profile-card">
+    <div class="profile-header">
+      <div class="avatar">
+        <i class="fas fa-user"></i>
+      </div>
+      <div class="profile-info">
+        <h3>{{ candidate.name }}</h3>
+        <p><strong>Email:</strong> {{ candidate.email }}</p>
+        <p><strong>Phone:</strong> {{ candidate.phone }}</p>
+        <p><strong>Applied For:</strong> {{ candidate.appliedFor }}</p>
+        <p><strong>Experience:</strong> {{ candidate.experience }}</p>
+      </div>
+    </div>
+
+    <div class="profile-details">
+      <h4>Additional Details</h4>
+      <p><strong>Education:</strong> {{ candidate.education }}</p>
+      <p><strong>Skills:</strong> {{ candidate.skills }}</p>
+      <p><strong>Resume Summary:</strong> {{ candidate.summary }}</p>
+    </div>
+  </section>
+
+  <!-- Actions -->
+  <div class="profile-actions">
+    <button class="ats-btn" (click)="runAtsMatch(candidate)">ATS Match</button>
+  </div>
+
+  <!-- ATS Results -->
+  <section class="ats-results" *ngIf="atsResult">
+    <h3>ATS Match Results</h3>
+    <p class="match-score">Match Score: <span>{{ atsResult.score }}%</span></p>
+
+    <div class="strengths">
+      <h4>Strengths</h4>
+      <ul>
+        <li *ngFor="let point of atsResult.strengths">{{ point }}</li>
+      </ul>
+    </div>
+
+    <div class="weaknesses" *ngIf="atsResult.gaps?.length">
+      <h4>Areas to Improve</h4>
+      <ul>
+        <li *ngFor="let gap of atsResult.gaps">{{ gap }}</li>
+      </ul>
+    </div>
+
+    <div class="action-btn-container">
+      <button class="ats-btn" (click)="proceedToStage()">Proceed</button>
+    </div>
+
+  </section>
+
+</div>

@@ -1,0 +1,23 @@
+<div class="view-jobs-container">
+
+  <!-- Back Button -->
+  <div class="action-back-container">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+  </div>
+
+  <h2 class="page-title">Available Jobs</h2>
+
+  <!-- Job Cards -->
+  <div class="job-cards">
+    <div class="job-card" *ngFor="let job of jobs">
+      <h4>{{ job.title }}</h4>
+      <p class="company">{{ job.company }}</p>
+      <p class="location">{{ job.location }}</p>
+      <p class="type">{{ job.type }}</p>
+      <button (click)="viewJob(job.id)">Apply</button>
+    </div>
+  </div>
+
+</div>

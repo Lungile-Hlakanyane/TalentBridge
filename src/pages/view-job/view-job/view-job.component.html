@@ -1,0 +1,72 @@
+<div class="view-job-container">
+
+  <!-- Back Button -->
+  <div class="action-back-container">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+  </div>
+
+  <!-- Job Details -->
+  <div class="job-details-card">
+    <h2 class="job-title">{{ job?.title }}</h2>
+    <p class="company">{{ job?.company }}</p>
+    <p class="location"><strong>Location:</strong> {{ job?.location }}</p>
+    <p class="type"><strong>Type:</strong> {{ job?.type }}</p>
+    <p class="description"><strong>Description:</strong> {{ job?.description }}</p>
+    <p class="requirements"><strong>Requirements:</strong></p>
+    <ul>
+      <li *ngFor="let req of job?.requirements">{{ req }}</li>
+    </ul>
+    <button (click)="openModal()">Apply</button>
+  </div>
+
+  <!-- Job Alert Subscription Section -->
+  <div class="job-alert-card">
+    <h3>Get updates for the latest <strong>front end developer</strong> jobs</h3>
+    <label for="email">Email Address</label>
+    <input type="email" id="email" placeholder="Enter your email" />
+
+    <button class="subscribe-btn">Get new jobs in your inbox</button>
+
+    <p class="terms-text">
+      By creating a job alert, you agree to our 
+      <a href="#" target="_blank">Terms</a>. 
+      You can change your consent settings at any time by unsubscribing or as detailed in our terms.
+    </p>
+  </div>
+
+  <!-- Apply Modal -->
+  <div class="modal-overlay" *ngIf="showModal">
+    <div class="modal-content">
+      <h3>Apply for {{ job?.title }}</h3>
+
+      <form (ngSubmit)="submitApplication()" #applyForm="ngForm">
+        <div class="form-group">
+          <label for="applicantName">Name</label>
+          <input type="text" id="applicantName" name="name" [(ngModel)]="application.name" required />
+        </div>
+
+        <div class="form-group">
+          <label for="applicantEmail">Email</label>
+          <input type="email" id="applicantEmail" name="email" [(ngModel)]="application.email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="coverLetter">Cover Letter</label>
+          <textarea id="coverLetter" name="coverLetter" [(ngModel)]="application.coverLetter" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="resumeUpload">Upload Resume</label>
+          <input type="file" id="resumeUpload" (change)="onFileSelected($event)" />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" (click)="closeModal()">Cancel</button>
+          <button type="submit" class="submit-btn" [disabled]="!applyForm.form.valid">Submit Application</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

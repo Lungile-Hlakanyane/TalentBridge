@@ -1,0 +1,51 @@
+<div class="stages-container">
+
+  <!-- Header -->
+  <section class="page-header">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+    <h2>Application Stages</h2>
+    <p>Drag and drop candidates between different stages</p>
+  </section>
+
+  <!-- Stages Board -->
+  <section class="stages-board">
+    <div class="stage-column"
+         *ngFor="let stage of stages; let i = index"
+         cdkDropList
+         [id]="'stage-' + i"
+         [cdkDropListData]="stage.candidates"
+         [cdkDropListConnectedTo]="stageIds"
+         (cdkDropListDropped)="drop($event)">
+      <h3>{{ stage.name }}</h3>
+
+      <div class="candidate-card"
+           *ngFor="let candidate of stage.candidates"
+           cdkDrag>
+        <h4>{{ candidate.name }}</h4>
+        <p><strong>Email:</strong> {{ candidate.email }}</p>
+        <p><strong>Applied for:</strong> {{ candidate.appliedFor }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Create Stage Button -->
+  <div class="create-stage-container" style="margin-top: 20px;">
+    <button (click)="openModal()">+ Create Stage</button>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal">
+      <h3>Enter Stage Name</h3>
+      <input type="text" [(ngModel)]="newStageName" placeholder="Stage name" />
+
+      <div class="modal-actions">
+        <button (click)="saveStage()">Save</button>
+        <button (click)="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+</div>

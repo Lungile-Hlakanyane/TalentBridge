@@ -1,0 +1,66 @@
+<div class="home-container">
+  <!-- Welcome Banner -->
+  <section class="welcome-banner">
+    <h2>Welcome back, {{ userName }}</h2>
+    <p>Find your next career opportunity today</p>
+  </section>
+
+  <!-- Quick Actions -->
+  <section class="quick-actions">
+    
+    <div class="action-card" (click)="goTo('view-jobs')">
+      <i class="fas fa-briefcase"></i>
+      <span>View Jobs</span>
+    </div>
+
+    <div class="action-card" (click)="goTo('my-applications')">
+      <i class="fas fa-file-alt"></i>
+      <span>My Applications</span>
+    </div>
+
+    <div class="action-card" (click)="goTo('massages')">
+      <i class="fas fa-envelope"></i>
+      <span>Messages</span>
+    </div>
+    
+  </section>
+
+  <!-- Featured Jobs -->
+  <section class="featured-jobs">
+    <h3>Featured Jobs</h3>
+    <div class="job-cards">
+      <div class="job-card" *ngFor="let job of featuredJobs">
+        <h4>{{ job.title }}</h4>
+        <p>{{ job.company }}</p>
+        <button (click)="viewJob(job.id)">View</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Announcements -->
+  <section class="announcements" *ngIf="announcements.length > 0">
+    <h3>Latest Updates</h3>
+    <ul>
+      <li *ngFor="let ann of announcements">{{ ann }}</li>
+    </ul>
+  </section>
+</div>
+
+<!-- Career Tips -->
+<section class="career-tips">
+  <h3>Career Tip 💡</h3>
+  <p>"Tailor your CV to match the job description for better chances."</p>
+</section>
+
+
+<!-- Footer -->
+<footer class="app-footer">
+  <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+  <div class="footer-links">
+    <a (click)="goTo('about')">About</a> |
+    <a (click)="goTo('contact')">Contact</a> |
+    <a (click)="goTo('privacy')">Privacy</a>
+  </div>
+</footer>
+<router-outlet></router-outlet>
+>

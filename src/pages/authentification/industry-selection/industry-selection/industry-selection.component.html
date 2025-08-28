@@ -1,0 +1,58 @@
+<div class="industries-container">
+  <!-- Welcome Banner -->
+  <section class="welcome-banner">
+    <h2>Select Industries</h2>
+    <p>Choose industries you are interested in for job recommendations</p>
+  </section>
+
+  <!-- Industries Grid -->
+  <section class="industries-grid">
+    <div 
+      class="industry-card" 
+      *ngFor="let industry of industries"
+      [class.selected]="selectedIndustries.includes(industry)"
+      (click)="toggleIndustry(industry)"
+    >
+      <i class="fas fa-building"></i>
+      <span>{{ industry }}</span>
+    </div>
+  </section>
+
+  <!-- Job Type Section -->
+  <section class="job-type-section">
+    <h3>Job Type</h3>
+    <div class="job-type-options">
+      <label *ngFor="let type of jobTypes">
+        <input 
+          type="checkbox" 
+          [value]="type" 
+          (change)="toggleJobType(type, $event)" 
+          [checked]="selectedJobTypes.includes(type)" 
+        />
+        {{ type }}
+      </label>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section class="experience-section">
+    <h3>Years of Experience</h3>
+    <div class="experience-options">
+      <label *ngFor="let exp of experienceLevels">
+        <input 
+          type="checkbox" 
+          [value]="exp" 
+          (change)="toggleExperience(exp, $event)" 
+          [checked]="selectedExperience.includes(exp)" 
+        />
+        {{ exp }}
+      </label>
+    </div>
+  </section>
+
+  <!-- Actions -->
+  <div class="form-actions">
+    <button class="skip-btn" (click)="skipSelection()">Skip</button>
+    <button class="submit-btn" (click)="continue()">Continue</button>
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<div class="profile-container">
+  <!-- Header Banner -->
+  <section class="welcome-banner">
+    <h2>Create Your Profile</h2>
+    <p>Fill in your details to get started</p>
+  </section>
+
+  <!-- Profile Form -->
+  <form [formGroup]="profileForm" (ngSubmit)="submitProfile()" class="profile-form">
+
+    <!-- Resume Upload -->
+    <div class="form-group file-upload">
+      <label for="resume">Upload Resume</label>
+      <div class="file-input-wrapper">
+        <input id="resume" type="file" formControlName="resume" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx"/>
+        <span class="file-placeholder">Choose your resume...</span>
+      </div>
+      <small *ngIf="profileForm.get('resume')?.touched && profileForm.get('resume')?.invalid">
+        Please upload your resume
+      </small>
+    </div>
+
+    <!-- Name -->
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input id="name" type="text" formControlName="name" placeholder="Enter your name" />
+      <small *ngIf="profileForm.get('name')?.touched && profileForm.get('name')?.invalid">Name is required</small>
+    </div>
+
+    <!-- Surname -->
+    <div class="form-group">
+      <label for="surname">Surname</label>
+      <input id="surname" type="text" formControlName="surname" placeholder="Enter your surname" />
+      <small *ngIf="profileForm.get('surname')?.touched && profileForm.get('surname')?.invalid">Surname is required</small>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="Enter your email" />
+      <small *ngIf="profileForm.get('email')?.touched && profileForm.get('email')?.invalid">Enter a valid email</small>
+    </div>
+
+    <!-- Phone -->
+    <div class="form-group">
+      <label for="phone">Phone Number</label>
+      <input id="phone" type="text" formControlName="phone" placeholder="Enter your phone number" />
+      <small *ngIf="profileForm.get('phone')?.touched && profileForm.get('phone')?.invalid">Enter a valid phone number</small>
+    </div>
+
+    <!-- Address -->
+    <div class="form-group">
+      <label for="address">Physical Address</label>
+      <textarea id="address" formControlName="address" placeholder="Enter your address"></textarea>
+      <small *ngIf="profileForm.get('address')?.touched && profileForm.get('address')?.invalid">Address is required</small>
+    </div>
+
+    <!-- Role -->
+    <div class="form-group">
+      <label for="role">Role</label>
+      <select id="role" formControlName="role">
+        <option value="Employee">Employee</option>
+        <option value="Employer">Employer</option>
+      </select>
+    </div>
+
+    <!-- Password -->
+<div class="form-group">
+  <label for="password">Password</label>
+  <input 
+    id="password" 
+    type="password" 
+    formControlName="password" 
+    placeholder="Enter your password" />
+  <small *ngIf="profileForm.get('password')?.touched && profileForm.get('password')?.invalid">
+    Password must be at least 6 characters
+  </small>
+</div>
+
+<!-- Confirm Password -->
+<div class="form-group">
+  <label for="confirmPassword">Confirm Password</label>
+  <input 
+    id="confirmPassword" 
+    type="password" 
+    formControlName="confirmPassword" 
+    placeholder="Confirm your password" />
+  <small *ngIf="profileForm.errors?.['passwordMismatch'] && profileForm.get('confirmPassword')?.touched">
+    Passwords do not match
+  </small>
+</div>
+
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button type="button" class="back-btn" (click)="goBack()">Back</button>
+      <button type="submit" class="submit-btn">Create Profile</button>
+    </div>
+  </form>
+</div>
