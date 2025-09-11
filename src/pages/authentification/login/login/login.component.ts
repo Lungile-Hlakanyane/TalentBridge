@@ -25,7 +25,12 @@ export class LoginComponent implements OnInit{
       localStorage.setItem('role', 'Employer');
       localStorage.setItem('email', this.email);
       this.router.navigate(['/employer-dashboard']);
-    } else {
+    } if(this.email.toLowerCase() === 'admin@gmail.com'){
+      localStorage.setItem('role', 'Admin');
+      localStorage.setItem('email', this.email);
+      this.router.navigate(['/admin-dashboard']);
+    }
+    else {
       localStorage.setItem('role', 'Job Seeker');
       localStorage.setItem('email', this.email);
       this.router.navigate(['/industry-selection']);

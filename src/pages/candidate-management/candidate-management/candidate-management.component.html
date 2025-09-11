@@ -1,0 +1,62 @@
+<div class="candidate-management-container">
+
+  <!-- Header -->
+  <section class="page-header">
+    <h2>Candidate Management</h2>
+    <p>View, filter, and manage all candidates</p>
+  </section>
+
+  <!-- Filters -->
+  <section class="filters">
+    <button [class.active]="selectedFilter==='all'" (click)="setFilter('all')">All</button>
+    <button [class.active]="selectedFilter==='active'" (click)="setFilter('active')">Active</button>
+    <button [class.active]="selectedFilter==='suspended'" (click)="setFilter('suspended')">Suspended</button>
+    <button [class.active]="selectedFilter==='flagged'" (click)="setFilter('flagged')">Flagged</button>
+  </section>
+
+  <!-- Candidate List -->
+  <section class="candidate-list">
+
+    <div class="candidate-card" *ngFor="let candidate of filteredCandidates()" (click)="navigate('/candidate-details')">
+
+      <div class="candidate-info">
+        <h3>{{ candidate.name }}</h3>
+        <p class="email"><i class="fas fa-envelope"></i> {{ candidate.email }}</p>
+        <p class="status" [ngClass]="candidate.status">{{ candidate.status | titlecase }}</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="candidate-actions">
+        <button class="suspend-btn" *ngIf="candidate.status==='active'" (click)="confirmAction(candidate, 'suspend')">
+          <i class="fas fa-ban"></i> Suspend
+        </button>
+        <button class="delete-btn" (click)="confirmAction(candidate, 'delete')">
+          <i class="fas fa-trash"></i> Delete
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Confirmation Modal -->
+  <div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal">
+      <h3>Confirm Action</h3>
+      <p>Are you sure you want to <strong>{{ modalAction | titlecase }}</strong> candidate "{{ selectedCandidate.name }}"?</p>
+      <div class="modal-actions">
+        <button class="confirm-btn" (click)="executeAction()">Yes</button>
+        <button class="cancel-btn" (click)="closeModal()">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+    <div class="footer-links">
+      <a (click)="goTo('about')">About</a> |
+      <a (click)="goTo('contact')">Contact</a> |
+      <a (click)="goTo('privacy')">Privacy</a>
+    </div>
+  </footer>
+
+</div>

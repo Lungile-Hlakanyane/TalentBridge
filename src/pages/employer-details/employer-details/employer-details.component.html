@@ -1,0 +1,50 @@
+<div class="employer-details-container">
+
+  <!-- Header -->
+  <section class="page-header">
+    <h2>{{ employer.companyName }}</h2>
+    <p>{{ employer.email }}</p>
+    <p class="status" [ngClass]="employer.status">{{ employer.status | titlecase }}</p>
+  </section>
+
+  <!-- Company Profile -->
+  <section class="company-profile">
+    <h3>Company Profile</h3>
+    <p>{{ employer.description }}</p>
+    <p><strong>Registered On:</strong> {{ employer.registeredDate | date }}</p>
+  </section>
+
+  <!-- Job Posts -->
+  <section class="job-posts">
+    <h3>Job Posts</h3>
+    <div class="job-card" *ngFor="let job of employer.jobs">
+      <h4>{{ job.title }}</h4>
+      <p>{{ job.location }}</p>
+      <p><strong>Status:</strong> {{ job.status | titlecase }}</p>
+      <button class="view-details-btn" (click)="viewJobDetails(job.id)">
+       <i class="fas fa-eye"></i> View Details
+      </button>
+    </div>
+  </section>
+
+  <!-- Activity History -->
+  <section class="activity-history">
+    <h3>Activity History</h3>
+    <ul>
+      <li *ngFor="let activity of employer.activityHistory">
+        <span>{{ activity.date | date:'short' }}</span> - {{ activity.action }}
+      </li>
+    </ul>
+  </section>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+    <div class="footer-links">
+      <a (click)="goTo('about')">About</a> |
+      <a (click)="goTo('contact')">Contact</a> |
+      <a (click)="goTo('privacy')">Privacy</a>
+    </div>
+  </footer>
+
+</div>

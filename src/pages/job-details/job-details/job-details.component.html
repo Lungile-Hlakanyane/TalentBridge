@@ -1,0 +1,86 @@
+<div class="job-details-container">
+
+  <!-- Header -->
+  <section class="page-header">
+    <h2>{{ job.title }}</h2>
+    <p>{{ job.company }} • <i class="fas fa-map-marker-alt"></i> {{ job.location }}</p>
+  </section>
+
+  <!-- Job Summary -->
+  <section class="job-summary">
+    <div class="summary-card">
+      <h3>Status</h3>
+      <p class="status" [ngClass]="job.status">{{ job.status | titlecase }}</p>
+    </div>
+    <div class="summary-card">
+      <h3>Total Applicants</h3>
+      <p>{{ job.applicants }}</p>
+    </div>
+    <div class="summary-card">
+      <h3>Posted On</h3>
+      <p>{{ job.postedDate | date }}</p>
+    </div>
+  </section>
+
+  <!-- Job Description -->
+  <section class="job-description">
+    <h3>Job Description</h3>
+    <p>{{ job.description }}</p>
+  </section>
+
+  <!-- Requirements -->
+  <section class="job-requirements">
+    <h3>Requirements</h3>
+    <ul>
+      <li *ngFor="let req of job.requirements">{{ req }}</li>
+    </ul>
+  </section>
+
+  <!-- Applicant Insights -->
+  <section class="applicant-insights">
+    <h3>Applicant Insights</h3>
+    <div class="insight-cards">
+      <div class="insight-card">
+        <i class="fas fa-users"></i>
+        <span>{{ job.applicants }}</span>
+        <p>Total Applicants</p>
+      </div>
+      <div class="insight-card">
+        <i class="fas fa-check-circle"></i>
+        <span>{{ job.shortlisted }}</span>
+        <p>Shortlisted</p>
+      </div>
+      <div class="insight-card">
+        <i class="fas fa-times-circle"></i>
+        <span>{{ job.rejected }}</span>
+        <p>Rejected</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Actions -->
+  <section class="job-actions">
+    <button class="approve-btn" *ngIf="job.status === 'pending'" (click)="approveJob()">
+      <i class="fas fa-check"></i> Approve
+    </button>
+    <button class="reject-btn" *ngIf="job.status === 'pending'" (click)="rejectJob()">
+      <i class="fas fa-times"></i> Reject
+    </button>
+    <button class="edit-btn" (click)="editJob()">
+      <i class="fas fa-edit"></i> Edit
+    </button>
+    <button class="delete-btn" (click)="deleteJob()">
+      <i class="fas fa-trash"></i> Delete
+    </button>
+  </section>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+    <div class="footer-links">
+      <a (click)="goTo('about')">About</a> |
+      <a (click)="goTo('contact')">Contact</a> |
+      <a (click)="goTo('privacy')">Privacy</a>
+    </div>
+  </footer>
+</div>

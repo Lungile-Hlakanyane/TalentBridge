@@ -1,0 +1,38 @@
+<div class="applications-container">
+
+  <!-- Header -->
+  <section class="page-header">
+    <h2>Candidate Applications</h2>
+    <p>View all applications submitted by candidates</p>
+  </section>
+
+  <!-- Applications Table -->
+  <section class="applications-list">
+    <div class="application-card" *ngFor="let app of applications">
+      <div class="application-info">
+        <h3>{{ app.candidateName }}</h3>
+        <p><strong>Position:</strong> {{ app.position }}</p>
+        <p><strong>Company:</strong> {{ app.company }}</p>
+        <p><strong>Applied On:</strong> {{ app.appliedDate | date:'medium' }}</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="application-actions">
+        <button (click)="viewApplicantProfile(app.candidateId)">
+          <i class="fas fa-user"></i> View Applicant Profile
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+    <div class="footer-links">
+      <a (click)="goTo('about')">About</a> |
+      <a (click)="goTo('contact')">Contact</a> |
+      <a (click)="goTo('privacy')">Privacy</a>
+    </div>
+  </footer>
+
+</div>

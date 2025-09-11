@@ -1,0 +1,73 @@
+<div class="employer-management-container">
+
+  <!-- Header -->
+  <section class="page-header">
+    <h2>Employer Management</h2>
+    <p>Review, approve, or suspend employer accounts</p>
+  </section>
+
+  <!-- Employer List -->
+  <section class="employer-list">
+
+    <div class="employer-card" *ngFor="let employer of employers">
+
+      <div class="employer-info" (click)="navigate('/employer-details')">
+        <h3>{{ employer.companyName }}</h3>
+        <p class="email"><i class="fas fa-envelope"></i> {{ employer.email }}</p>
+        <p class="status" [ngClass]="employer.status">{{ employer.status | titlecase }}</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="employer-actions">
+  <button class="approve-btn" *ngIf="employer.status === 'pending'" 
+          (click)="confirmAction(employer, 'approve')">
+    <i class="fas fa-check"></i> Approve
+  </button>
+
+  <button class="reject-btn" *ngIf="employer.status === 'pending'" 
+          (click)="confirmAction(employer, 'reject')">
+    <i class="fas fa-times"></i> Reject
+  </button>
+
+  <button class="suspend-btn" *ngIf="employer.status === 'approved'" 
+          (click)="confirmAction(employer, 'suspend')">
+    <i class="fas fa-ban"></i> Suspend
+  </button>
+
+  <button class="delete-btn" 
+          (click)="confirmAction(employer, 'delete')">
+    <i class="fas fa-trash"></i> Delete
+  </button>
+</div>
+
+
+    </div>
+
+  </section>
+
+  <!-- Confirmation Modal -->
+<div class="modal-backdrop" *ngIf="showModal">
+  <div class="modal">
+    <h3>Confirm Action</h3>
+    <p>Are you sure you want to 
+      <strong>{{ modalAction | titlecase }}</strong> 
+      this employer "{{ selectedEmployer.companyName }}"?
+    </p>
+    <div class="modal-actions">
+      <button class="confirm-btn" (click)="executeAction()">Yes</button>
+      <button class="cancel-btn" (click)="closeModal()">No</button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+    <div class="footer-links">
+      <a (click)="goTo('about')">About</a> |
+      <a (click)="goTo('contact')">Contact</a> |
+      <a (click)="goTo('privacy')">Privacy</a>
+    </div>
+  </footer>
+</div>

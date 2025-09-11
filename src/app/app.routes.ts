@@ -13,6 +13,15 @@ import { ManageJobsComponent } from '../pages/manage-jobs/manage-jobs/manage-job
 import { ApplicantsComponent } from '../pages/applicants/applicants/applicants.component';
 import { StagesComponent } from '../pages/stages/stages/stages.component';
 import { ViewProfileComponent } from '../pages/view-profile/view-profile/view-profile.component';
+import { AdminDashboardComponent } from '../pages/admin-dashboard/admin-dashboard/admin-dashboard.component';
+import { AdminManageJobsComponent } from '../pages/admin-manage-jobs/admin-manage-jobs/admin-manage-jobs.component';
+import { JobDetailsComponent } from '../pages/job-details/job-details/job-details.component';
+import { EmployersComponent } from '../pages/employers/employers/employers.component';
+import { EmployerDetailsComponent } from '../pages/employer-details/employer-details/employer-details.component';
+import { CandidateManagementComponent } from '../pages/candidate-management/candidate-management/candidate-management.component';
+import { CandidateDetailsComponent } from '../pages/candidate-details/candidate-details/candidate-details.component';
+import { ApplicationsComponent } from '../pages/applications/applications/applications.component';
+import { PendingApprovalsComponent } from '../pages/pending-approvals/pending-approvals/pending-approvals.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -29,5 +38,14 @@ export const routes: Routes = [
     {path: 'applicants', component: ApplicantsComponent},
     {path: 'stages', component: StagesComponent},
     {path: 'view-profile/:id', component: ViewProfileComponent},
+    {path: 'admin-dashboard', component: AdminDashboardComponent},
+    {path: 'admin-manage-jobs', component: AdminManageJobsComponent},
+    {path: 'job-details/:id', component: JobDetailsComponent},
+    {path: 'employers',component: EmployersComponent},
+    {path: 'employer-details', component: EmployerDetailsComponent},
+    {path: 'candidates-management', component: CandidateManagementComponent},
+    {path: 'candidate-details', component: CandidateDetailsComponent},
+    {path: 'applications', component: ApplicationsComponent},
+    {path: 'pending-approvals', component: PendingApprovalsComponent},
     {path: '**', redirectTo: '' },
 ];

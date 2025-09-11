@@ -1,0 +1,61 @@
+<div class="admin-dashboard-container">
+
+  <!-- Welcome Banner -->
+  <section class="welcome-banner">
+    <h2>Welcome back, {{ adminName }}</h2>
+    <p>Here’s an overview of the TalentBridge platform</p>
+  </section>
+
+  <!-- Stats Overview -->
+  <section class="stats-cards">
+    <div class="stat-card" (click)="goTo('admin-manage-jobs')">
+      <i class="fas fa-briefcase"></i>
+      <h3>{{ stats.totalJobs }}</h3>
+      <p>Total Jobs</p>
+    </div>
+
+    <div class="stat-card" (click)="goTo('employers')">
+      <i class="fas fa-building"></i>
+      <h3>{{ stats.totalEmployers }}</h3>
+      <p>Employers</p>
+    </div>
+
+    <div class="stat-card" (click)="goTo('candidates-management')">
+      <i class="fas fa-users"></i>
+      <h3>{{ stats.totalCandidates }}</h3>
+      <p>Candidates</p>
+    </div>
+
+    <div class="stat-card" (click)="goTo('applications')">
+      <i class="fas fa-file-alt"></i>
+      <h3>{{ stats.totalApplications }}</h3>
+      <p>Applications</p>
+    </div>
+
+    <div class="stat-card pending" (click)="goTo('pending-approvals')">
+      <i class="fas fa-hourglass-half"></i>
+      <h3>{{ stats.pendingApprovals }}</h3>
+      <p>Pending Approvals</p>
+    </div>
+  </section>
+
+  <!-- Recent Activity -->
+  <section class="recent-activity">
+    <h3>Recent Activity</h3>
+    <ul>
+      <li *ngFor="let activity of recentActivity">
+        <i class="fas fa-circle"></i> {{ activity }}
+      </li>
+    </ul>
+  </section>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+    <div class="footer-links">
+      <a (click)="goTo('about')">About</a> |
+      <a (click)="goTo('contact')">Contact</a> |
+      <a (click)="goTo('privacy')">Privacy</a>
+    </div>
+  </footer>
+</div>

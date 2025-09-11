@@ -1,0 +1,50 @@
+<div class="candidate-details-container">
+
+  <!-- Header -->
+  <section class="page-header">
+    <h2>{{ candidate.name }}</h2>
+    <p>{{ candidate.email }}</p>
+    <p class="status" [ngClass]="candidate.status">{{ candidate.status | titlecase }}</p>
+  </section>
+
+  <!-- Candidate Profile -->
+  <section class="candidate-profile">
+    <h3>Profile</h3>
+    <p><strong>Phone:</strong> {{ candidate.phoneNumber }}</p>
+    <p><strong>Location:</strong> {{ candidate.location }}</p>
+    <p><strong>Registered On:</strong> {{ candidate.registeredDate | date }}</p>
+  </section>
+
+  <!-- Resumes -->
+  <section class="resumes">
+    <h3>Resumes</h3>
+    <ul>
+      <li *ngFor="let resume of candidate.resumes">
+        <i class="fas fa-file-alt"></i> {{ resume.name }}
+        <button (click)="downloadResume(resume.url)">Download</button>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Applied Jobs -->
+  <section class="applied-jobs">
+    <h3>Applied Jobs</h3>
+    <div class="job-card" *ngFor="let job of candidate.appliedJobs">
+      <h4>{{ job.title }}</h4>
+      <p>{{ job.company }} • {{ job.location }}</p>
+      <p><strong>Status:</strong> {{ job.status | titlecase }}</p>
+      <button (click)="viewJobDetails(job.id)">View Job</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+    <div class="footer-links">
+      <a (click)="goTo('about')">About</a> |
+      <a (click)="goTo('contact')">Contact</a> |
+      <a (click)="goTo('privacy')">Privacy</a>
+    </div>
+  </footer>
+
+</div>

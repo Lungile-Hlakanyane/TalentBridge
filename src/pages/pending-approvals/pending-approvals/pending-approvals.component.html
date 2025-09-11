@@ -1,0 +1,41 @@
+<div class="pending-approvals-container">
+
+  <!-- Header -->
+  <section class="page-header">
+    <h2>Pending Approvals</h2>
+    <p>Review and approve or reject pending requests</p>
+  </section>
+
+  <!-- Pending Approvals List -->
+  <section class="approvals-list">
+    <div class="approval-card" *ngFor="let approval of pendingApprovals">
+      <div class="approval-info">
+        <h3>{{ approval.name }}</h3>
+        <p><strong>Type:</strong> {{ approval.type }}</p>
+        <p *ngIf="approval.email"><strong>Email:</strong> {{ approval.email }}</p>
+        <p><strong>Submitted On:</strong> {{ approval.submittedDate | date:'medium' }}</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="approval-actions">
+        <button class="approve-btn" (click)="approve(approval.id)">
+          <i class="fas fa-check"></i> Approve
+        </button>
+        <button class="reject-btn" (click)="reject(approval.id)">
+          <i class="fas fa-times"></i> Reject
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+    <div class="footer-links">
+      <a (click)="goTo('about')">About</a> |
+      <a (click)="goTo('contact')">Contact</a> |
+      <a (click)="goTo('privacy')">Privacy</a>
+    </div>
+  </footer>
+
+</div>
