@@ -5,5 +5,8 @@ export interface Job{
   location: string;
   type: string;
   description: string;
-  requirements: string[];
+  requirements?: string[];
+  userId?:number;
+  created?:string;
+  applicants?:number;
 }

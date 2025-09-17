@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Job } from '../../../models/Job';
+import { JobService } from '../../../services/Job-Service/job.service';
 
 @Component({
   selector: 'app-manage-jobs',
@@ -14,27 +15,17 @@ export class ManageJobsComponent implements OnInit{
 
   jobs: Job[] = [];
 
-  constructor(private router:Router){}
+  constructor(
+    private router:Router,
+    private jobService:JobService
+  ){}
 
     // Modal state
   showDeleteModal: boolean = false;
   jobToDelete: Job | null = null;
 
   ngOnInit(){
-     this.jobs = [
-      {
-        id: 1, title: 'Frontend Developer', company: 'Tech Solutions', location: 'Johannesburg', type: 'Full-time', description: 'Build amazing web apps',
-        requirements: []
-      },
-      {
-        id: 2, title: 'Backend Engineer', company: 'Innovate Inc', location: 'Cape Town', type: 'Contract', description: 'Develop APIs and services',
-        requirements: []
-      },
-      {
-        id: 3, title: 'UI/UX Designer', company: 'Creative Minds', location: 'Remote', type: 'Part-time', description: 'Design beautiful interfaces',
-        requirements: []
-      }
-    ];
+     this.loadUserJobs();
   }
 
   editJob(jobId: number) {
@@ -42,11 +33,15 @@ export class ManageJobsComponent implements OnInit{
     this.router.navigate(['/post-job'], { queryParams: { id: jobId } });
   }
 
-   deleteJob() {
+deleteJob() {
     if (this.jobToDelete) {
-      this.jobs = this.jobs.filter(job => job.id !== this.jobToDelete!.id);
-      console.log('Deleted job', this.jobToDelete.id);
-      this.closeModal();
+      this.jobService.deleteJob(this.jobToDelete.id).subscribe({
+        next: () => {
+          this.jobs = this.jobs.filter(j => j.id !== this.jobToDelete?.id);
+          this.closeModal();
+        },
+        error: (err) => console.error('Delete error:', err)
+      });
     }
   }
 
@@ -63,5 +58,22 @@ export class ManageJobsComponent implements OnInit{
   confirmDeleteJob(job: Job) {
     this.jobToDelete = job;
     this.showDeleteModal = true;
+  }
+
+  loadUserJobs() {
+    const userId = localStorage.getItem('userId'); // comes from login
+    if (userId) {
+      this.jobService.getJobsByUserId(Number(userId)).subscribe({
+        next: (data) => {
+          this.jobs = data;
+          console.log('Jobs fetched for user:', data);
+        },
+        error: (err) => {
+          console.error('Error fetching jobs:', err);
+        }
+      });
+    } else {
+      console.warn('No userId found in localStorage!');
+    }
   }
 }

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { JobService } from '../../../services/Job-Service/job.service';
+import { Job } from '../../../models/Job';
+
 
 @Component({
   selector: 'app-employer-dashboard',
@@ -11,22 +14,22 @@ import { CommonModule } from '@angular/common';
 })
 export class EmployerDashboardComponent implements OnInit{
 
-  constructor(private router: Router){}
+  constructor(
+    private router: Router,
+    private jobService: JobService
+  ){}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadActiveJobs();
+  }
 
-  employerName = 'ABC Recruitment Agency';
-
-  activeJobs = [
-    { id: 1, title: 'Frontend Developer', location: 'Johannesburg', applicants: 12 },
-    { id: 2, title: 'Backend Engineer', location: 'Cape Town', applicants: 8 },
-    { id: 3, title: 'Project Manager', location: 'Durban', applicants: 5 }
-  ];
+  activeJobs: Job[] = [];
+  employerName = 'Vincent Technologies (PTY) LTD';
 
   insights = {
-    jobsPosted: 15,
-    totalApplicants: 120,
-    interviews: 20
+    jobsPosted: 0,
+    totalApplicants: 0,
+    interviews: 0
   };
 
   goTo(page: string) {
@@ -37,6 +40,27 @@ export class EmployerDashboardComponent implements OnInit{
   manageJob(id: number) {
     this.router.navigate(['/manage-job', id]);
     console.log(`Managing job with ID: ${id}`);
+  }
+
+   loadActiveJobs() {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      this.jobService.getJobsByUserId(Number(userId)).subscribe({
+        next: (jobs) => {
+          // Sort by created date descending to show most recent first
+          this.activeJobs = jobs.sort(
+            (a, b) =>
+              new Date(b.created ?? 0).getTime() - new Date(a.created ?? 0).getTime()
+          );
+          this.insights.jobsPosted = this.activeJobs.length;
+          // Optionally calculate total applicants if Job model has applicants field
+          this.insights.totalApplicants = this.activeJobs.reduce((sum, job) => sum + (job.applicants || 0), 0);
+        },
+        error: (err) => console.error('Error fetching jobs:', err)
+      });
+    } else {
+      console.warn('No userId found in localStorage');
+    }
   }
 
 }

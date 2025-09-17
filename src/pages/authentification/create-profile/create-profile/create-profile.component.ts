@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule, FormBuilder, ReactiveFormsModule, Validators, FormGroup, AbstractControl } from '@angular/forms';
+import { UserService } from '../../../../services/User-Service/user.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-create-profile',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './create-profile.component.html',
   styleUrl: './create-profile.component.scss'
 })
@@ -16,7 +18,10 @@ export class CreateProfileComponent  implements OnInit{
   selectedFile: File | null = null;
 
   constructor(
-    private fb: FormBuilder, private router: Router)
+    private fb: FormBuilder, 
+    private router: Router,
+    private userService: UserService
+  )
     {}
 
   ngOnInit() {
@@ -27,7 +32,7 @@ export class CreateProfileComponent  implements OnInit{
       phone: ['', [Validators.required, Validators.pattern('^[0-9]{10,}$')]],
       address: ['', Validators.required],
       role: ['Employee', Validators.required],
-      resume: [null, Validators.required],
+      resume: [],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
     },
@@ -43,25 +48,45 @@ export class CreateProfileComponent  implements OnInit{
 
 
   submitProfile() {
-    if (this.profileForm.valid) {
-      console.log('Profile Created:', this.profileForm.value);
-      console.log('Uploaded File:', this.selectedFile);
-      this.router.navigate(['/login']);
-    } else {
-      this.profileForm.markAllAsTouched();
-    }
+  if (this.profileForm.valid) {
+    const formData = new FormData();
+    const formValue = this.profileForm.value;
+
+    Object.keys(formValue).forEach(key => {
+      if (key === 'resume' && formValue.resume instanceof File) {
+        formData.append('resume', formValue.resume);
+      } else {
+        formData.append(key, formValue[key]);
+      }
+    });
+
+    this.userService.createUser(formData).subscribe({
+      next: (res) => {
+        console.log('Profile created:', res);
+        alert('Profile created successfully! Please check your email for activation link.');
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.error('Error creating profile:', err);
+        alert('Failed to create profile');
+      }
+    });
+  } else {
+    this.profileForm.markAllAsTouched();
   }
+}
 
   goBack() {
     this.router.navigate(['/login']);
   }
 
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-      this.profileForm.patchValue({ resume: this.selectedFile });
-    }
+onFileSelected(event: any) {
+  const file: File = event.target.files[0];
+  if (file) {
+    this.profileForm.patchValue({ resume: file }); // store file reference
+    this.profileForm.get('resume')?.updateValueAndValidity();
   }
+}
+
 
 }

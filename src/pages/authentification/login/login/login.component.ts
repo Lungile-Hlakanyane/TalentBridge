@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../../../../services/User-Service/user.service';
 
 @Component({
   selector: 'app-login',
@@ -15,27 +16,36 @@ export class LoginComponent implements OnInit{
   email: string = '';
   password: string = '';
 
-  constructor(private router: Router){}
+  constructor(
+    private router: Router,
+    private userService: UserService
+  ){}
 
   ngOnInit() {}
 
- login() {
-    console.log('Logging in with:', this.email, this.password);
-    if (this.email.toLowerCase() === 'employer@gmail.com') {
-      localStorage.setItem('role', 'Employer');
+login() {
+  console.log('Logging in with:', this.email, this.password);
+  this.userService.login(this.email, this.password).subscribe({
+    next: (response: any) => {
+      console.log('Login response:', response);
+      localStorage.setItem('role', response.role);
       localStorage.setItem('email', this.email);
-      this.router.navigate(['/employer-dashboard']);
-    } if(this.email.toLowerCase() === 'admin@gmail.com'){
-      localStorage.setItem('role', 'Admin');
-      localStorage.setItem('email', this.email);
-      this.router.navigate(['/admin-dashboard']);
+      localStorage.setItem('userId', response.userId);
+
+      if (response.role === 'Admin') {
+        this.router.navigate(['/admin-dashboard']);
+      } else if (response.role === 'EMPLOYER') {
+        this.router.navigate(['/employer-dashboard']);
+      } else {
+        this.router.navigate(['/industry-selection']);
+      }
+    },
+    error: (err) => {
+      alert(err.error || 'Invalid email or password');
     }
-    else {
-      localStorage.setItem('role', 'Job Seeker');
-      localStorage.setItem('email', this.email);
-      this.router.navigate(['/industry-selection']);
-    }
-  }
+  });
+}
+
 
   navigate(link:string){
     this.router.navigate([link]); 

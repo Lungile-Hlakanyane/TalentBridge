@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { UserService } from '../../../../services/User-Service/user.service';
 
 @Component({
   selector: 'app-industry-selection',
@@ -39,7 +40,10 @@ export class IndustrySelectionComponent implements OnInit{
     '5+ Years'
   ];
 
-  constructor(private router:Router){}
+  constructor(
+    private router:Router,
+    private userService:UserService
+  ){}
 
   selectedIndustries: string[] = [];
   selectedJobTypes: string[] = [];
@@ -79,11 +83,25 @@ export class IndustrySelectionComponent implements OnInit{
     this.router.navigate(['/home']);
   }
 
-  continue() {
-    console.log('Selected Industries:', this.selectedIndustries);
-    console.log('Selected Job Types:', this.selectedJobTypes);
-    console.log('Selected Experience:', this.selectedExperience);
-    this.router.navigate(['/home']);
-  }
+ continue() {
+  const payload = {
+    userId: localStorage.getItem('userId') || localStorage.getItem('email'),
+    industries: this.selectedIndustries,
+    jobTypes: this.selectedJobTypes,
+    experienceLevels: this.selectedExperience
+  };
+
+  this.userService.savePreferences(payload).subscribe({
+    next: (res) => {
+      console.log('Preferences saved', res);
+      this.router.navigate(['/home']);
+    },
+    error: (err) => {
+      console.error(err);
+      alert('Failed to save preferences');
+    }
+  });
+}
+
 
 }
