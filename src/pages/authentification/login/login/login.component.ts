@@ -32,7 +32,7 @@ login() {
       localStorage.setItem('email', this.email);
       localStorage.setItem('userId', response.userId);
 
-      if (response.role === 'Admin') {
+      if (response.role === 'ADMIN') {
         this.router.navigate(['/admin-dashboard']);
       } else if (response.role === 'EMPLOYER') {
         this.router.navigate(['/employer-dashboard']);

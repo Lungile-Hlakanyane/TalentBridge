@@ -4,6 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { JobService } from '../../../services/Job-Service/job.service';
+import { Subscription } from '../../../models/Subscription';
+import { SubscriptionService } from '../../../services/Subscription-Service/subscription.service';
+import { ApplicationService } from '../../../services/Application-Service/application.service';
+import { JobApplication } from '../../../models/JobApplication';
 
 @Component({
   selector: 'app-view-job',
@@ -17,12 +22,18 @@ export class ViewJobComponent implements OnInit{
   job: Job | undefined;
   jobs: Job[] = [];
 
+  subscriberEmail: string = '';   
+  userId: any | null = null;         
+
   showModal: boolean = false;
   selectedFile: File | null = null;
 
   constructor(
    private route:ActivatedRoute,
-   private router: Router
+   private router: Router,
+   private jobService:JobService,
+   private subscriptionService:SubscriptionService,
+   private applicationService: ApplicationService
   ){}
 
   application = {
@@ -47,22 +58,53 @@ export class ViewJobComponent implements OnInit{
   }
 
    submitApplication() {
-    console.log('Applying to job:', this.job);
-    console.log('Application Info:', this.application);
-    console.log('Uploaded Resume:', this.selectedFile);
+    if (!this.job) {
+      alert('Job not found.');
+      return;
+    }
 
-    alert(`Application submitted for "${this.job?.title}" at ${this.job?.company}`);
-    this.closeModal();
+    const jobApplication: JobApplication = {
+      jobId: this.job.id!,
+      applicantName: this.application.name,
+      applicantEmail: this.application.email,
+      coverLetter: this.application.coverLetter,
+      resumePath: this.selectedFile ? this.selectedFile.name : undefined // later replace with upload
+    };
+
+    this.applicationService.applyForJob(jobApplication).subscribe({
+      next: (res) => {
+        console.log('Application submitted:', res);
+        alert(`Application submitted for "${this.job?.title}" at ${this.job?.company}`);
+        this.closeModal();
+        this.application = { name: '', email: '', coverLetter: '' };
+        this.selectedFile = null;
+      },
+      error: (err) => {
+        console.error('Error submitting application:', err);
+        alert('Failed to submit application. Please try again.');
+      }
+    });
   }
 
-  ngOnInit(){
-    this.jobs = [
-      { id: 1, title: 'Frontend Developer', company: 'Tech Solutions', location: 'Johannesburg', type: 'Full-time', description: 'Work on building amazing web apps.', requirements: ['HTML, CSS, JS', 'Angular experience', 'Team player'] },
-      { id: 2, title: 'Backend Developer', company: 'Innovate Inc', location: 'Cape Town', type: 'Contract', description: 'Develop APIs and services.', requirements: ['Node.js, Express', 'Database experience', 'Problem-solving skills'] },
-      { id: 3, title: 'UI/UX Designer', company: 'Creative Minds', location: 'Remote', type: 'Part-time', description: 'Design beautiful interfaces.', requirements: ['Figma, Adobe XD', 'Creativity', 'Attention to detail'] }
-    ];
+ ngOnInit() {
+
+   const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      this.userId = Number(storedUserId);
+    }
+
     const jobId = Number(this.route.snapshot.paramMap.get('id'));
-    this.job = this.jobs.find(j => j.id === jobId);
+    if (jobId) {
+      this.jobService.getJobById(jobId).subscribe({
+        next: (data) => {
+          this.job = data;
+          console.log('Loaded job:', data);
+        },
+        error: (err) => {
+          console.error('Error fetching job', err);
+        }
+      });
+    }
   }
 
   goBack() {
@@ -72,6 +114,29 @@ export class ViewJobComponent implements OnInit{
   applyJob() {
     console.log('Applying to job:', this.job);
     alert(`You have applied to "${this.job?.title}" at ${this.job?.company}`);
+  }
+
+  subscribeToJobAlert() {
+    if (!this.subscriberEmail || !this.job) {
+      alert('Please enter a valid email.');
+      return;
+    }
+    const subscription: Subscription = {
+      userId: this.userId,
+      email: this.subscriberEmail,
+      jobRole: this.job.title
+    };
+    this.subscriptionService.createSubscription(subscription).subscribe({
+      next: (res) => {
+        console.log('Subscription successful:', res);
+        alert(`Subscribed to alerts for "${this.job?.title}" jobs!`);
+        this.subscriberEmail = '';
+      },
+      error: (err) => {
+        console.error('Error subscribing:', err);
+        alert('Failed to subscribe. Please try again.');
+      }
+    });
   }
 
 }

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Application } from '../../../models/Application';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-applications',
@@ -14,7 +15,10 @@ export class ApplicationsComponent implements OnInit {
 
   applications: Application[] = [];
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private location: Location
+  ) { }
 
   ngOnInit(): void {
     this.loadMockApplications();
@@ -61,6 +65,10 @@ export class ApplicationsComponent implements OnInit {
 
   goTo(path: string): void {
     this.router.navigate([`/admin/${path}`]);
+  }
+
+  goBack() {
+    this.location.back();
   }
 
 }

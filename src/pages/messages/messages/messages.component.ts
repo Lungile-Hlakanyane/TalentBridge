@@ -35,7 +35,9 @@ export class MessagesComponent implements OnInit {
   }
 
   openChat(chatId: number) {
-    console.log('Opening chat with ID:', chatId);
-  }
+  console.log('Opening chat with ID:', chatId);
+  this.router.navigate(['/chat', chatId]);
+}
+
 
 }

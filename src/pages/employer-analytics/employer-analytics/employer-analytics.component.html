@@ -1,0 +1,43 @@
+  <div class="action-back-container">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+  </div>
+
+<div class="employer-analytics-container">
+
+  <section class="analytics-banner">
+    <h2>{{ employerName }} Analytics Dashboard</h2>
+    <p>Visual insights into your hiring activity</p>
+  </section>
+
+  <section class="analytics-stats">
+    <div class="stat-card" *ngFor="let stat of stats">
+      <h4>{{ stat.label }}</h4>
+      <p>{{ stat.value }}</p>
+    </div>
+  </section>
+
+  <section class="chart-section">
+    <h3>Recruitment Overview</h3>
+    <canvas baseChart
+      [data]="pieChartData"
+      [type]="pieChartType"
+      [options]="pieChartOptions">
+    </canvas>
+  </section>
+
+  <div class="back-btn">
+    <button (click)="goBack()">← Back to Dashboard</button>
+  </div>
+
+   <footer class="app-footer">
+    <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+    <div class="footer-links">
+      <a (click)="goTo('about')">About</a> |
+      <a (click)="goTo('contact')">Contact</a> |
+      <a (click)="goTo('privacy')">Privacy</a>
+    </div>
+  </footer>
+
+</div>

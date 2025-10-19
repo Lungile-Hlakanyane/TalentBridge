@@ -1,3 +1,4 @@
+<app-top-navbar></app-top-navbar>
 <div class="home-container">
   <!-- Welcome Banner -->
   <section class="welcome-banner">
@@ -26,16 +27,20 @@
   </section>
 
   <!-- Featured Jobs -->
-  <section class="featured-jobs">
-    <h3>Featured Jobs</h3>
-    <div class="job-cards">
-      <div class="job-card" *ngFor="let job of featuredJobs">
-        <h4>{{ job.title }}</h4>
-        <p>{{ job.company }}</p>
-        <button (click)="viewJob(job.id)">View</button>
-      </div>
+ <section class="featured-jobs"> 
+  <h3>Featured Jobs</h3>
+  <div class="job-cards">
+    <div class="job-card" *ngFor="let job of featuredJobs">
+      <h4>{{ job.title }}</h4>
+      <p><strong>Company:</strong> {{ job.company }}</p>
+      <p><strong>Location:</strong> {{ job.location }}</p>
+      <p><strong>Salary:</strong> R{{ job.salary }}</p>
+      <p><strong>Type:</strong> {{ job.type }}</p>
+      <button (click)="viewJob(job.id)">View</button>
     </div>
-  </section>
+  </div>
+</section>
+
 
   <!-- Announcements -->
   <section class="announcements" *ngIf="announcements.length > 0">

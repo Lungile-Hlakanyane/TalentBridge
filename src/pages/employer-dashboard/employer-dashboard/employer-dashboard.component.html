@@ -1,10 +1,11 @@
+<app-top-navbar></app-top-navbar>
 <div class="employer-home-container">
 
   <!-- Welcome Banner -->
-  <section class="welcome-banner">
-    <h2>Welcome back, {{ employerName }}</h2>
-    <p>Manage your job postings and track applicants</p>
-  </section>
+ <section class="welcome-banner">
+  <h2>Welcome back, {{ employerName }}</h2>
+  <p>Manage your job postings and track applicants</p>
+</section>
 
   <!-- Quick Actions -->
   <section class="quick-actions">
@@ -49,6 +50,7 @@
       <li>Total Jobs Posted: {{ insights.jobsPosted }}</li>
       <li>Total Applicants: {{ insights.totalApplicants }}</li>
       <li>Interviews Scheduled: {{ insights.interviews }}</li>
+      <li (click)="goTo('employer-analytics')">Analytics</li>
     </ul>
   </section>
 

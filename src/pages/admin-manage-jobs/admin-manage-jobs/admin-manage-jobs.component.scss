@@ -152,3 +152,101 @@
     }
   }
 }
+
+
+.action-back-container {
+     margin-bottom: 20px;
+     font-family: 'Poppins', sans-serif;
+    .back-text {
+      color: #4cafef;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      i {
+        font-size: 1rem;
+      }
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .job-meta {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #555;
+
+  p {
+    margin: 2px 0;
+  }
+
+  strong {
+    color: #222;
+  }
+}
+
+.status {
+  margin-top: 10px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status.approved {
+  color: green;
+}
+
+.status.rejected {
+  color: red;
+}
+
+.status.pending {
+  color: orange;
+}
+
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+
+  input {
+    width: 60%;
+    max-width: 500px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+
+    &:focus {
+      border-color: #007bff;
+      outline: none;
+      box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+    }
+  }
+}
+
+.status {
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 8px;
+  text-transform: capitalize;
+}
+
+.status.approved {
+  color: #1a7f37;
+  background: #d7f8df;
+}
+
+.status.declined {
+  color: #a82b2b;
+  background: #fbd4d4;
+}
+
+.status.pending {
+  color: #aa8c00;
+  background: #fff2b3;
+}
+

@@ -1,3 +1,9 @@
+<div class="action-back-container">
+  <span class="back-text" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i> Back
+  </span>
+</div>
+
 <div class="manage-jobs-container">
 
   <!-- Header -->
@@ -6,33 +12,71 @@
     <p>Review, approve, or remove job postings</p>
   </section>
 
+  <div class="search-container">
+    <input
+      type="text"
+      placeholder="Search by job title, company, or location..."
+      [(ngModel)]="searchTerm"
+      (input)="filterJobs()"
+    />
+  </div>
+
+  <!-- Loading and Error States -->
+  <div *ngIf="isLoading" class="loading">
+    <p>Loading job postings...</p>
+  </div>
+
+  <div *ngIf="!isLoading && errorMessage" class="error">
+    <p>{{ errorMessage }}</p>
+  </div>
+
   <!-- Job List -->
-  <section class="job-list">
-    <div class="job-card" *ngFor="let job of jobs" (click)="viewJobDetails(job.id)">
+  <section class="job-list" *ngIf="!isLoading && filteredJobs.length > 0">
+    <div class="job-card" *ngFor="let job of filteredJobs" (click)="viewJobDetails(job.id)">
       <div class="job-info">
         <h3>{{ job.title }}</h3>
         <p class="company">{{ job.company }}</p>
-        <p class="location"><i class="fas fa-map-marker-alt"></i> {{ job.location }}</p>
-        <p class="status" [ngClass]="job.status">{{ job.status | titlecase }}</p>
+        <p class="location">
+          <i class="fas fa-map-marker-alt"></i> {{ job.location }}
+        </p>
+
+        <!-- Added extra info -->
+        <div class="job-meta">
+          <p><strong>Type:</strong> {{ job.type }}</p>
+          <p><strong>Salary:</strong> R{{ job.salary }}</p>
+          <p><strong>Date Posted:</strong> {{ job.created | date:'mediumDate' }}</p>
+        </div>
+
+       <p class="status" 
+         [ngClass]="{
+          'approved': job.status === 'approved',
+          'declined': job.status === 'declined',
+          'pending': job.status === 'pending'}">
+        {{ job.status ? (job.status | titlecase) : 'Pending' }}
+       </p>
+
+
       </div>
 
       <!-- Actions -->
       <div class="job-actions">
-        <button class="approve-btn" *ngIf="job.status === 'pending'" (click)="approveJob(job.id)">
+        <button class="approve-btn" (click)="approveJob(job.id); $event.stopPropagation();">
           <i class="fas fa-check"></i> Approve
         </button>
-        <button class="reject-btn" *ngIf="job.status === 'pending'" (click)="rejectJob(job.id)">
+        <button class="reject-btn" (click)="rejectJob(job.id); $event.stopPropagation();">
           <i class="fas fa-times"></i> Reject
         </button>
-        <button class="edit-btn" (click)="editJob(job.id)">
-          <i class="fas fa-edit"></i> Edit
-        </button>
-        <button class="delete-btn" (click)="deleteJob(job.id)">
+        <button class="delete-btn" (click)="deleteJob(job.id); $event.stopPropagation();">
           <i class="fas fa-trash"></i> Delete
         </button>
       </div>
     </div>
   </section>
+
+  <!-- No jobs -->
+  <div *ngIf="!isLoading && jobs.length === 0 && !errorMessage" class="no-jobs">
+    <p>No job postings available.</p>
+  </div>
 
   <!-- Footer -->
   <footer class="app-footer">

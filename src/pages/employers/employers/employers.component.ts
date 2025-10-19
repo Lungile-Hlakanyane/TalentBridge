@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Employer } from '../../../models/Employer';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-employers',
@@ -19,7 +20,10 @@ export class EmployersComponent implements OnInit {
   modalAction: 'approve' | 'reject' | 'suspend' | 'delete' | null = null;
   selectedEmployer!: Employer;
   
-  constructor(private router:Router) { }
+  constructor(
+    private router:Router,
+    private location: Location
+  ) { }
 
   ngOnInit(): void {
      this.employers = [
@@ -93,6 +97,11 @@ export class EmployersComponent implements OnInit {
   closeModal() {
     this.showModal = false;
     this.modalAction = null;
+  }
+
+  
+  goBack() {
+    this.location.back();
   }
 
 }

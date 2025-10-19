@@ -1,28 +1,54 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
+import { TopNavbarComponent } from '../../../re-usable-components/top-navbar/top-navbar.component';
+import { UserService } from '../../../services/User-Service/user.service';
+import { JobService } from '../../../services/Job-Service/job.service';
+import { Job } from '../../../models/Job';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TopNavbarComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit{
 
-  constructor(private router: Router){}
+  userName: string = '';
+  featuredJobs: Job[] = [ ]
 
-  ngOnInit() {}
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private jobService: JobService
+  ) {}
 
-  userName = 'Lungile Hlakanyane';
+  ngOnInit() {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      this.userService.getUserById(+userId).subscribe({
+        next: (res: any) => {
+          this.userName = res.name || `${res.firstName} ${res.lastName}`; 
+        },
+        error: (err) => {
+          console.error('Failed to fetch user details', err);
+          this.userName = 'User';
+        }
+      });
+    } else {
+      this.userName = 'User';
+    }
 
-  featuredJobs = [
-    { title: 'Frontend Developer', company: 'TechCorp', id: 1 },
-    { title: 'UI/UX Designer', company: 'Designify', id: 2 },
-    { title: 'Backend Engineer', company: 'CodeWorks', id: 3 }
-  ];
+    this.jobService.getAllJobs().subscribe({
+      next: (jobs: Job[]) => {
+        const sortedJobs = jobs.sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
+        this.featuredJobs = sortedJobs.slice(0, 3);
+      },
+      error: (err) => console.error('Failed to fetch jobs', err)
+    });
+  }
+
 
   announcements = [
     'New job postings every Monday!',

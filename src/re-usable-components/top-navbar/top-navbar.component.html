@@ -1,0 +1,47 @@
+<nav class="navbar">
+  <div class="navbar-left">
+    <div class="search-section">
+      <a href="#" class="search-link">Search</a>
+      <div class="search-box">
+        <select>
+          <option value="">Select</option>
+        </select>
+      </div>
+      <button class="explore-btn">
+        Explore <span class="arrow">&#9662;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="navbar-right">
+    
+   <ul class="nav-links" *ngIf="userRole !== 'ADMIN' && userRole !== 'EMPLOYER'">
+     <li><a (click)="navigate('dashboard')">Dashboard</a></li>
+     <li><a (click)="navigate('job-postings')">Job Postings</a></li>
+     <li><a (click)="navigate('candidates')">Candidates</a></li>
+     <li><a (click)="navigate('interviews')">Interviews</a></li>
+     <li><a (click)="navigate('employer-report')">Reports</a></li>
+    </ul>
+
+    <div class="icons">
+      <button class="icon-btn">
+        <i class="fa fa-bell"></i>
+      </button>
+      <button class="icon-btn reload">
+        <i class="fa fa-rotate-right"></i>
+      </button>
+
+      <div class="profile-dropdown">
+        <button class="profile-btn" (click)="toggleDropdown()">
+          Profile <span class="arrow">&#9662;</span>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu" *ngIf="dropdownOpen">
+          <a (click)="navigate('employer-profile')" class="dropdown-item">View Profile</a>
+          <a (click)="logout()" class="dropdown-item quit">Quit</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

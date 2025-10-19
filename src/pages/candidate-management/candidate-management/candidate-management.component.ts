@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Candidate } from '../../../models/Candidate';
 import { CommonModule } from '@angular/common';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-candidate-management',
@@ -19,7 +20,10 @@ export class CandidateManagementComponent implements OnInit {
   modalAction: 'suspend' | 'delete' | null = null;
   selectedCandidate!: Candidate;
 
-  constructor(private router: Router) { } 
+  constructor(
+    private router: Router,
+    private location: Location  
+  ) { } 
 
   ngOnInit(): void {
       this.candidates = [
@@ -80,6 +84,10 @@ export class CandidateManagementComponent implements OnInit {
 
   navigate(link: string){
     this.router.navigate([link]);
+  }
+
+  goBack() {
+    this.location.back();
   }
 
 }

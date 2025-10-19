@@ -55,14 +55,30 @@
       <small *ngIf="profileForm.get('address')?.touched && profileForm.get('address')?.invalid">Address is required</small>
     </div>
 
-    <!-- Role -->
-    <div class="form-group">
-      <label for="role">Role</label>
-      <select id="role" formControlName="role">
-        <option value="Employee">Employee</option>
-        <option value="Employer">Employer</option>
-      </select>
-    </div>
+   <!-- Role -->
+<div class="form-group">
+  <label for="role">Role</label>
+  <select id="role" formControlName="role">
+    <option value="Employee">Employee</option>
+    <option value="Employer">Employer</option>
+  </select>
+</div>
+
+<!-- Company Name - Only show if Employer is selected -->
+<div class="form-group" *ngIf="profileForm.get('role')?.value === 'Employer'">
+  <label for="companyName">Company Name</label>
+  <input
+    id="companyName"
+    type="text"
+    formControlName="companyName"
+    placeholder="Enter your company name"
+  />
+  <small
+    *ngIf="profileForm.get('companyName')?.touched && profileForm.get('companyName')?.invalid"
+    >Enter valid company name</small
+  >
+</div>
+
 
     <!-- Password -->
 <div class="form-group">

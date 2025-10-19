@@ -22,6 +22,10 @@ import { CandidateManagementComponent } from '../pages/candidate-management/cand
 import { CandidateDetailsComponent } from '../pages/candidate-details/candidate-details/candidate-details.component';
 import { ApplicationsComponent } from '../pages/applications/applications/applications.component';
 import { PendingApprovalsComponent } from '../pages/pending-approvals/pending-approvals/pending-approvals.component';
+import { EmployerAnalyticsComponent } from '../pages/employer-analytics/employer-analytics/employer-analytics.component';
+import { ChatComponent } from '../pages/chat/chat/chat.component';
+import { EmployerProfileComponent } from '../pages/employer-profile/employer-profile/employer-profile.component';
+import { EmployerReportComponent } from '../pages/employer-report/employer-report/employer-report.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -47,5 +51,9 @@ export const routes: Routes = [
     {path: 'candidate-details', component: CandidateDetailsComponent},
     {path: 'applications', component: ApplicationsComponent},
     {path: 'pending-approvals', component: PendingApprovalsComponent},
+    {path: 'employer-analytics', component: EmployerAnalyticsComponent},
+    {path: 'chat/:id', component: ChatComponent},
+    {path: 'employer-profile', component:EmployerProfileComponent},
+    {path: 'employer-report', component: EmployerReportComponent},
     {path: '**', redirectTo: '' },
 ];

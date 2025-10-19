@@ -3,12 +3,13 @@ import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { JobService } from '../../../services/Job-Service/job.service';
 import { Job } from '../../../models/Job';
-
+import { UserService } from '../../../services/User-Service/user.service';
+import { TopNavbarComponent } from '../../../re-usable-components/top-navbar/top-navbar.component';
 
 @Component({
   selector: 'app-employer-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TopNavbarComponent],
   templateUrl: './employer-dashboard.component.html',
   styleUrl: './employer-dashboard.component.scss'
 })
@@ -16,15 +17,17 @@ export class EmployerDashboardComponent implements OnInit{
 
   constructor(
     private router: Router,
-    private jobService: JobService
+    private jobService: JobService,
+    private userService:UserService
   ){}
 
   ngOnInit() {
+    this.loadEmployerDetails();
     this.loadActiveJobs();
   }
 
   activeJobs: Job[] = [];
-  employerName = 'Vincent Technologies (PTY) LTD';
+  employerName: string = '';
 
   insights = {
     jobsPosted: 0,
@@ -42,7 +45,7 @@ export class EmployerDashboardComponent implements OnInit{
     console.log(`Managing job with ID: ${id}`);
   }
 
-   loadActiveJobs() {
+  loadActiveJobs() {
     const userId = localStorage.getItem('userId');
     if (userId) {
       this.jobService.getJobsByUserId(Number(userId)).subscribe({
@@ -57,6 +60,22 @@ export class EmployerDashboardComponent implements OnInit{
           this.insights.totalApplicants = this.activeJobs.reduce((sum, job) => sum + (job.applicants || 0), 0);
         },
         error: (err) => console.error('Error fetching jobs:', err)
+      });
+    } else {
+      console.warn('No userId found in localStorage');
+    }
+  }
+
+  loadEmployerDetails() {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      this.userService.getUserById(Number(userId)).subscribe({
+        next: (user) => {
+          this.employerName = user.companyName || user.name; 
+        },
+        error: (err) => {
+          console.error('Error fetching employer details:', err);
+        }
       });
     } else {
       console.warn('No userId found in localStorage');

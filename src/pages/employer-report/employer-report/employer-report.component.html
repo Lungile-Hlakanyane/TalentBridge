@@ -1,0 +1,68 @@
+  <div class="action-back-container">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+  </div>
+
+<div class="report-container">
+  <h2>Employer Reports</h2>
+
+  <!-- Stats Section -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>Total Companies</h3>
+      <p>{{ reportData.totalCompanies }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Total Employees</h3>
+      <p>{{ reportData.totalEmployees }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Active Contracts</h3>
+      <p>{{ reportData.activeContracts }}</p>
+    </div>
+    <div class="stat-card">
+      <h3>Pending Verifications</h3>
+      <p>{{ reportData.pendingVerifications }}</p>
+    </div>
+  </div>
+
+  <!-- Chart Section -->
+  <div class="chart-section">
+    <h3>Overview Chart</h3>
+    <canvas id="reportChart"></canvas>
+  </div>
+
+  <!-- Download Section -->
+ <div class="download-section">
+  <h3>Download Report</h3>
+  <div class="download-buttons">
+    <button (click)="downloadReport('pdf')" class="pdf-btn">
+      <!-- PDF icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.103.897 2 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
+        <path d="M8 15h8v2H8zM8 11h8v2H8z"/>
+      </svg>
+      PDF
+    </button>
+
+    <button (click)="downloadReport('excel')" class="excel-btn">
+      <!-- Excel icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19 2H8a2 2 0 0 0-2 2v4H3v8h3v4a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm0 18H8v-4h11v4zM8 8h11v4H8V8zm0-4h11v2H8V4z"/>
+        <path d="M10.293 17.293 12 19l1.707-1.707L12 15.586z"/>
+      </svg>
+      Excel
+    </button>
+
+    <button (click)="downloadReport('word')" class="word-btn">
+      <!-- Word icon -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M14 2H6a2 2 0 0 0-2 2v4H3v8h1v4a2 2 0 0 0 2 2h8l6-6V8l-6-6zm0 16H6v-4h8v4zm0-6H6V8h8v4zm2-4v2h2l-2 2v2h4V8h-4z"/>
+      </svg>
+      Word
+    </button>
+  </div>
+</div>
+
+</div>

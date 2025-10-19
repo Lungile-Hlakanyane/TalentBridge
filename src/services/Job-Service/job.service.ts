@@ -42,4 +42,17 @@ export class JobService {
   deleteJob(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  getEmployerCount(): Observable<number> {
+   return this.http.get<number>(`${this.baseUrl}/count/employers`);
+  }
+
+  approveJob(id: number): Observable<Job> {
+    return this.http.put<Job>(`${this.baseUrl}/${id}/approve`, {});
+  }
+
+  declineJob(id: number): Observable<Job> {
+    return this.http.put<Job>(`${this.baseUrl}/${id}/decline`, {});
+  }
+
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PendingApproval } from '../../../models/PendingApproval';
 import { CommonModule } from '@angular/common';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-pending-approvals',
@@ -14,7 +15,10 @@ export class PendingApprovalsComponent implements OnInit {
 
   pendingApprovals: PendingApproval[] = [];
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private location: Location
+  ) { }
 
   ngOnInit(): void {
     this.loadMockPendingApprovals();
@@ -40,6 +44,10 @@ export class PendingApprovalsComponent implements OnInit {
 
   goTo(path: string): void {
     this.router.navigate([`/admin/${path}`]);
+  }
+
+  goBack() {
+    this.location.back();
   }
 
 }

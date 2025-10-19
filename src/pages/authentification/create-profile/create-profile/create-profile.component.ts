@@ -24,8 +24,8 @@ export class CreateProfileComponent  implements OnInit{
   )
     {}
 
-  ngOnInit() {
-     this.profileForm = this.fb.group({
+ngOnInit() {
+    this.profileForm = this.fb.group({
       name: ['', Validators.required],
       surname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
@@ -34,10 +34,22 @@ export class CreateProfileComponent  implements OnInit{
       role: ['Employee', Validators.required],
       resume: [],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
+      confirmPassword: ['', Validators.required],
+      companyName: ['']
     },
-    { validators: this.passwordMatchValidator } 
-  );
+    { validators: this.passwordMatchValidator });
+
+    // 👇 Watch for role changes to toggle companyName validation
+    this.profileForm.get('role')?.valueChanges.subscribe(role => {
+      const companyControl = this.profileForm.get('companyName');
+      if (role === 'Employer') {
+        companyControl?.setValidators([Validators.required, Validators.minLength(2)]);
+      } else {
+        companyControl?.clearValidators();
+        companyControl?.setValue('');
+      }
+      companyControl?.updateValueAndValidity();
+    });
   }
 
   passwordMatchValidator(form: AbstractControl) {

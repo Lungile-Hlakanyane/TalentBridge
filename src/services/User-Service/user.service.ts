@@ -40,5 +40,17 @@ getPreferencesByUser(userId: string) {
   return this.http.get(`${this.apiUrl.replace('/users','')}/preferences/user/${userId}`);
 }
 
+getUserById(userId: number): Observable<any> {
+  return this.http.get(`${this.apiUrl}/${userId}`);
+}
+
+getEmployerCount(): Observable<number> {
+   return this.http.get<number>(`${this.apiUrl}/count/employers`);
+ }
+
+getEmployeeCount(): Observable<number> {
+   return this.http.get<number>(`${this.apiUrl}/count/employees`);
+}
+
 
 }

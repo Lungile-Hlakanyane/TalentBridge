@@ -1,0 +1,73 @@
+  <div class="action-back-container">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+  </div>
+
+<div class="chat-layout">
+
+  <!-- LEFT: Chat List -->
+  <div class="chat-list">
+    <div class="chat-list-header">
+      <h3>Recent Chats</h3>
+    </div>
+
+    <div class="search-container">
+      <input 
+        type="text" 
+        placeholder="Search chats..." 
+        [(ngModel)]="searchTerm" 
+        (input)="filterChats()" />
+    </div>
+
+    <div class="chat-list-body">
+      <div 
+        *ngFor="let chat of chatList" 
+        class="chat-list-item" 
+        [class.active]="chat.id === chatId"
+        (click)="openChat(chat)"
+      >
+        <div class="chat-avatar">{{ chat.name.charAt(0) }}</div>
+        <div class="chat-info">
+          <h4>{{ chat.name }}</h4>
+          <p>{{ chat.lastMessage }}</p>
+        </div>
+        <span class="chat-time">{{ chat.time | date:'shortTime' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Active Chat -->
+  <div class="chat-container">
+
+  <div class="chat-header">
+   <div class="chat-user-info">
+     <div class="chat-avatar">{{ chatPartnerName.charAt(0) }}</div>
+     <div class="chat-details">
+      <h3>{{ chatPartnerName }}</h3>
+      <p>
+        <span class="role">{{ chatPartnerRole }}</span> • 
+        <span class="last-active">Last active {{ lastActive | date:'shortTime' }}</span>
+      </p>
+    </div>
+  </div>
+
+   <button class="view-profile-btn" (click)="viewProfile()">View Profile</button>
+ </div>
+
+    <div class="chat-window" #chatWindow>
+      <div *ngFor="let msg of messages" 
+           [ngClass]="{'employee-msg': msg.sender==='employee', 'employer-msg': msg.sender==='employer'}" 
+           class="chat-message">
+        <p>{{ msg.content }}</p>
+        <span>{{ msg.timestamp | date:'shortTime' }}</span>
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <input type="text" [(ngModel)]="newMessage" placeholder="Type your message..." (keyup.enter)="sendMessage()" />
+      <button (click)="sendMessage()">Send</button>
+    </div>
+  </div>
+
+</div>

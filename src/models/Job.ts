@@ -7,6 +7,9 @@ export interface Job{
   description: string;
   requirements?: string[];
   userId?:number;
-  created?:string;
+  created?:any;
   applicants?:number;
+  salary?: string;
+  approve?: any;
+  status?:any;
 }

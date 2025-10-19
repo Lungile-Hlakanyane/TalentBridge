@@ -2,11 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { DashboardStats } from '../../../models/DashboardStats';
+import { TopNavbarComponent } from '../../../re-usable-components/top-navbar/top-navbar.component';
+import { JobService } from '../../../services/Job-Service/job.service';
+import { UserService } from '../../../services/User-Service/user.service';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TopNavbarComponent],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss'
 })
@@ -23,33 +26,54 @@ export class AdminDashboardComponent implements OnInit{
 
   recentActivity: string[] = [];
 
-  constructor(private router: Router){}
+  constructor(
+    private router: Router,
+    private jobService: JobService,
+    private userService: UserService
+  ){}
 
   ngOnInit() {
-    this.loadMockData();
+    this.loadDashboardData();
+    this.loadStats();
   }
 
-   loadMockData(): void {
-    this.stats = {
-      totalJobs: 128,
-      totalEmployers: 42,
-      totalCandidates: 560,
-      totalApplications: 1340,
-      pendingApprovals: 7
-    };
 
+  loadDashboardData(): void {
+    // ✅ Fetch total jobs
+    this.jobService.getAllJobs().subscribe({
+      next: (jobs) => this.stats.totalJobs = jobs.length,
+      error: (err) => console.error('Failed to load jobs:', err)
+    });
+
+    // ✅ Fetch total employers
+    this.userService.getEmployerCount().subscribe({
+      next: (count) => this.stats.totalEmployers = count,
+      error: (err) => console.error('Failed to load employer count:', err)
+    });
+
+    // You can expand later for candidates/applications
     this.recentActivity = [
       'New employer "TechSoft Ltd" registered',
       'Candidate John Doe applied for "Frontend Developer"',
-      'Job post "Marketing Specialist" approved',
-      'Candidate Jane Smith account suspended',
-      'Employer "CreativeHub" pending verification'
+      'Job post "Marketing Specialist" approved'
     ];
   }
+
 
   goTo(page: string) {
     this.router.navigateByUrl(page);
     console.log(`Navigate to ${page}`);
   }
+
+  loadStats() {
+  this.userService.getEmployeeCount().subscribe({
+    next: (count) => {
+      this.stats.totalCandidates = count;
+    },
+    error: (err) => {
+      console.error('Error fetching employee count:', err);
+    }
+  });
+}
 
 }
