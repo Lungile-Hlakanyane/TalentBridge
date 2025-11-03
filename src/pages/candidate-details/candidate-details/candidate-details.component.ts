@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Job } from '../../../models/Job';
 import { Candidate } from '../../../models/Candidate';
 import { Resume } from '../../../models/Resume';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-candidate-details',
@@ -18,7 +19,8 @@ export class CandidateDetailsComponent implements OnInit{
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location:Location
   ) { }
 
   ngOnInit(): void {
@@ -56,6 +58,10 @@ export class CandidateDetailsComponent implements OnInit{
 
   goTo(path: string) {
     this.router.navigate([`/admin/${path}`]);
+  }
+
+  goBack() {
+    this.location.back();
   }
 
 }

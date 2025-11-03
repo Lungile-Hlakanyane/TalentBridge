@@ -3,17 +3,22 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Employer } from '../../../models/Employer';
 import { Location } from '@angular/common';
+import { UserService } from '../../../services/User-Service/user.service';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-employers',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './employers.component.html',
   styleUrl: './employers.component.scss'
 })
 export class EmployersComponent implements OnInit {
 
   employers: Employer[] = [];
+  filteredEmployers: Employer[] = [];
+  searchTerm: string = '';
 
    // Modal state
   showModal = false;
@@ -22,17 +27,20 @@ export class EmployersComponent implements OnInit {
   
   constructor(
     private router:Router,
-    private location: Location
+    private location: Location,
+    private userService:UserService
   ) { }
 
   ngOnInit(): void {
-     this.employers = [
-      { id: 1, companyName: 'TechSoft Ltd', email: 'hr@techsoft.com', status: 'pending' },
-      { id: 2, companyName: 'CreativeHub', email: 'jobs@creativehub.com', status: 'approved' },
-      { id: 3, companyName: 'DesignPro', email: 'info@designpro.com', status: 'suspended' },
-      { id: 4, companyName: 'InnovateX', email: 'careers@innovatex.com', status: 'rejected' }
-    ];
-  }
+        this.userService.getAllEmployers().subscribe({
+            next: (employers) => {
+                this.employers = employers;
+                this.filteredEmployers = employers;
+            },
+            error: (err) => console.error('Failed to load employers:', err)
+        });
+    }
+
 
   // Open confirmation modal
   confirmAction(employer: Employer, action: 'approve' | 'reject' | 'suspend' | 'delete') {
@@ -103,5 +111,11 @@ export class EmployersComponent implements OnInit {
   goBack() {
     this.location.back();
   }
+
+   searchEmployers(): void {
+        this.filteredEmployers = this.employers.filter((employer) =>
+            employer.companyName.toLowerCase().includes(this.searchTerm.toLowerCase())
+        );
+    }
 
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Location } from '@angular/common';
+import { UserService } from '../../../services/User-Service/user.service';
 
 @Component({
   selector: 'app-employer-profile',
@@ -13,8 +14,9 @@ import { Location } from '@angular/common';
 export class EmployerProfileComponent implements OnInit{
 
    showEditModal = false;
+   employerData: any = null;
 
-   employerData = {
+   employerData2 = {
     fullName: 'Lungile Vincent Hlakanyane',
     email: 'lungile@vintechsolutions.co.za',
     contactNumber: '+27 65 123 4567',
@@ -31,13 +33,48 @@ export class EmployerProfileComponent implements OnInit{
     ]
   };
 
+  showCompanyModal = false;
+  companyInfo: any = {
+  description: '',
+  taxNumber: '',
+  registeredAddress: '',
+  registrationDocument: null,
+  taxClearanceDocument: null,
+  leaseAgreement: null
+};
+
+openCompanyModal() {
+  this.showEditModal = false; // close edit modal if open
+  this.showCompanyModal = true;
+}
+
+
+closeCompanyModal() {
+  this.showCompanyModal = false;
+}
+
+saveCompanyInfo() {
+  console.log('Company Info Saved:', this.companyInfo);
+  this.showCompanyModal = false;
+}
+
   constructor(
-     private location:Location
+     private location:Location,
+     private userService:UserService
   ) { }
 
   editData: any = {};
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const storedUserId = localStorage.getItem('userId');
+     if (storedUserId) {
+     const userId = +storedUserId; 
+     this.loadEmployerData(userId);
+   } else {
+     console.error('No userId found in localStorage');
+   }
+  }
+
 
  editProfile() {
     this.editData = { ...this.employerData }; 
@@ -63,6 +100,18 @@ export class EmployerProfileComponent implements OnInit{
 
   goBack() {
     this.location.back();
+  }
+
+  loadEmployerData(userId: number): void {
+    this.userService.getUserById(userId).subscribe({
+      next: (data) => {
+        this.employerData = data;
+        console.log('Employer data loaded:', data);
+      },
+      error: (err) => {
+        console.error('Error fetching employer data:', err);
+      }
+    });
   }
 
 }

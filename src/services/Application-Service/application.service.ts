@@ -19,4 +19,17 @@ export class ApplicationService {
   getApplicationsForJob(jobId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/job/${jobId}`);
   }
+
+  getApplicationsForUser(email: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/${email}`);
+  }
+
+  getJobDetails(jobId: number): Observable<any> {
+    return this.http.get(`http://localhost:8080/api/jobs/${jobId}`);
+  }
+
+  getApplicationCount(): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/count`);
+  }
+ 
 }

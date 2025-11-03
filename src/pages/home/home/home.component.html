@@ -43,12 +43,13 @@
 
 
   <!-- Announcements -->
-  <section class="announcements" *ngIf="announcements.length > 0">
-    <h3>Latest Updates</h3>
-    <ul>
-      <li *ngFor="let ann of announcements">{{ ann }}</li>
-    </ul>
-  </section>
+ <section class="announcements" *ngIf="announcements.length > 0">
+  <h3>Latest Updates</h3>
+  <ul>
+    <li *ngFor="let ann of announcements">{{ ann }}</li>
+  </ul>
+</section>
+
 </div>
 
 <!-- Career Tips -->
@@ -68,4 +69,3 @@
   </div>
 </footer>
 <router-outlet></router-outlet>
->

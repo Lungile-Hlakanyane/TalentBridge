@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Application } from '../../../models/Application';
 import { CommonModule } from '@angular/common';
+import { ApplicationService } from '../../../services/Application-Service/application.service';
+import { JobService } from '../../../services/Job-Service/job.service';
 
 @Component({
   selector: 'app-my-applications',
@@ -15,18 +17,43 @@ export class MyApplicationsComponent implements OnInit {
   applications: Application[] = [];
 
   constructor(
-    private router:Router
+    private router:Router,
+    private applicationService:ApplicationService,
+    private jobService:JobService
   ){}
 
   ngOnInit() {
-     this.applications = [
-      { id: 1, jobTitle: 'Frontend Developer', company: 'Tech Solutions', status: 'Pending', appliedDate: new Date('2025-08-01') },
-      { id: 2, jobTitle: 'Backend Developer', company: 'Innovate Inc', status: 'Accepted', appliedDate: new Date('2025-07-25') },
-      { id: 3, jobTitle: 'UI/UX Designer', company: 'Creative Minds', status: 'Rejected', appliedDate: new Date('2025-07-30') },
-      { id: 4, jobTitle: 'Data Analyst', company: 'DataWorks', status: 'Pending', appliedDate: new Date('2025-08-05') },
-      { id: 5, jobTitle: 'Full Stack Developer', company: 'NextGen Software', status: 'Accepted', appliedDate: new Date('2025-08-03') },
-      { id: 6, jobTitle: 'Project Manager', company: 'Visionary Projects', status: 'Pending', appliedDate: new Date('2025-08-07') }
-    ];
+  const userEmail = localStorage.getItem('email');
+    if (userEmail) {
+        this.applicationService.getApplicationsForUser(userEmail).subscribe({
+            next: (response: any) => {
+                this.applications = response.map((application: any) => {
+                    return {
+                        id: application.id,
+                        jobId: application.jobId,
+                        status: application.status,
+                        appliedDate: application.appliedAt
+                    };
+                });
+
+                // Fetch job details for each application
+                this.applications.forEach((application) => {
+                    this.jobService.getJobById(application.jobId).subscribe({
+                        next: (jobDetails: any) => {
+                            application.title = jobDetails.title;
+                            application.company = jobDetails.company;
+                        },
+                        error: (err) => {
+                            console.error('Error fetching job details:', err);
+                        }
+                    });
+                });
+            },
+            error: (err) => {
+                console.error('Error fetching applications:', err);
+            }
+        });
+    }
   }
 
   goBack() {

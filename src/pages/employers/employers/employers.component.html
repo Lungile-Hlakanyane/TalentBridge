@@ -6,16 +6,20 @@
   
 <div class="employer-management-container">
 
-  <!-- Header -->
+<!-- Header -->
   <section class="page-header">
     <h2>Employer Management</h2>
-    <p>Review, approve, or suspend employer accounts</p>
+    <p>Review, approve, reject, or delete employers</p>
   </section>
+
+ <div class="search-container">
+    <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="searchEmployers()" placeholder="Search by company name..."/>
+</div>
 
   <!-- Employer List -->
   <section class="employer-list">
 
-    <div class="employer-card" *ngFor="let employer of employers">
+    <div class="employer-card" *ngFor="let employer of  filteredEmployers">
 
       <div class="employer-info" (click)="navigate('/employer-details')">
         <h3>{{ employer.companyName }}</h3>
@@ -25,17 +29,17 @@
 
       <!-- Actions -->
       <div class="employer-actions">
-  <button class="approve-btn" *ngIf="employer.status === 'pending'" 
+  <button class="approve-btn"  
           (click)="confirmAction(employer, 'approve')">
     <i class="fas fa-check"></i> Approve
   </button>
 
-  <button class="reject-btn" *ngIf="employer.status === 'pending'" 
+  <button class="reject-btn" 
           (click)="confirmAction(employer, 'reject')">
     <i class="fas fa-times"></i> Reject
   </button>
 
-  <button class="suspend-btn" *ngIf="employer.status === 'approved'" 
+  <button class="suspend-btn"  
           (click)="confirmAction(employer, 'suspend')">
     <i class="fas fa-ban"></i> Suspend
   </button>

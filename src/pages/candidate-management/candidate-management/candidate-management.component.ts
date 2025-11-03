@@ -3,16 +3,20 @@ import { Router } from '@angular/router';
 import { Candidate } from '../../../models/Candidate';
 import { CommonModule } from '@angular/common';
 import { Location } from '@angular/common';
+import { UserService } from '../../../services/User-Service/user.service';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-candidate-management',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './candidate-management.component.html',
   styleUrl: './candidate-management.component.scss'
 })
 export class CandidateManagementComponent implements OnInit {
-
+  searchTerm: string = '';
   candidates: Candidate[] = [];
   selectedFilter: 'all' | 'active' | 'suspended' | 'flagged' = 'all';
 
@@ -22,38 +26,23 @@ export class CandidateManagementComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private location: Location  
+    private location: Location,
+    private usersService:UserService  
   ) { } 
 
   ngOnInit(): void {
-      this.candidates = [
-      {
-        id: 1, name: 'Alice Johnson', email: 'alice@example.com', status: 'active',
-        appliedFor: ''
-      },
-      {
-        id: 2, name: 'Bob Smith', email: 'bob@example.com', status: 'suspended',
-        appliedFor: ''
-      },
-      {
-        id: 3, name: 'Charlie Brown', email: 'charlie@example.com', status: 'flagged',
-        appliedFor: ''
-      },
-      {
-        id: 4, name: 'Diana Prince', email: 'diana@example.com', status: 'active',
-        appliedFor: ''
-      }
-    ];
-  }
+    this.usersService.getAllEmployees().subscribe({
+        next: (employees) => {
+            this.candidates = employees;
+        },
+        error: (err) => console.error('Failed to load employees:', err)
+    });
+}
 
   setFilter(filter: 'all' | 'active' | 'suspended' | 'flagged') {
     this.selectedFilter = filter;
   }
 
-  filteredCandidates(): Candidate[] {
-    if (this.selectedFilter === 'all') return this.candidates;
-    return this.candidates.filter(c => c.status === this.selectedFilter);
-  }
 
   confirmAction(candidate: Candidate, action: 'suspend' | 'delete') {
     this.selectedCandidate = candidate;
@@ -88,6 +77,12 @@ export class CandidateManagementComponent implements OnInit {
 
   goBack() {
     this.location.back();
+  }
+
+  filteredCandidates() {
+    return this.candidates.filter(candidate => 
+        candidate.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
   }
 
 }

@@ -15,12 +15,16 @@
 
   <div class="navbar-right">
     
-   <ul class="nav-links" *ngIf="userRole !== 'ADMIN' && userRole !== 'EMPLOYER'">
+    <ul class="nav-links" *ngIf="userRole !== 'ADMIN' && userRole !== 'EMPLOYER'">
      <li><a (click)="navigate('dashboard')">Dashboard</a></li>
      <li><a (click)="navigate('job-postings')">Job Postings</a></li>
      <li><a (click)="navigate('candidates')">Candidates</a></li>
      <li><a (click)="navigate('interviews')">Interviews</a></li>
      <li><a (click)="navigate('employer-report')">Reports</a></li>
+    </ul>
+
+    <ul class="nav-links" *ngIf="userRole === 'ADMIN'">
+     <li><a (click)="navigate('admin-analytics')">Analytics</a></li>
     </ul>
 
     <div class="icons">

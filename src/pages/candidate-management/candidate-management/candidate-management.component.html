@@ -12,6 +12,11 @@
     <p>View, filter, and manage all candidates</p>
   </section>
 
+  <!-- Search container -->
+ <div class="search-container">
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Search by candidate name..."/>
+</div>
+
   <!-- Filters -->
   <section class="filters">
     <button [class.active]="selectedFilter==='all'" (click)="setFilter('all')">All</button>
@@ -25,22 +30,24 @@
 
     <div class="candidate-card" *ngFor="let candidate of filteredCandidates()" (click)="navigate('/candidate-details')">
 
-      <div class="candidate-info">
-        <h3>{{ candidate.name }}</h3>
-        <p class="email"><i class="fas fa-envelope"></i> {{ candidate.email }}</p>
-        <p class="status" [ngClass]="candidate.status">{{ candidate.status | titlecase }}</p>
-      </div>
+        <div class="candidate-info">
+            <h3>{{ candidate.name }}</h3>
+            <p class="email"><i class="fas fa-envelope"></i> {{ candidate.email }}</p>
+            <p class="status" [ngClass]="candidate.status">{{ candidate.status | titlecase }}</p>
+        </div>
 
-      <!-- Actions -->
-      <div class="candidate-actions">
-        <button class="suspend-btn" *ngIf="candidate.status==='active'" (click)="confirmAction(candidate, 'suspend')">
-          <i class="fas fa-ban"></i> Suspend
-        </button>
-        <button class="delete-btn" (click)="confirmAction(candidate, 'delete')">
-          <i class="fas fa-trash"></i> Delete
-        </button>
-      </div>
+      
+        <div class="candidate-actions">
+            <button class="suspend-btn" (click)="confirmAction(candidate, 'suspend')">
+                <i class="fas fa-ban"></i> Suspend
+            </button>
+            <button class="delete-btn" (click)="confirmAction(candidate, 'delete')">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        </div>
+
     </div>
+
   </section>
 
   <!-- Confirmation Modal -->

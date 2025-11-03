@@ -11,13 +11,14 @@
   
   <div class="applications-list">
     <div class="application-card" *ngFor="let app of applications">
-      <h4>{{ app.jobTitle }}</h4>
-      <p class="company">{{ app.company }}</p>
-      <p class="status">Status: <span [ngClass]="app.status.toLowerCase()">{{ app.status }}</span></p>
-      <p class="applied-date">Applied on: {{ app.appliedDate | date:'mediumDate' }}</p>
-      <button (click)="viewApplication(app.id)">View</button>
+        <h4>{{ app.title }}</h4>
+        <p class="company">{{ app.company }}</p>
+        <p class="status">Status: <span [ngClass]="app.status.toLowerCase()">{{ app.status }}</span></p>
+        <p class="applied-date">Applied on: {{ app.appliedDate | date:'mediumDate' }}</p>
+        <button (click)="viewApplication(app.id)">View</button>
     </div>
   </div>
+
 
    <!-- Bottom Section -->
   <div class="applications-footer">

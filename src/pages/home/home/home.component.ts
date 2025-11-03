@@ -5,6 +5,7 @@ import { TopNavbarComponent } from '../../../re-usable-components/top-navbar/top
 import { UserService } from '../../../services/User-Service/user.service';
 import { JobService } from '../../../services/Job-Service/job.service';
 import { Job } from '../../../models/Job';
+import { AnnouncementService } from '../../../app/announcement.service';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +15,7 @@ import { Job } from '../../../models/Job';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit{
+   announcements: any[] = [];
 
   userName: string = '';
   featuredJobs: Job[] = [ ]
@@ -21,10 +23,24 @@ export class HomeComponent implements OnInit{
   constructor(
     private router: Router,
     private userService: UserService,
-    private jobService: JobService
+    private jobService: JobService,
+    private announcementService:AnnouncementService
   ) {}
 
   ngOnInit() {
+
+    this.announcementService.getAllAnnouncements().subscribe({
+      next: (response: any) => {
+        this.announcements = response.map((announcement: any) => {
+          return `${announcement.subject} - ${announcement.context}`;
+        });
+      },
+      error: (err) => {
+        console.error('Failed to load announcements:', err);
+      }
+    });
+
+     
     const userId = localStorage.getItem('userId');
     if (userId) {
       this.userService.getUserById(+userId).subscribe({
@@ -48,12 +64,6 @@ export class HomeComponent implements OnInit{
       error: (err) => console.error('Failed to fetch jobs', err)
     });
   }
-
-
-  announcements = [
-    'New job postings every Monday!',
-    'Update your profile to get better matches'
-  ];
 
   title = 'talentbridge';
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoginResponse } from '../../models/LoginResponse';
 
@@ -50,6 +50,14 @@ getEmployerCount(): Observable<number> {
 
 getEmployeeCount(): Observable<number> {
    return this.http.get<number>(`${this.apiUrl}/count/employees`);
+}
+
+getAllEmployers(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/employers`);
+}
+
+getAllEmployees(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/employees`);
 }
 
 

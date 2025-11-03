@@ -55,4 +55,8 @@ export class JobService {
     return this.http.put<Job>(`${this.baseUrl}/${id}/decline`, {});
   }
 
+  getJobCount(): Observable<number> {
+   return this.http.get<number>(`${this.baseUrl}/count`);
+ }
+ 
 }

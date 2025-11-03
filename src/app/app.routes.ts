@@ -26,6 +26,7 @@ import { EmployerAnalyticsComponent } from '../pages/employer-analytics/employer
 import { ChatComponent } from '../pages/chat/chat/chat.component';
 import { EmployerProfileComponent } from '../pages/employer-profile/employer-profile/employer-profile.component';
 import { EmployerReportComponent } from '../pages/employer-report/employer-report/employer-report.component';
+import { AdminAnalyticsComponent } from '../pages/admin-analytics/admin-analytics/admin-analytics.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -55,5 +56,6 @@ export const routes: Routes = [
     {path: 'chat/:id', component: ChatComponent},
     {path: 'employer-profile', component:EmployerProfileComponent},
     {path: 'employer-report', component: EmployerReportComponent},
+    {path: 'admin-analytics', component:AdminAnalyticsComponent},
     {path: '**', redirectTo: '' },
 ];

@@ -33,8 +33,9 @@ export class ApplicationsComponent implements OnInit {
         company: 'TechSoft Ltd',
         appliedDate: new Date('2025-08-15T10:30:00'),
         id: 0,
-        jobTitle: '',
-        status: 'Pending'
+        title: '',
+        status: 'Pending',
+        jobId: undefined
       },
       {
         candidateId: 2,
@@ -43,8 +44,9 @@ export class ApplicationsComponent implements OnInit {
         company: 'CreativeHub',
         appliedDate: new Date('2025-08-16T14:45:00'),
         id: 0,
-        jobTitle: '',
-        status: 'Pending'
+        title: '',
+        status: 'Pending',
+        jobId: undefined
       },
       {
         candidateId: 3,
@@ -53,8 +55,9 @@ export class ApplicationsComponent implements OnInit {
         company: 'DataWorks',
         appliedDate: new Date('2025-08-17T09:15:00'),
         id: 0,
-        jobTitle: '',
-        status: 'Pending'
+        title: '',
+        status: 'Pending',
+        jobId: undefined
       }
     ];
   }

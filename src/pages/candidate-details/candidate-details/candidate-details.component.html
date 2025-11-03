@@ -1,12 +1,16 @@
-<div class="candidate-details-container">
+  <div class="action-back-container">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+  </div>
 
+<div class="candidate-details-container">
   <!-- Header -->
   <section class="page-header">
     <h2>{{ candidate.name }}</h2>
     <p>{{ candidate.email }}</p>
     <p class="status" [ngClass]="candidate.status">{{ candidate.status | titlecase }}</p>
   </section>
-
   <!-- Candidate Profile -->
   <section class="candidate-profile">
     <h3>Profile</h3>
@@ -14,18 +18,16 @@
     <p><strong>Location:</strong> {{ candidate.location }}</p>
     <p><strong>Registered On:</strong> {{ candidate.registeredDate | date }}</p>
   </section>
-
   <!-- Resumes -->
   <section class="resumes">
     <h3>Resumes</h3>
     <ul>
       <li *ngFor="let resume of candidate.resumes">
-        <i class="fas fa-file-alt"></i> {{ resume.name }}
+        <i class="fas fa-file-alt"></i> {{ resume.name }} 
         <button (click)="downloadResume(resume.url)">Download</button>
       </li>
     </ul>
   </section>
-
   <!-- Applied Jobs -->
   <section class="applied-jobs">
     <h3>Applied Jobs</h3>
@@ -36,15 +38,13 @@
       <button (click)="viewJobDetails(job.id)">View Job</button>
     </div>
   </section>
-
   <!-- Footer -->
   <footer class="app-footer">
     <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
     <div class="footer-links">
-      <a (click)="goTo('about')">About</a> |
-      <a (click)="goTo('contact')">Contact</a> |
+      <a (click)="goTo('about')">About</a> | 
+      <a (click)="goTo('contact')">Contact</a> | 
       <a (click)="goTo('privacy')">Privacy</a>
     </div>
   </footer>
-
 </div>
