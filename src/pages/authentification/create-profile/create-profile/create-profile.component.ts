@@ -4,11 +4,13 @@ import { Router, RouterModule } from '@angular/router';
 import { FormsModule, FormBuilder, ReactiveFormsModule, Validators, FormGroup, AbstractControl } from '@angular/forms';
 import { UserService } from '../../../../services/User-Service/user.service';
 import { HttpClientModule } from '@angular/common/http';
+import { LoadingService } from '../../../../services/Loading-Service/loading.service';
+import { LoadingSpinnerComponent } from '../../../../re-usable-components/loading-spinner/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-create-profile',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule, HttpClientModule],
+  imports: [CommonModule, RouterModule, ReactiveFormsModule, HttpClientModule, LoadingSpinnerComponent],
   templateUrl: './create-profile.component.html',
   styleUrl: './create-profile.component.scss'
 })
@@ -20,7 +22,8 @@ export class CreateProfileComponent  implements OnInit{
   constructor(
     private fb: FormBuilder, 
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private loadingService:LoadingService
   )
     {}
 
@@ -39,7 +42,7 @@ ngOnInit() {
     },
     { validators: this.passwordMatchValidator });
 
-    // 👇 Watch for role changes to toggle companyName validation
+    
     this.profileForm.get('role')?.valueChanges.subscribe(role => {
       const companyControl = this.profileForm.get('companyName');
       if (role === 'Employer') {
@@ -63,30 +66,34 @@ ngOnInit() {
   if (this.profileForm.valid) {
     const formData = new FormData();
     const formValue = this.profileForm.value;
-
     Object.keys(formValue).forEach(key => {
       if (key === 'resume' && formValue.resume instanceof File) {
         formData.append('resume', formValue.resume);
-      } else {
+      } 
+      else if (formValue[key] !== null && formValue[key] !== undefined) {
         formData.append(key, formValue[key]);
       }
     });
-
+    this.loadingService.show();
     this.userService.createUser(formData).subscribe({
       next: (res) => {
         console.log('Profile created:', res);
         alert('Profile created successfully! Please check your email for activation link.');
+        this.loadingService.hide();
         this.router.navigate(['/login']);
       },
       error: (err) => {
         console.error('Error creating profile:', err);
         alert('Failed to create profile');
+        this.loadingService.hide(); 
       }
     });
   } else {
     this.profileForm.markAllAsTouched();
   }
 }
+
+
 
   goBack() {
     this.router.navigate(['/login']);

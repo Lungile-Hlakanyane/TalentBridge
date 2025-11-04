@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../../services/User-Service/user.service';
+import { LoadingService } from '../../../../services/Loading-Service/loading.service';
+import { LoadingSpinnerComponent } from '../../../../re-usable-components/loading-spinner/loading-spinner/loading-spinner.component';
+
 
 @Component({
   selector: 'app-industry-selection',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoadingSpinnerComponent],
   templateUrl: './industry-selection.component.html',
   styleUrl: './industry-selection.component.scss'
 })
@@ -42,7 +45,8 @@ export class IndustrySelectionComponent implements OnInit{
 
   constructor(
     private router:Router,
-    private userService:UserService
+    private userService:UserService,
+    private loadingService:LoadingService
   ){}
 
   selectedIndustries: string[] = [];
@@ -91,14 +95,18 @@ export class IndustrySelectionComponent implements OnInit{
     experienceLevels: this.selectedExperience
   };
 
+  this.loadingService.show();
+
   this.userService.savePreferences(payload).subscribe({
     next: (res) => {
       console.log('Preferences saved', res);
+      this.loadingService.hide();
       this.router.navigate(['/home']);
     },
     error: (err) => {
       console.error(err);
       alert('Failed to save preferences');
+      this.loadingService.hide();
     }
   });
 }

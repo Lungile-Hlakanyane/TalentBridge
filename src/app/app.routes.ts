@@ -27,6 +27,9 @@ import { ChatComponent } from '../pages/chat/chat/chat.component';
 import { EmployerProfileComponent } from '../pages/employer-profile/employer-profile/employer-profile.component';
 import { EmployerReportComponent } from '../pages/employer-report/employer-report/employer-report.component';
 import { AdminAnalyticsComponent } from '../pages/admin-analytics/admin-analytics/admin-analytics.component';
+import { ForgotPasswordComponent } from '../pages/authentification/forgot-password/forgot-password/forgot-password.component';
+import { OtpComponent } from '../pages/authentification/otp/otp/otp.component';
+import { ResetPasswordComponent } from '../pages/authentification/reset-password/reset-password/reset-password.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -57,5 +60,8 @@ export const routes: Routes = [
     {path: 'employer-profile', component:EmployerProfileComponent},
     {path: 'employer-report', component: EmployerReportComponent},
     {path: 'admin-analytics', component:AdminAnalyticsComponent},
+    {path: 'forgot-password', component:ForgotPasswordComponent},
+    {path: 'otp', component:OtpComponent},
+    {path: 'reset-passoword', component: ResetPasswordComponent},
     {path: '**', redirectTo: '' },
 ];

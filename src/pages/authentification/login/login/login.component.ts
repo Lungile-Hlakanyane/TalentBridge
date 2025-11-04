@@ -14,7 +14,7 @@ import { LoadingService } from '../../../../services/Loading-Service/loading.ser
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit{
-
+  rememberMe: boolean = false;
   email: string = '';
   password: string = '';
 
@@ -29,14 +29,21 @@ export class LoginComponent implements OnInit{
   }
 
 login() {
-  this.loading.show(); // show spinner at the start
+  this.loading.show();
   this.userService.login(this.email, this.password).subscribe({
     next: (response: any) => {
-      this.loading.hide(); // hide spinner after success
+      this.loading.hide(); 
 
       localStorage.setItem('role', response.role);
       localStorage.setItem('email', this.email);
       localStorage.setItem('userId', response.userId);
+
+       
+      if (this.rememberMe) {
+        localStorage.setItem('token', response.token);
+      } else {
+        sessionStorage.setItem('token', response.token); 
+      }
 
       if (response.role === 'ADMIN') {
         this.router.navigate(['/admin-dashboard']);

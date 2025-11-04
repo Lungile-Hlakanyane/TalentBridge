@@ -1,0 +1,47 @@
+<app-loading-spinner></app-loading-spinner>
+
+<div class="otp-wrapper">
+  <!-- Left Side -->
+  <div class="otp-left">
+    <div class="brand-logo">
+      <h2 class="brand">Talent<span>Bridge</span></h2>
+    </div>
+
+    <div class="welcome-text">
+      <h1>Verify<br />Your OTP</h1>
+      <p>We’ve sent a 6-digit OTP to your email. Enter it below to continue resetting your password.</p>
+    </div>
+
+    <form (ngSubmit)="verifyOtp()" #otpForm="ngForm">
+      <div class="otp-inputs">
+        <input
+          *ngFor="let digit of otpArray; let i = index"
+          type="text"
+          maxlength="1"
+          [(ngModel)]="otp[i]"
+          name="otp{{ i }}"
+          required
+          (input)="moveToNext($event, i)"
+          class="otp-box"
+        />
+      </div>
+
+      <button type="submit" [disabled]="!isOtpComplete()">Verify OTP</button>
+    </form>
+
+    <p class="resend-text">
+      Didn’t receive the code?
+      <a (click)="resendOtp()">Resend OTP</a>
+    </p>
+
+    <p class="back-to-login">
+      Remember your password?
+      <a (click)="navigate('/login')">Sign In</a>
+    </p>
+  </div>
+
+  <!-- Right Side - Illustration -->
+  <div class="otp-right">
+    <img src="../../../../assets/reset-password.jpg" alt="Verify OTP" />
+  </div>
+</div>
