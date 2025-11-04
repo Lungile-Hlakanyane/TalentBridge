@@ -13,7 +13,8 @@
     <div class="profile-info">
       <h2>{{employerData.surname}} {{ employerData.name }}</h2>
       <p class="email">{{ employerData.email }}</p>
-      <p class="role">Employer</p>
+      <p class="role">{{employerData.role}}</p>
+      <p>{{ employerData.companyName }}</p>
     </div>
     <div class="edit-btn-section">
       <button class="edit-btn" (click)="editProfile()">Edit Profile</button>
@@ -43,48 +44,73 @@
     </div>
   </div>
 
-  <!-- Company Info -->
-  <div class="profile-section">
-    <h3>Company Information</h3>
-    <div class="info-grid">
-      <div class="info-item">
-        <label>Company Name</label>
-        <p>{{ employerData.companyName }}</p>
-      </div>
-      <div class="info-item">
-        <label>Company Description</label>
-        <p>{{ employerData.companyDescription }}</p>
-      </div>
-      <div class="info-item">
-        <label>Tax Number</label>
-        <p>{{ employerData.taxNumber }}</p>
-      </div>
-      <div class="info-item">
-        <label>Registered Address</label>
-        <p>{{ employerData.registeredAddress }}</p>
-      </div>
-      <div class="info-item">
-        <label>Lease Agreement</label>
-        <p>{{ employerData.leaseAgreement ? 'Uploaded' : 'Not Available' }}</p>
-      </div>
+<!-- Employee Info -->
+<div class="profile-section" *ngIf="employerData?.role === 'EMPLOYEE'">
+  <h3>Uploaded Documents</h3>
+  <div class="info-grid">
+    <div class="info-item resume-item">
+      <label>Resume/CV</label>
+      <p>{{ getResumeFileName(employerData?.resume_path) }}</p>
+      <img src="../../../assets/download_icon.svg" alt="Download Resume" class="download-icon"(click)="downloadResume(employerData?.id)"/>
     </div>
-
-    <div class="edit-btn-section" style="padding-top:15px;">
-     <button class="edit-company-btn" (click)="openCompanyModal()">Add Company Information</button>
-    </div>
-
   </div>
+</div>
+
+
+  <!-- Company Info -->
+<div class="profile-section" *ngIf="companyData">
+  <h3>Company Information</h3>
+  <div class="info-grid">
+    <div class="info-item">
+      <label>Company Description</label>
+      <p>{{ companyData.companyDescription }}</p>
+    </div>
+    <div class="info-item">
+      <label>Tax Number</label>
+      <p>{{ companyData.taxNumber }}</p>
+    </div>
+    <div class="info-item">
+      <label>Registered Address</label>
+      <p>{{ companyData.registeredAddress }}</p>
+    </div>
+    <div class="info-item">
+      <label>Registration Document</label>
+      <p>{{ companyData.registrationDocument ? 'Uploaded' : 'Not Available' }}</p>
+    </div>
+    <div class="info-item">
+      <label>Tax Clearance Document</label>
+      <p>{{ companyData.taxClearanceDocument ? 'Uploaded' : 'Not Available' }}</p>
+    </div>
+    <div class="info-item">
+      <label>Lease Agreement</label>
+      <p>{{ companyData.leaseAgreement ? 'Uploaded' : 'Not Available' }}</p>
+    </div>
+  </div>
+</div>
+
 
   <!-- Company Documents -->
-  <div class="profile-section">
-    <h3>Uploaded Documents</h3>
-    <div class="documents-list">
-      <div class="document-card" *ngFor="let doc of employerData.documents">
-        <i class="fa fa-file-text doc-icon"></i>
-        <span>{{ doc.name }}</span>
-      </div>
+<div class="profile-section" *ngIf="companyData">
+  <h3>Uploaded Documents</h3>
+  <div class="documents-list">
+    <div class="document-card" *ngFor="let doc of getCompanyDocuments()">
+      <!-- File Icon -->
+      <i class="fa fa-file-text doc-icon"></i>
+
+      <!-- Document Name -->
+      <span>{{ doc.name }}</span>
+
+      <!-- Download Icon using image -->
+      <img style="color:blue; cursor:pointer;"
+        src="../../../assets/download_icon.svg"
+        class="download-icon"
+        (click)="downloadFile(doc.file, doc.name + '.pdf')"
+      />
     </div>
   </div>
+</div>
+
+
 </div>
 
 <!-- Edit Modal -->
@@ -121,53 +147,7 @@
         <input type="text" [(ngModel)]="editData.companyName" name="companyName" />
       </div>
 
-      <div class="form-group">
-        <label>Company Description</label>
-        <textarea [(ngModel)]="editData.companyDescription" name="companyDescription"></textarea>
-      </div>
-
-      <!-- Company Info -->
-      <div class="form-group">
-        <label>Tax Number</label>
-        <input type="text" [(ngModel)]="editData.taxNumber" name="taxNumber" />
-      </div>
-
-      <!-- Company Info -->
-      <div class="form-group">
-        <label>Registered Address</label>
-        <input type="text" [(ngModel)]="editData.registeredAddress" name="registeredAddress" />
-      </div>
-
-      <!-- 📂 Company Documents -->
-      <div class="documents-section">
-        <h3>Company Documents</h3>
-
-
-        <div class="form-group">
-          <label>Registration Document</label>
-          <input type="file" (change)="onFileSelected($event, 'registrationDocument')" />
-          <p class="file-status" *ngIf="editData.registrationDocument">
-            {{ editData.registrationDocument.name }}
-          </p>
-        </div>
-
-        <div class="form-group">
-          <label>Tax Clearance Certificate</label>
-          <input type="file" (change)="onFileSelected($event, 'taxClearanceCertificate')" />
-          <p class="file-status" *ngIf="editData.taxClearanceCertificate">
-            {{ editData.taxClearanceCertificate.name }}
-          </p>
-        </div>
-
-        <div class="form-group">
-          <label>Lease Agreement</label>
-          <input type="file" (change)="onFileSelected($event, 'leaseAgreement')" />
-          <p class="file-status" *ngIf="editData.leaseAgreement">
-            {{ editData.leaseAgreement.name }}
-          </p>
-        </div>
-      </div>
-
+      
       <!-- Actions -->
       <div class="modal-actions">
         <button type="button" class="cancel-btn" (click)="closeModal()">Cancel</button>
@@ -175,52 +155,6 @@
       </div>
     </form>
   </div>
-
-  <!-- ✅ Company Info Modal -->
-<div class="modal-backdrop company-modal" *ngIf="showCompanyModal">
-  <div class="modal-content company-modal">
-    <h2>Add Company Information</h2>
-    <form (ngSubmit)="saveCompanyInfo()" #companyForm="ngForm">
-      <div class="form-group">
-        <label>Company Description</label>
-        <textarea [(ngModel)]="companyInfo.description" name="description" required></textarea>
-      </div>
-
-      <div class="form-group">
-        <label>Tax Number</label>
-        <input type="text" [(ngModel)]="companyInfo.taxNumber" name="taxNumber" required />
-      </div>
-
-      <div class="form-group">
-        <label>Registered Address</label>
-        <input type="text" [(ngModel)]="companyInfo.registeredAddress" name="registeredAddress" required />
-      </div>
-
-      <div class="form-group">
-        <label>Registration Document</label>
-        <input type="file" (change)="onFileSelected($event, 'registrationDocument')" />
-        <p *ngIf="companyInfo.registrationDocument">{{ companyInfo.registrationDocument.name }}</p>
-      </div>
-
-      <div class="form-group">
-        <label>Tax Clearance Document</label>
-        <input type="file" (change)="onFileSelected($event, 'taxClearanceDocument')" />
-        <p *ngIf="companyInfo.taxClearanceDocument">{{ companyInfo.taxClearanceDocument.name }}</p>
-      </div>
-
-      <div class="form-group">
-        <label>Lease Agreement</label>
-        <input type="file" (change)="onFileSelected($event, 'leaseAgreement')" />
-        <p *ngIf="companyInfo.leaseAgreement">{{ companyInfo.leaseAgreement.name }}</p>
-      </div>
-
-      <div class="modal-actions">
-        <button type="button" class="cancel-btn" (click)="closeCompanyModal()">Cancel</button>
-        <button type="submit" class="save-btn">Save</button>
-      </div>
-    </form>
-  </div>
-
 
 </div>
 

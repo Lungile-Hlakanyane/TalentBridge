@@ -436,6 +436,85 @@ input[type="file"] {
   animation: fadeIn 0.3s ease;
 }
 
+.documents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .document-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background: #f4f6f8;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+    .doc-icon {
+      margin-right: 10px;
+      color: #007bff;
+    }
+
+    .download-icon {
+      cursor: pointer;
+      color: #28a745;
+      font-size: 1.1em;
+
+      &:hover {
+        color: #1e7e34;
+      }
+    }
+
+    span {
+      flex: 1;
+    }
+  }
+}
+
+.document-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background-color: #fafafa;
+
+  .doc-icon {
+    margin-right: 10px;
+  }
+
+  .download-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: scale(1.2);
+      filter: brightness(0.8);
+    }
+  }
+}
+
+.resume-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .download-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
+
 
 
 

@@ -27,6 +27,20 @@
      <li><a (click)="navigate('admin-analytics')">Analytics</a></li>
     </ul>
 
+   <ul class="nav-links" *ngIf="userRole === 'EMPLOYER'">
+    <li class="company-dropdown">
+    <button class="company-btn" (click)="toggleCompanyDropdown()">
+      Company Info <span class="arrow">&#9662;</span>
+    </button>
+
+      <div class="dropdown-menu" *ngIf="companyDropdownOpen">
+       <a (click)="openAddCompanyModal()" class="dropdown-item">Add</a>
+       <a (click)="openEditCompanyModal()" class="dropdown-item">Edit</a>
+      </div>
+
+     </li>
+   </ul>
+
     <div class="icons">
       <button class="icon-btn">
         <i class="fa fa-bell"></i>
@@ -49,3 +63,191 @@
     </div>
   </div>
 </nav>
+
+<!-- ADD COMPANY MODAL -->
+<div class="modal-overlay" *ngIf="showAddCompanyModal">
+  <div class="modal-content">
+    <h2>Add Company Information</h2>
+    <form (ngSubmit)="submitCompanyForm()" #companyForm="ngForm">
+      <div class="form-group">
+        <label>Company Description</label>
+        <textarea name="description" [(ngModel)]="companyData.companyDescription" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Tax Number</label>
+        <input type="text" name="taxNumber" [(ngModel)]="companyData.taxNumber" required />
+      </div>
+
+      <div class="form-group">
+        <label>Registered Address</label>
+        <input type="text" name="registeredAddress" [(ngModel)]="companyData.registeredAddress" required />
+      </div>
+
+      <div class="form-group upload-group">
+  <label>Registration Document</label>
+  <div class="custom-file-upload" (click)="triggerFileInput('registrationDocumentInput')">
+    <i class="fa fa-upload"></i>
+    <span>{{ companyData.registrationDocument?.name || 'Upload Registration Document' }}</span>
+    <input
+      type="file"
+      #registrationDocumentInput
+      (change)="onFileChange($event, 'registrationDocument')"
+      hidden
+      required
+    />
+  </div>
+</div>
+
+<div class="form-group upload-group">
+  <label>Tax Clearance Document</label>
+  <div class="custom-file-upload" (click)="triggerFileInput('taxClearanceDocumentInput')">
+    <i class="fa fa-upload"></i>
+    <span>{{ companyData.taxClearanceDocument?.name || 'Upload Tax Clearance Document' }}</span>
+    <input
+      type="file"
+      #taxClearanceDocumentInput
+      (change)="onFileChange($event, 'taxClearanceDocument')"
+      hidden
+      required
+    />
+  </div>
+</div>
+
+<div class="form-group upload-group">
+  <label>Lease Agreement</label>
+  <div class="custom-file-upload" (click)="triggerFileInput('leaseAgreementInput')">
+    <i class="fa fa-upload"></i>
+    <span>{{ companyData.leaseAgreement?.name || 'Upload Lease Agreement' }}</span>
+    <input
+      type="file"
+      #leaseAgreementInput
+      (change)="onFileChange($event, 'leaseAgreement')"
+      hidden
+      required
+    />
+  </div>
+</div>
+
+      
+
+      <div class="modal-actions">
+        <button type="submit" [disabled]="!companyForm.valid">Submit</button>
+        <button type="button" class="cancel-btn" (click)="closeAddCompanyModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- EDIT COMPANY MODAL -->
+<div class="modal-overlay" *ngIf="showEditCompanyModal">
+  <div class="modal-content">
+    <h2>Edit Company Information</h2>
+    <form (ngSubmit)="updateCompanyInfo()" #editCompanyForm="ngForm">
+      <div class="form-group">
+        <label>Company Description</label>
+        <textarea
+          name="description"
+          [(ngModel)]="companyData.companyDescription"
+          required
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Tax Number</label>
+        <input
+          type="text"
+          name="taxNumber"
+          [(ngModel)]="companyData.taxNumber"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Registered Address</label>
+        <input
+          type="text"
+          name="registeredAddress"
+          [(ngModel)]="companyData.registeredAddress"
+          required
+        />
+      </div>
+
+      <!-- Registration Document -->
+      <div class="form-group upload-group">
+        <label>Registration Document</label>
+        <div
+          class="custom-file-upload"
+          (click)="triggerFileInput('editRegistrationDocumentInput')"
+        >
+          <i class="fa fa-upload"></i>
+          <span>{{
+            companyData.registrationDocument?.name ||
+              'Upload New Registration Document'
+          }}</span>
+          <input
+            type="file"
+            #editRegistrationDocumentInput
+            (change)="onEditFileChange($event, 'registrationDocument')"
+            hidden
+          />
+        </div>
+      </div>
+
+      <!-- Tax Clearance Document -->
+      <div class="form-group upload-group">
+        <label>Tax Clearance Document</label>
+        <div
+          class="custom-file-upload"
+          (click)="triggerFileInput('editTaxClearanceDocumentInput')"
+        >
+          <i class="fa fa-upload"></i>
+          <span>{{
+            companyData.taxClearanceDocument?.name ||
+              'Upload New Tax Clearance Document'
+          }}</span>
+          <input
+            type="file"
+            #editTaxClearanceDocumentInput
+            (change)="onEditFileChange($event, 'taxClearanceDocument')"
+            hidden
+          />
+        </div>
+      </div>
+
+      <!-- Lease Agreement -->
+      <div class="form-group upload-group">
+        <label>Lease Agreement</label>
+        <div
+          class="custom-file-upload"
+          (click)="triggerFileInput('editLeaseAgreementInput')"
+        >
+          <i class="fa fa-upload"></i>
+          <span>{{
+            companyData.leaseAgreement?.name ||
+              'Upload New Lease Agreement'
+          }}</span>
+          <input
+            type="file"
+            #editLeaseAgreementInput
+            (change)="onEditFileChange($event, 'leaseAgreement')"
+            hidden
+          />
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" [disabled]="!editCompanyForm.valid">
+          Update
+        </button>
+        <button
+          type="button"
+          class="cancel-btn"
+          (click)="closeEditCompanyModal()"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+

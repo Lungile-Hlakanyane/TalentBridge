@@ -60,5 +60,11 @@ getAllEmployees(): Observable<any> {
     return this.http.get(`${this.apiUrl}/employees`);
 }
 
+downloadResume(userId: number): Observable<Blob> {
+  return this.http.get(`http://localhost:8080/api/users/download-resume/${userId}`, {
+    responseType: 'blob'
+  });
+}
+
 
 }

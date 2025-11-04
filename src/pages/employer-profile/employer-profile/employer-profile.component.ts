@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Location } from '@angular/common';
 import { UserService } from '../../../services/User-Service/user.service';
+import { CompanyService } from '../../../services/company-service/company.service';
+import { CompanyInformationDTO } from '../../../models/CompanyInformationDTO';
+
 
 @Component({
   selector: 'app-employer-profile',
@@ -13,27 +16,11 @@ import { UserService } from '../../../services/User-Service/user.service';
 })
 export class EmployerProfileComponent implements OnInit{
 
-   showEditModal = false;
-   employerData: any = null;
+showEditModal = false;
+employerData: any = null;
+companyData: CompanyInformationDTO | null = null;
 
-   employerData2 = {
-    fullName: 'Lungile Vincent Hlakanyane',
-    email: 'lungile@vintechsolutions.co.za',
-    contactNumber: '+27 65 123 4567',
-    role: 'Employer',
-    companyName: 'Vintech IT Solutions',
-    companyDescription: 'A recruitment agency connecting top talent with growing companies across South Africa.',
-    taxNumber: 'TXN-8745932',
-    registeredAddress: '123 Rosebank, Johannesburg, South Africa',
-    leaseAgreement: true,
-    documents: [
-      { name: 'Registration Document.pdf' },
-      { name: 'Tax Clearance Certificate.pdf' },
-      { name: 'Lease Agreement.pdf' }
-    ]
-  };
-
-  showCompanyModal = false;
+showCompanyModal = false;
   companyInfo: any = {
   description: '',
   taxNumber: '',
@@ -44,7 +31,7 @@ export class EmployerProfileComponent implements OnInit{
 };
 
 openCompanyModal() {
-  this.showEditModal = false; // close edit modal if open
+  this.showEditModal = false; 
   this.showCompanyModal = true;
 }
 
@@ -59,8 +46,9 @@ saveCompanyInfo() {
 }
 
   constructor(
-     private location:Location,
-     private userService:UserService
+    private location:Location,
+    private userService:UserService,
+    private companyService:CompanyService
   ) { }
 
   editData: any = {};
@@ -70,6 +58,7 @@ saveCompanyInfo() {
      if (storedUserId) {
      const userId = +storedUserId; 
      this.loadEmployerData(userId);
+     this.loadCompanyData(userId);
    } else {
      console.error('No userId found in localStorage');
    }
@@ -113,5 +102,80 @@ saveCompanyInfo() {
       }
     });
   }
+
+  loadCompanyData(userId: number): void {
+    this.companyService.getCompanyInfoByUserId(userId).subscribe({
+      next: (data) => {
+        this.companyData = data;
+        console.log('Company data loaded:', data);
+      },
+      error: (err) => {
+        console.error('Error fetching company data:', err);
+      }
+    });
+  }
+
+  getCompanyDocuments() {
+  if (!this.companyData) return [];
+
+  return [
+    {
+      name: 'Registration Document',
+      file: this.companyData.registrationDocument
+    },
+    {
+      name: 'Tax Clearance Document',
+      file: this.companyData.taxClearanceDocument
+    },
+    {
+      name: 'Lease Agreement',
+      file: this.companyData.leaseAgreement
+    }
+  ].filter(doc => doc.file);
+ }
+
+ downloadFile(file: any, filename: string) {
+  if (!file) return;
+  const blob = new Blob([new Uint8Array(file)], { type: 'application/pdf' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
+ }
+
+ // Extracts a clean file name from resume_path
+getResumeFileName(resumePath: string | null): string {
+  if (!resumePath) return 'No Resume Uploaded';
+  // In your DB, resume_path might be a long object or file reference string
+  // You can improve this extraction depending on your format
+  const parts = resumePath.split('/');
+  return parts[parts.length - 1] || 'Resume.pdf';
+}
+
+// Downloads the employee's resume
+downloadResume(userId: number): void {
+  if (!userId) return;
+
+  this.userService.downloadResume(userId).subscribe({
+    next: (blob: Blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Resume.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    },
+    error: (err) => {
+      console.error('Error downloading resume:', err);
+    }
+  });
+}
+
 
 }

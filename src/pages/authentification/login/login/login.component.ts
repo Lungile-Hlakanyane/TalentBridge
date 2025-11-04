@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../../services/User-Service/user.service';
+import { LoadingSpinnerComponent } from '../../../../re-usable-components/loading-spinner/loading-spinner/loading-spinner.component';
+import { LoadingService } from '../../../../services/Loading-Service/loading.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -18,16 +20,20 @@ export class LoginComponent implements OnInit{
 
   constructor(
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private loading:LoadingService
   ){}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadData();
+  }
 
 login() {
-  console.log('Logging in with:', this.email, this.password);
+  this.loading.show(); // show spinner at the start
   this.userService.login(this.email, this.password).subscribe({
     next: (response: any) => {
-      console.log('Login response:', response);
+      this.loading.hide(); // hide spinner after success
+
       localStorage.setItem('role', response.role);
       localStorage.setItem('email', this.email);
       localStorage.setItem('userId', response.userId);
@@ -41,14 +47,25 @@ login() {
       }
     },
     error: (err) => {
+      this.loading.hide(); // hide spinner on error
       alert(err.error || 'Invalid email or password');
     }
   });
 }
 
-
   navigate(link:string){
     this.router.navigate([link]); 
   }
+
+  loadData() {
+  this.loading.show();
+  this.userService.getUserById(1).subscribe({
+    next: (data) => {
+      console.log(data);
+      this.loading.hide();
+    },
+    error: () => this.loading.hide()
+  });
+}
 
 }
