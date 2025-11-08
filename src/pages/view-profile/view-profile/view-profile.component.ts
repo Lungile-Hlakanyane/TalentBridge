@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
-import { Router } from '@angular/router';
+import { ApplicationService } from '../../../services/Application-Service/application.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from '../../../services/User-Service/user.service';
 
 @Component({
   selector: 'app-view-profile',
@@ -11,26 +13,20 @@ import { Router } from '@angular/router';
 })
 export class ViewProfileComponent implements OnInit{
 
-  candidate = {
-    id: 1,
-    name: 'John Doe',
-    email: 'john@example.com',
-    phone: '123-456-7890',
-    appliedFor: 'Frontend Developer',
-    experience: '3 years',
-    education: 'BSc Computer Science',
-    skills: 'Angular, TypeScript, HTML, CSS',
-    summary: 'Passionate frontend developer with a strong eye for UI/UX design...'
-  };
-
+  candidate: any = null;
+  isLoading = true;
   atsResult: any = null;
+
   constructor(
     private location: Location,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute,
+    private applicationService: ApplicationService,
+    private userService:UserService
   ){}
 
   ngOnInit(){
-    
+    this.loadCandidateDetails();  
   }
   
   goBack(){
@@ -54,6 +50,40 @@ export class ViewProfileComponent implements OnInit{
 
   proceedToStage(){
     this.router.navigateByUrl('/stages');
+  }
+
+  loadCandidateDetails() {
+    const applicantId = this.route.snapshot.paramMap.get('id');
+    if (!applicantId) return;
+    this.applicationService.getApplicationById(Number(applicantId)).subscribe({
+      next: (data) => {
+        this.candidate = {
+          id: data.id,
+          name: data.applicantName,
+          email: data.applicantEmail,
+          phone: 'N/A', 
+          appliedFor: data.jobTitle || 'N/A',
+          experience: data.experience || 'N/A',
+          education: data.education || 'N/A',
+          skills: data.skills || 'N/A',
+          summary: data.coverLetter || 'N/A',
+        };
+        this.userService.getUserByEmail(data.applicantEmail).subscribe({
+          next: (user) => {
+            this.candidate.phone = user.phone || 'N/A';
+            this.isLoading = false;
+          },
+          error: (err) => {
+            console.error('Error fetching user by email:', err);
+            this.isLoading = false;
+          }
+        });
+      },
+      error: (err) => {
+        console.error('Error loading application:', err);
+        this.isLoading = false;
+      }
+    });
   }
 
 }

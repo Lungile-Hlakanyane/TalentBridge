@@ -23,12 +23,19 @@ export class ResetPasswordComponent implements OnInit{
   showConfirmPassword: boolean = false;
   passwordMismatch: boolean = false;
 
+  email: string = '';
+  code: string = '';
+
   constructor(
     private location: Location,
     private router: Router,
     private userService: UserService,
     private loading: LoadingService
-  ) { }
+  ) { 
+     const state = this.router.getCurrentNavigation()?.extras.state;
+     this.email = state ? state['email'] : '';
+     this.code = state ? state['code'] : '';
+  }
 
   ngOnInit(): void {}
 
@@ -40,11 +47,22 @@ export class ResetPasswordComponent implements OnInit{
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-  resetPassword() {
-    this.passwordMismatch = this.password !== this.confirmPassword;
-    if (this.passwordMismatch) return;
-    console.log('Password reset successful:', this.password);
-    this.router.navigate(['/login']);
+ resetPassword() {
+    if (!this.password || this.password !== this.confirmPassword) return;
+    this.loading.show();
+    this.userService.resetPassword(this.email, this.code, this.password).subscribe({
+      next: (res) => {
+        this.loading.hide();
+        console.log(res);
+        alert("Password reset successfully. Please login.");
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        this.loading.hide();
+        console.error(err);
+        alert(err.error || "Failed to reset password.");
+      }
+    });
   }
 
   navigate(path: string) {

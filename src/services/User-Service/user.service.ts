@@ -16,7 +16,6 @@ export class UserService {
     return this.http.post(`${this.apiUrl}/create`, userData, { responseType: 'text'}); 
   }
 
-
 activateAccount(token: string): Observable<any> {
   return this.http.get(`${this.apiUrl}/activate`, { 
     params: { token },
@@ -65,6 +64,35 @@ downloadResume(userId: number): Observable<Blob> {
     responseType: 'blob'
   });
 }
+
+// Send OTP to user's email
+sendForgotPasswordEmail(email: string): Observable<string> {
+  return this.http.post(`${this.apiUrl}/forgot-password`, null, { 
+    params: { email },
+    responseType: 'text' 
+  });
+}
+
+// Verify OTP code
+verifyResetCode(email: string, code: string): Observable<string> {
+  return this.http.post(`${this.apiUrl}/verify-reset-code`, null, { 
+    params: { email, code },
+    responseType: 'text' 
+  });
+}
+
+// Reset password
+resetPassword(email: string, code: string, newPassword: string): Observable<string> {
+  return this.http.post(`${this.apiUrl}/reset-password`, null, { 
+    params: { email, code, newPassword },
+    responseType: 'text' 
+  });
+}
+
+getUserByEmail(email: string): Observable<any> {
+  return this.http.get(`${this.apiUrl}/by-email`, { params: { email } });
+}
+
 
 
 }

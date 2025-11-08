@@ -5,12 +5,14 @@ import { Location } from '@angular/common';
 import { UserService } from '../../../services/User-Service/user.service';
 import { CompanyService } from '../../../services/company-service/company.service';
 import { CompanyInformationDTO } from '../../../models/CompanyInformationDTO';
+import { LoadingService } from '../../../services/Loading-Service/loading.service';
+import { LoadingSpinnerComponent } from '../../../re-usable-components/loading-spinner/loading-spinner/loading-spinner.component';
 
 
 @Component({
   selector: 'app-employer-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './employer-profile.component.html',
   styleUrl: './employer-profile.component.scss'
 })
@@ -48,7 +50,8 @@ saveCompanyInfo() {
   constructor(
     private location:Location,
     private userService:UserService,
-    private companyService:CompanyService
+    private companyService:CompanyService,
+    private loading:LoadingService
   ) { }
 
   editData: any = {};

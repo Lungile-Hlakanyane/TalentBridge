@@ -5,6 +5,8 @@ import { JobService } from '../../../services/Job-Service/job.service';
 import { Job } from '../../../models/Job';
 import { UserService } from '../../../services/User-Service/user.service';
 import { TopNavbarComponent } from '../../../re-usable-components/top-navbar/top-navbar.component';
+import { ApplicationService } from '../../../services/Application-Service/application.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-employer-dashboard',
@@ -18,7 +20,8 @@ export class EmployerDashboardComponent implements OnInit{
   constructor(
     private router: Router,
     private jobService: JobService,
-    private userService:UserService
+    private userService:UserService,
+    private applicationService:ApplicationService
   ){}
 
   ngOnInit() {
@@ -50,14 +53,33 @@ export class EmployerDashboardComponent implements OnInit{
     if (userId) {
       this.jobService.getJobsByUserId(Number(userId)).subscribe({
         next: (jobs) => {
-          // Sort by created date descending to show most recent first
+          if (!jobs || jobs.length === 0) {
+            this.activeJobs = [];
+            return;
+          }
+
+          // Sort jobs (latest first)
           this.activeJobs = jobs.sort(
             (a, b) =>
               new Date(b.created ?? 0).getTime() - new Date(a.created ?? 0).getTime()
           );
+
           this.insights.jobsPosted = this.activeJobs.length;
-          // Optionally calculate total applicants if Job model has applicants field
-          this.insights.totalApplicants = this.activeJobs.reduce((sum, job) => sum + (job.applicants || 0), 0);
+          const applicationRequests = this.activeJobs.map((job) =>
+            this.applicationService.getApplicationsForJob(job.id)
+          );
+          forkJoin(applicationRequests).subscribe({
+            next: (results) => {
+              this.insights.totalApplicants = 0;
+              results.forEach((applications, index) => {
+                const job = this.activeJobs[index];
+                const count = applications ? applications.length : 0;
+                (job as any).applicants = count;
+                this.insights.totalApplicants += count;
+              });
+            },
+            error: (err) => console.error('Error fetching application counts:', err)
+          });
         },
         error: (err) => console.error('Error fetching jobs:', err)
       });

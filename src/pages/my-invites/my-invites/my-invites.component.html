@@ -1,0 +1,71 @@
+
+<div class="action-back-container">
+  <span class="back-text" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i> Back
+  </span>
+</div>
+
+<div class="my-invites-container">
+  <h2 class="page-title">My Invites</h2>
+  <p class="page-subtitle">
+    Below is a list of people who have sent you an invitation. You can accept or decline below.
+  </p>
+
+  <!-- Search Bar -->
+  <div class="search-container">
+    <input
+      type="text"
+      placeholder="Search invites..."
+      [(ngModel)]="searchTerm"
+      (input)="filterInvites()"
+    />
+    <span class="total-invites">Total Invites: {{ filteredInvites.length }}</span>
+  </div>
+
+  <!-- Invites List -->
+  <div class="invites-list">
+    <div class="invite-card" *ngFor="let invite of filteredInvites">
+      <div class="invite-info">
+        <img
+          src="../../../assets/avatar_employer.png"
+          alt="User Avatar"
+          class="avatar"
+          onerror="this.src='assets/images/default-avatar.png'"
+        />
+       <div class="invite-details">
+        <h4>{{ invite.displayName }}</h4>
+        <p *ngIf="invite.displayExtra">{{ invite.displayExtra }}</p>
+       </div>
+      </div>
+      <div class="invite-actions">
+        <button
+          class="accept-btn"
+          [disabled]="invite.status === 'ACCEPTED'"
+          (click)="acceptInvite(invite)"
+        >
+          {{ invite.status === 'ACCEPTED' ? 'Accepted' : 'Accept' }}
+        </button>
+
+        <button
+          class="decline-btn"
+          [disabled]="invite.status === 'DECLINED'"
+          (click)="declineInvite(invite)"
+        >
+          {{ invite.status === 'DECLINED' ? 'Declined' : 'Decline' }}
+        </button>
+      </div>
+    </div>
+
+    <p *ngIf="filteredInvites.length === 0" class="no-invites">No invites found.</p>
+  </div>
+</div>
+
+ <!-- Footer -->
+  <footer class="app-footer" style="font-family: 'Inter', sans-serif;">
+    <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+    <div class="footer-links">
+      <a (click)="goTo('about')">About</a> |
+      <a (click)="goTo('contact')">Contact</a> |
+      <a (click)="goTo('privacy')">Privacy</a>
+    </div>
+  </footer>

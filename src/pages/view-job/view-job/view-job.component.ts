@@ -9,11 +9,14 @@ import { Subscription } from '../../../models/Subscription';
 import { SubscriptionService } from '../../../services/Subscription-Service/subscription.service';
 import { ApplicationService } from '../../../services/Application-Service/application.service';
 import { JobApplication } from '../../../models/JobApplication';
+import { LoadingService } from '../../../services/Loading-Service/loading.service';
+import { LoadingSpinnerComponent } from '../../../re-usable-components/loading-spinner/loading-spinner/loading-spinner.component';
+
 
 @Component({
   selector: 'app-view-job',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './view-job.component.html',
   styleUrl: './view-job.component.scss'
 })
@@ -33,7 +36,8 @@ export class ViewJobComponent implements OnInit{
    private router: Router,
    private jobService:JobService,
    private subscriptionService:SubscriptionService,
-   private applicationService: ApplicationService
+   private applicationService: ApplicationService,
+   private loading:LoadingService
   ){}
 
   application = {
@@ -71,6 +75,7 @@ export class ViewJobComponent implements OnInit{
       resumePath: this.selectedFile ? this.selectedFile.name : undefined // later replace with upload
     };
 
+    this.loading.show();
     this.applicationService.applyForJob(jobApplication).subscribe({
       next: (res) => {
         console.log('Application submitted:', res);
@@ -78,10 +83,12 @@ export class ViewJobComponent implements OnInit{
         this.closeModal();
         this.application = { name: '', email: '', coverLetter: '' };
         this.selectedFile = null;
+        this.loading.hide();
       },
       error: (err) => {
         console.error('Error submitting application:', err);
         alert('Failed to submit application. Please try again.');
+        this.loading.hide();
       }
     });
   }
@@ -126,15 +133,18 @@ export class ViewJobComponent implements OnInit{
       email: this.subscriberEmail,
       jobRole: this.job.title
     };
+    this.loading.show();
     this.subscriptionService.createSubscription(subscription).subscribe({
       next: (res) => {
         console.log('Subscription successful:', res);
         alert(`Subscribed to alerts for "${this.job?.title}" jobs!`);
         this.subscriberEmail = '';
+        this.loading.hide();
       },
       error: (err) => {
         console.error('Error subscribing:', err);
         alert('Failed to subscribe. Please try again.');
+        this.loading.hide();
       }
     });
   }

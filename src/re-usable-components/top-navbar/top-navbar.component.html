@@ -1,3 +1,4 @@
+<app-loading-spinner></app-loading-spinner>
 <nav class="navbar">
   <div class="navbar-left">
     <div class="search-section">
@@ -16,6 +17,7 @@
   <div class="navbar-right">
     
     <ul class="nav-links" *ngIf="userRole !== 'ADMIN' && userRole !== 'EMPLOYER'">
+     <li><a (click)="navigate('candidate-invites')">My Invites</a></li>
      <li><a (click)="navigate('dashboard')">Dashboard</a></li>
      <li><a (click)="navigate('job-postings')">Job Postings</a></li>
      <li><a (click)="navigate('candidates')">Candidates</a></li>
@@ -28,17 +30,13 @@
     </ul>
 
    <ul class="nav-links" *ngIf="userRole === 'EMPLOYER'">
-    <li class="company-dropdown">
-    <button class="company-btn" (click)="toggleCompanyDropdown()">
-      Company Info <span class="arrow">&#9662;</span>
-    </button>
-
+    <li class="company-dropdown"><button class="company-btn" (click)="toggleCompanyDropdown()">Company Info <span class="arrow">&#9662;</span></button>
       <div class="dropdown-menu" *ngIf="companyDropdownOpen">
        <a (click)="openAddCompanyModal()" class="dropdown-item">Add</a>
        <a (click)="openEditCompanyModal()" class="dropdown-item">Edit</a>
       </div>
-
      </li>
+     <li><a (click)="navigate('candidate-invites')">My Invites</a></li>
    </ul>
 
     <div class="icons">

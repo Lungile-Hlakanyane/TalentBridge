@@ -19,14 +19,18 @@ import { Location } from '@angular/common';
 export class OtpComponent implements OnInit {
   otp: string[] = ['', '', '', '', '', ''];
   otpArray = new Array(6);
+  email: string = '';
 
 
   constructor(
     private location: Location,
     private router: Router,
     private userService: UserService,
-    private loadingService: LoadingService
-  ) { }
+    private loading: LoadingService
+  ) { 
+    const state = this.router.getCurrentNavigation()?.extras.state;
+    this.email= state? state['email'] : ''; 
+  }
 
   ngOnInit(): void {
     
@@ -41,14 +45,28 @@ export class OtpComponent implements OnInit {
   }
 
   isOtpComplete(): boolean {
-    return this.otp.every(digit => digit !== '');
-  }
+   return this.otp.every(digit => digit !== '' && digit.length === 1);
+ }
 
-  verifyOtp() {
-    const enteredOtp = this.otp.join('');
-    console.log('Entered OTP:', enteredOtp);
-    this.router.navigate(['/reset-passoword']);
-  }
+
+ verifyOtp() {
+  if (!this.isOtpComplete() || !this.email) return;
+  const otpString = this.otp.join('');
+  this.loading.show();
+  this.userService.verifyResetCode(this.email, otpString).subscribe({
+    next: (res) => {
+      this.loading.hide();
+      console.log(res);
+      this.router.navigate(['/reset-password'], { state: { email: this.email, code: otpString } });
+    },
+    error: (err) => {
+      this.loading.hide();
+      console.error(err);
+      alert(err.error || "Invalid or expired code.");
+    }
+  });
+}
+
 
   resendOtp() {
     console.log('Resend OTP triggered');

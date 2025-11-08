@@ -31,5 +31,9 @@ export class ApplicationService {
   getApplicationCount(): Observable<number> {
     return this.http.get<number>(`${this.apiUrl}/count`);
   }
+
+  getApplicationById(id: number): Observable<any> {
+   return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
  
 }

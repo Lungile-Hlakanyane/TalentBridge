@@ -43,7 +43,9 @@
       border-radius: 15px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.05);
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
 
       .applicant-info {
         h3 {
@@ -62,7 +64,7 @@
         margin-top: 10px;
         display: flex;
         gap: 10px;
-
+        min-width:150px;
         button {
           padding: 8px 14px;
           border-radius: 8px;
@@ -94,3 +96,63 @@
     }
   }
 }
+
+.applicant-actions {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+
+  button,
+  .resume-btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    transition: background 0.2s;
+    text-decoration: none; /* remove underline for links */
+    display: inline-block;
+    text-align: center;
+  }
+
+  .view-btn,
+  .resume-btn {
+    background: #4cafef;
+    color: white;
+
+    &:hover {
+      background: #2b90d9;
+    }
+  }
+
+  .shortlist-btn {
+    background: #eee;
+    color: #333;
+
+    &:hover {
+      background: #ddd;
+    }
+  }
+}
+
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin: 15px 0 25px;
+  input {
+    width: 60%;
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border 0.2s ease;
+
+    &:focus {
+      border-color: #4cafef;
+    }
+  }
+}
+

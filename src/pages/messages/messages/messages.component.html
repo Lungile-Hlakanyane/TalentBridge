@@ -9,18 +9,127 @@
 
   <h2 class="page-title">Messages</h2>
 
-  <!-- Chat List -->
-  <div class="chat-list">
-    <div class="chat-card" *ngFor="let chat of chats" (click)="openChat(chat.id)">
-      <div class="chat-info">
-        <h4>{{ chat.sender }}</h4>
-        <p class="last-message">{{ chat.lastMessage }}</p>
+  <div class="chat-wrapper">
+    <!-- LEFT: User List Panel -->
+    <div class="user-list-panel">
+      <!-- Search & Filter Tabs -->
+      <div class="search-filter-container">
+        <!-- Search Bar -->
+        <input
+          type="text"
+          placeholder="Search users by name or surname..."
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="filterUsers()"
+          class="search-input"
+        />
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+          <button
+            *ngFor="let tab of tabs"
+            (click)="selectTab(tab)"
+            [class.active]="selectedTab === tab"
+          >
+            {{ tab }}
+          </button>
+        </div>
       </div>
-      <div class="chat-meta">
-        <span class="timestamp">{{ chat.timestamp | date:'shortTime' }}</span>
-        <span *ngIf="chat.unreadCount > 0" class="unread-count">{{ chat.unreadCount }}</span>
+
+      <!-- Users List -->
+     <div class="chat-card"
+  *ngFor="let user of filteredUsers"
+  [class.active-chat]="activeUser?.id === user.id"
+  (click)="selectUser(user)"
+>
+  <div class="chat-item">
+    <img
+      src="../../../assets/avatar_employer.png"
+      alt="User Avatar"
+      class="avatar"
+      onerror="this.src='assets/images/default-avatar.png'"
+    />
+
+    <div class="chat-details">
+      <h4>{{ user.name }} {{ user.surname }}</h4>
+
+      <!-- ✅ Show company name for employers only -->
+      <p class="company-name" *ngIf="user.userType === 'Employer' && user.companyName">
+        {{ user.companyName }}
+      </p>
+    </div>
+
+    <button
+      class="send-invite-btn"
+      (click)="sendInvite(user, $event)"
+      [disabled]="user.inviteStatus === 'PENDING' || user.inviteStatus === 'ACCEPTED'">
+      {{ user.inviteStatus === 'ACCEPTED' ? 'Invited' :
+         user.inviteStatus === 'PENDING' ? 'Pending...' : 'Send Invite' }}
+    </button>
+
+  </div>
+  
+</div>
+
+
+        <!-- Empty State -->
+        <div *ngIf="filteredUsers.length === 0" class="no-results">
+          <p>No users found.</p>
+        </div>
+
       </div>
     </div>
+
+    <!-- RIGHT: Chat Panel -->
+    <div class="chat-panel" *ngIf="activeUser">
+  <div class="chat-header">
+    <div class="chat-header-info">
+      <div>
+        <h3>{{ activeUser.name }} {{ activeUser.surname }}</h3>
+        <p class="chat-role">
+          {{ activeUser.userType }}
+          <span *ngIf="activeUser.userType === 'Employer' && activeUser.companyName">
+            • {{ activeUser.companyName }}
+          </span>
+        </p>
+      </div>
+    </div>
+
+    <button class="view-profile-btn" (click)="viewProfile(activeUser)">
+      View Profile
+    </button>
+  </div>
+
+  <!-- Chat History -->
+  <div class="chat-history">
+    <div
+      *ngFor="let msg of messages"
+      [class.sent]="msg.senderId === currentUserId"
+      [class.received]="msg.senderId !== currentUserId"
+      class="chat-bubble"
+    >
+      <p>{{ msg.message }}</p>
+      <span class="timestamp">{{ msg.timestamp | date:'shortTime' }}</span>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="chat-input-container">
+    <input
+      type="text"
+      placeholder="Type your message..."
+      [(ngModel)]="newMessage"
+    />
+    <button (click)="sendMessage()">
+      <img src="../../../assets/send-message-icon.svg" style="width:25px; height: 25px;">
+    </button>
+  </div>
+
+
+<!-- Empty Chat State -->
+<div class="chat-panel empty" *ngIf="!activeUser">
+  <p>Select a user to start chatting 💬</p>
+</div>
+
   </div>
 
 </div>

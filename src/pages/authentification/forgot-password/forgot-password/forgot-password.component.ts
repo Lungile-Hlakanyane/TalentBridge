@@ -32,23 +32,23 @@ export class ForgotPasswordComponent implements OnInit{
    
   }
 
-   submit() {
+submit() {
+  if (!this.email) return;
+  this.loading.show(); 
+  this.userService.sendForgotPasswordEmail(this.email).subscribe({
+    next: (res) => {
+      this.loading.hide();
+      console.log(res);
+      this.router.navigate(['/otp'], { state: { email: this.email } });
+    },
+    error: (err) => {
+      this.loading.hide();
+      console.error(err);
+      alert(err.error || "Something went wrong. Please try again.");
+    }
+  });
+}
 
-    this.router.navigate(['/otp']);
-
-    // this.loading.show();
-    // this.userService.forgotPassword(this.email).subscribe({
-    //   next: (res) => {
-    //     this.loading.hide();
-    //     alert('Password reset link sent! Check your email.');
-    //     this.router.navigate(['/login']);
-    //   },
-    //   error: (err) => {
-    //     this.loading.hide();
-    //     alert(err.error || 'Something went wrong. Try again.');
-    //   }
-    // });
-  }
 
   navigate(link: string) {
     this.router.navigate([link]);

@@ -7,11 +7,13 @@ import { ChartConfiguration } from 'chart.js';
 import { UserService } from '../../../services/User-Service/user.service';
 import { JobService } from '../../../services/Job-Service/job.service';
 import { ApplicationService } from '../../../services/Application-Service/application.service';
+import { LoadingService } from '../../../services/Loading-Service/loading.service';
+import { LoadingSpinnerComponent } from '../../../re-usable-components/loading-spinner/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-admin-analytics',
   standalone: true,
-  imports: [CommonModule, NgChartsModule],
+  imports: [CommonModule, NgChartsModule, LoadingSpinnerComponent],
   templateUrl: './admin-analytics.component.html',
   styleUrl: './admin-analytics.component.scss'
 })
@@ -32,7 +34,8 @@ export class AdminAnalyticsComponent implements OnInit{
     private router:Router,
     private userService:UserService,
     private jobService:JobService,
-    private applicationService:ApplicationService
+    private applicationService:ApplicationService,
+    private loading:LoadingService
   ){}
 
   ngOnInit(): void {
@@ -90,34 +93,42 @@ export class AdminAnalyticsComponent implements OnInit{
       console.log(`Navigate to ${page}`);
     }
 
-    loadInsights() {
+  loadInsights() {
+    this.loading.show();  //show loading spinner
     this.userService.getEmployerCount().subscribe({
       next: (count) => {
         this.insights.employers = count;
         this.updateStatsAndChart();
       },
-      error: (err) => console.error('Error fetching employer count:', err)
+      error: (err) => console.error('Error fetching employer count:', err),
+      complete: () => this.loading.hide()
     });
+    this.loading.show();//show loading spinner
     this.userService.getEmployeeCount().subscribe({
       next: (count) => {
         this.insights.candidates = count;
         this.updateStatsAndChart();
       },
-      error: (err) => console.error('Error fetching candidate count:', err)
+      error: (err) => console.error('Error fetching candidate count:', err),
+      complete: () => this.loading.hide()
     });
+    this.loading.show();//show loading spinner
     this.jobService.getJobCount().subscribe({
      next: (count) => {
       this.insights.jobs = count;
       this.updateStatsAndChart();
      },
-     error: (err) => console.error('Error fetching job count:', err)
+     error: (err) => console.error('Error fetching job count:', err),
+     complete: () => this.loading.hide()
     });
+    this.loading.show();//show loading spinner
     this.applicationService.getApplicationCount().subscribe({
       next:(count)=>{
         this.insights.applications=count;
         this.updateStatsAndChart();
       },
-      error:(err)=>console.error('Error fetching application count:',err)
+      error:(err)=>console.error('Error fetching application count:',err),
+      complete: () => this.loading.hide()
     });
   }
 

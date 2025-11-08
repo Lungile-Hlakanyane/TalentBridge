@@ -9,18 +9,47 @@
     <p>Review the list of candidates who applied for your jobs</p>
   </section>
 
+  <!-- 🔍 Search Bar -->
+  <div class="search-container" *ngIf="!isLoading && applicants.length > 0">
+    <input
+      type="text"
+      placeholder="Search by name, email, or role..."
+      [(ngModel)]="searchTerm"
+      (input)="filterApplicants()"
+    />
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-container">
+    <p>Loading applicants...</p>
+  </div>
+
+  <!-- No Applicants -->
+  <div *ngIf="!isLoading && filteredApplicants.length === 0" class="no-applicants">
+    <p>No applicants found.</p>
+  </div>
+
   <!-- Applicants List -->
-  <section class="applicants-list">
-    <div class="applicant-card" *ngFor="let applicant of applicants">
+  <section class="applicants-list" *ngIf="!isLoading && filteredApplicants.length > 0">
+    <div class="applicant-card" *ngFor="let applicant of filteredApplicants">
       <div class="applicant-info">
-        <h3>{{ applicant.name }}</h3>
-        <p><strong>Email:</strong> {{ applicant.email }}</p>
+        <h3>{{ applicant.applicantName }}</h3>
+        <p><strong>Email:</strong> {{ applicant.applicantEmail }}</p>
         <p><strong>Phone:</strong> {{ applicant.phone }}</p>
         <p><strong>Applied for:</strong> {{ applicant.appliedFor }}</p>
-        <p><strong>Experience:</strong> {{ applicant.experience }}</p>
+        <p><strong>Applied at:</strong> {{ applicant.appliedAt | date:'medium' }}</p>
       </div>
+
       <div class="applicant-actions">
         <button class="view-btn" (click)="viewProfile(applicant.id)">View Profile</button>
+        <a
+          *ngIf="applicant.resumePath"
+          [href]="'http://localhost:8080/uploads/' + applicant.resumePath"
+          target="_blank"
+          class="resume-btn"
+        >
+          View Resume
+        </a>
       </div>
     </div>
   </section>

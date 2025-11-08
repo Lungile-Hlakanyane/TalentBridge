@@ -30,6 +30,7 @@ import { AdminAnalyticsComponent } from '../pages/admin-analytics/admin-analytic
 import { ForgotPasswordComponent } from '../pages/authentification/forgot-password/forgot-password/forgot-password.component';
 import { OtpComponent } from '../pages/authentification/otp/otp/otp.component';
 import { ResetPasswordComponent } from '../pages/authentification/reset-password/reset-password/reset-password.component';
+import { MyInvitesComponent } from '../pages/my-invites/my-invites/my-invites.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -62,6 +63,7 @@ export const routes: Routes = [
     {path: 'admin-analytics', component:AdminAnalyticsComponent},
     {path: 'forgot-password', component:ForgotPasswordComponent},
     {path: 'otp', component:OtpComponent},
-    {path: 'reset-passoword', component: ResetPasswordComponent},
+    {path: 'reset-password', component: ResetPasswordComponent},
+    {path: 'candidate-invites', component: MyInvitesComponent},
     {path: '**', redirectTo: '' },
 ];

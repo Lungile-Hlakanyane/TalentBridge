@@ -6,13 +6,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { CompanyService } from '../../services/company-service/company.service';
 import { CompanyInformationDTO } from '../../models/CompanyInformationDTO';
+import { LoadingService } from '../../services/Loading-Service/loading.service';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner/loading-spinner.component';
 
 type FileField = 'registrationDocument' | 'taxClearanceDocument' | 'leaseAgreement';
 
 @Component({
   selector: 'app-top-navbar',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './top-navbar.component.html',
   styleUrl: './top-navbar.component.scss'
 })
@@ -34,7 +36,8 @@ export class TopNavbarComponent implements OnInit {
   constructor(
     private location: Location,
     private router: Router,
-    private companyService:CompanyService
+    private companyService:CompanyService,
+    private loading:LoadingService
   ) { } 
 
   companyData = {
@@ -99,14 +102,16 @@ openEditCompanyModal() {
     userId: Number(localStorage.getItem('userId')),
     companyDescription: ''
   };
-
+  this.loading.show();
   this.companyService.createCompanyInfo(payload).subscribe({
     next: (res) => {
+      this.loading.hide();
       console.log('Company created:', res);
       this.showAddCompanyModal = false;
       alert('Company information submitted successfully!');
     },
     error: (err) => {
+      this.loading.hide();
       console.error('Error creating company:', err);
       alert('Failed to submit company information.');
     }
@@ -129,8 +134,12 @@ openEditCompanyModal() {
   }
 
   logout() {
+    this.loading.show();
     this.dropdownOpen = false;
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login']).then(() => {
+      localStorage.clear();
+      this.loading.hide();
+    });
   }
 
   goBack() {

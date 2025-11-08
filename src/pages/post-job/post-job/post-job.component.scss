@@ -93,3 +93,24 @@
     }
   }
 }
+
+.action-back-container {
+     margin-bottom: 20px;
+     font-family: 'Poppins', sans-serif;
+    .back-text {
+      color: #4cafef;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+
+      i {
+        font-size: 1rem;
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
