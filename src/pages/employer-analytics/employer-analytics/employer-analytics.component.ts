@@ -30,7 +30,7 @@ export class EmployerAnalyticsComponent implements OnInit {
 
   insights = {
     jobsPosted: 0,
-    totalApplicants: 15,
+    applications: 0,
     interviews: 10,
     jobOffers: 1,
     rejections: 9
@@ -52,7 +52,7 @@ export class EmployerAnalyticsComponent implements OnInit {
   datasets: [{
     data: [
       this.insights.jobsPosted,
-      this.insights.totalApplicants,
+      this.insights.applications,
       this.insights.interviews,
       this.insights.jobOffers,
       this.insights.rejections
@@ -121,8 +121,8 @@ export class EmployerAnalyticsComponent implements OnInit {
           (a, b) => new Date(b.created ?? 0).getTime() - new Date(a.created ?? 0).getTime()
         );
         this.insights.jobsPosted = this.activeJobs.length;
-        this.insights.totalApplicants = this.activeJobs.reduce(
-          (sum, job) => sum + (job.applicants || 0),
+        this.insights.applications = this.activeJobs.reduce(
+          (sum, job) => sum + (job.applications || 0),
           0
         );
         this.updateChartData();
@@ -140,7 +140,7 @@ export class EmployerAnalyticsComponent implements OnInit {
 updateChartData() {
   this.pieChartData.datasets[0].data = [
     this.insights.jobsPosted,
-    this.insights.totalApplicants,
+    this.insights.applications,
     this.insights.interviews,
     this.insights.jobOffers,
     this.insights.rejections
@@ -148,11 +148,10 @@ updateChartData() {
   this.updateStats();
 }
 
-
 updateStats() {
   this.stats = [
     { label: 'Jobs Posted', value: this.insights.jobsPosted },
-    { label: 'Applications', value: this.insights.totalApplicants },
+    { label: 'Applications', value: this.insights.applications },
     { label: 'Interviews', value: this.insights.interviews },
     { label: 'Job Offers', value: this.insights.jobOffers },
     { label: 'Rejections', value: this.insights.rejections }

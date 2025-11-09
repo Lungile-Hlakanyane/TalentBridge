@@ -12,4 +12,5 @@ export interface Job{
   salary?: string;
   approve?: any;
   status?:any;
+  applications?: any;
 }

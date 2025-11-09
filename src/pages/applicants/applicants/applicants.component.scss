@@ -156,3 +156,18 @@
   }
 }
 
+.analyze-btn{
+    width: 60%;
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border 0.2s ease;
+    background: #4cafef;
+    color: white;
+    &:hover {
+      background: #2b90d9;
+    }
+  }
+
