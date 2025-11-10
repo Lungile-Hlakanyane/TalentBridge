@@ -24,4 +24,14 @@ export class InviteService {
     const params = new HttpParams().set('status', status);
     return this.http.put(`${this.apiUrl}/${inviteId}/status`, null, { params, responseType: 'text' });
   }
+
+  getInviteStatus(senderId: number, receiverId: number): Observable<string> {
+  return this.http.get(`${this.apiUrl}/status`, {
+    params: { senderId, receiverId },
+    responseType: 'text'
+  });
+ }
+
+
+
 }

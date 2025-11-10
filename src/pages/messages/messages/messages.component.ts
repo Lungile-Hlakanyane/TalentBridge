@@ -1,4 +1,4 @@
-import { Component,OnInit } from '@angular/core';
+import { Component,OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { Chat } from '../../../models/Chat';
 import { CommonModule } from '@angular/common';
@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ChatService } from '../../../services/chat-service/chat.service';
 import { InviteService } from '../../../services/invite-service/invite.service';
-import { forkJoin } from 'rxjs';
+
 
 @Component({
   selector: 'app-messages',
@@ -19,6 +19,9 @@ import { forkJoin } from 'rxjs';
 })
 export class MessagesComponent implements OnInit {
 
+  showSettingsDropdown: boolean = false;
+  hideActive: boolean = false;
+  isOnline:boolean = navigator.onLine; 
   activeUser: any = null;
   messages: any[] = [];
   newMessage: string = '';
@@ -30,6 +33,7 @@ export class MessagesComponent implements OnInit {
   searchTerm: string = '';
   tabs: string[] = ['All', 'Employers', 'Employees'];
   selectedTab: string = 'All';
+  alertCount: number = 0;
 
   constructor(
     private router: Router,
@@ -39,31 +43,49 @@ export class MessagesComponent implements OnInit {
     private inviteService: InviteService
   ){}
 
-  ngOnInit() {
-     this.loadAllUsers();
-     this.loadCurrentUser();
-     const storedUserId = localStorage.getItem('userId');
-     if (storedUserId !== null) {
-       this.loadChatHistory(Number(storedUserId));
-     }
+ ngOnInit() {
+  this.loadCurrentUser();
+  window.addEventListener('online',  () => this.updateOnlineStatus(true));
+  window.addEventListener('offline', () => this.updateOnlineStatus(false));
+  if (this.currentUserId) {
+    this.loadAllUsers();   
+    this.loadChatHistory(this.currentUserId);
+    this.loadAlerts(); //fetch alerts
   }
+}
 
-  loadAllUsers() {
-    this.userService.getAllEmployees().subscribe({
-      next: (employees) => {
-        this.userService.getAllEmployers().subscribe({
-          next: (employers) => {
-            const empList = employees.map((e: any) => ({ ...e, userType: 'Employee' }));
-            const employerList = employers.map((e: any) => ({ ...e, userType: 'Employer' }));
-            this.users = [...empList, ...employerList];
-            this.filteredUsers = this.users;
-          },
-          error: (err) => console.error('Error fetching employers:', err)
+updateOnlineStatus(status: boolean) {
+  this.isOnline = status;
+  console.log('Network status:', status ? 'Online' : 'Offline');
+}
+
+loadAllUsers() {
+  if (!this.currentUserId) return;
+
+  this.userService.getAllUsersStatus().subscribe({
+    next: (users) => {
+      // Mark type for each user
+      const employees = users
+        .filter((u: any) => u.role === 'EMPLOYEE')
+        .map((e: any) => ({ ...e, userType: 'Employee' }));
+      const employers = users
+        .filter((u: any) => u.role === 'EMPLOYER')
+        .map((e: any) => ({ ...e, userType: 'Employer' }));
+
+      this.users = [...employees, ...employers];
+      this.filteredUsers = this.users;
+
+      // Load invite status for each user
+      this.users.forEach((user) => {
+        this.inviteService.getInviteStatus(this.currentUserId!, user.id).subscribe({
+          next: (status) => user.inviteStatus = status,
+          error: () => user.inviteStatus = 'NONE',
         });
-      },
-      error: (err) => console.error('Error fetching employees:', err)
-    });
-  }
+      });
+    },
+    error: (err) => console.error('Error fetching users with status:', err),
+  });
+}
 
   goBack() {
     this.location.back();
@@ -72,11 +94,6 @@ export class MessagesComponent implements OnInit {
   openChat(chatId: number) {
    console.log('Opening chat with ID:', chatId);
    this.router.navigate(['/chat', chatId]);
-  }
-
-  startChat(user: any) {
-    console.log('Starting chat with:', user);
-    this.router.navigate(['/chat', user.id]);
   }
 
  
@@ -100,14 +117,15 @@ export class MessagesComponent implements OnInit {
   }
 
   selectUser(user: any) {
-    if (user.inviteStatus !== 'ACCEPTED') {
-     alert('You can only chat with users who have accepted your invite.');
-     return;
-   }
-    this.activeUser = user;
-    console.log('Selected user:', user);
-    this.loadChatHistory(user.id);
+  if (user.inviteStatus !== 'ACCEPTED') {
+    alert('⚠️ You can only chat with users who have accepted your invite.');
+    return;
   }
+  this.activeUser = user;
+  console.log('Selected user:', user);
+  this.loadChatHistory(user.id);
+}
+
 
  loadChatHistory(userId: number) {
   if (!this.currentUserId) return;
@@ -148,7 +166,7 @@ export class MessagesComponent implements OnInit {
 
  viewProfile(user: any) {
   console.log('Viewing profile of:', user);
-  this.router.navigate(['/profile', user.id]);
+  this.router.navigate(['/show-profile', user.id]);
 }
 
 loadCurrentUser() {
@@ -189,6 +207,63 @@ loadCurrentUser() {
   });
 }
 
+  goTo(page: string) {
+    this.router.navigateByUrl(page);
+    console.log(`Navigate to ${page}`);
+  }
+
+  viewMyProfile() {
+   this.router.navigate(['/employer-profile']);
+  }
+
+  goToInvites() {
+   this.router.navigate(['/candidate-invites']);
+  }
+
+  openSettings() {
+   console.log('Settings clicked');
+   this.router.navigate(['/settings'])
+  }
+
+  openAlerts(){
+    this.router.navigate(['/candidate-invites'])
+  }
+
+  
+  loadAlerts() {
+    if (!this.currentUserId) return;
+    this.inviteService.getInvitesForUser(this.currentUserId).subscribe({
+      next: (invites) => {
+        this.alertCount = invites.filter(inv => inv.status === 'PENDING').length;
+        console.log('Alert count:', this.alertCount);
+      },
+      error: (err) => {
+        console.error('Error loading alerts:', err);
+      }
+    });
+  }
+
+  toggleSettingsDropdown(){
+    this.showSettingsDropdown =! this.showSettingsDropdown;
+  }
+
+ toggleHideActive() {
+   console.log('Hide Active:', this.hideActive);
+  if (this.hideActive) {
+     this.filteredUsers = this.filteredUsers.filter(u => !u.online);
+   } else {
+     this.filteredUsers = [...this.users];
+     this.filterUsers();
+   }
+ }
+
+@HostListener('document:click', ['$event'])
+onClickOutside(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  if (!target.closest('.settings-dropdown-container')) {
+    this.showSettingsDropdown = false;
+  }
+}
 
 
 }

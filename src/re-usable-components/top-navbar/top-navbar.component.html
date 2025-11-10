@@ -29,6 +29,10 @@
      <li><a (click)="navigate('admin-analytics')">Analytics</a></li>
     </ul>
 
+    <ul class="nav-links" *ngIf="userRole === 'ADMIN'">
+     <li><a (click)="navigate('candidate-invites')">My Invites</a></li>
+    </ul>
+
    <ul class="nav-links" *ngIf="userRole === 'EMPLOYER'">
     <li class="company-dropdown"><button class="company-btn" (click)="toggleCompanyDropdown()">Company Info <span class="arrow">&#9662;</span></button>
       <div class="dropdown-menu" *ngIf="companyDropdownOpen">
@@ -55,7 +59,9 @@
         <!-- Dropdown Menu -->
         <div class="dropdown-menu" *ngIf="dropdownOpen">
           <a (click)="navigate('employer-profile')" class="dropdown-item">View Profile</a>
+          <a (click)="navigate('/settings')" class="dropdown-item">Settings</a>
           <a (click)="logout()" class="dropdown-item quit">Quit</a>
+          
         </div>
       </div>
     </div>

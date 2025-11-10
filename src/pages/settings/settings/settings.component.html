@@ -1,0 +1,137 @@
+<div class="action-back-container">
+  <span class="back-text" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i> Back
+  </span>
+</div>
+
+<div class="settings-container">
+  <div class="settings-header">
+    <h1>Settings</h1>
+    <p>Manage your preferences and visibility</p>
+  </div>
+
+  <!-- ================= PRIVACY & VISIBILITY ================= -->
+  <h2 class="section-title">Privacy & Visibility</h2>
+
+  <div class="setting-item">
+    <div class="setting-info">
+      <h3>Hide Active Status</h3>
+      <p>Prevent others from seeing when you are online.</p>
+    </div>
+    <label class="switch">
+      <input type="checkbox" [(ngModel)]="hideActive" (change)="onToggleChange('hideActive')" />
+      <span class="slider"></span>
+    </label>
+  </div>
+
+ <div class="setting-item">
+  <div class="setting-info">
+    <h3>Show Last Seen</h3>
+    <p>Allow others to view your last activity time.</p>
+  </div>
+  <label class="switch">
+    <input
+      type="checkbox"
+      [(ngModel)]="showLastSeen"
+      (change)="onToggleChange('showLastSeen')"
+      disabled
+    />
+    <span class="slider"></span>
+  </label>
+</div>
+
+  <!-- ================= COMMUNICATION ================= -->
+  <h2 class="section-title">Communication & Messaging</h2>
+
+  <div class="setting-item">
+    <div class="setting-info">
+      <h3>Allow Invites</h3>
+      <p>Enable or disable receiving new invites from other users.</p>
+    </div>
+    <label class="switch">
+      <input type="checkbox" [(ngModel)]="allowInvites" (change)="onToggleChange('allowInvites')" disabled />
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="setting-item">
+    <div class="setting-info">
+      <h3>Receive Message Notifications</h3>
+      <p>Get notified when someone sends you a message.</p>
+    </div>
+    <label class="switch">
+      <input type="checkbox" [(ngModel)]="messageNotifications" (change)="onToggleChange('messageNotifications')" disabled/>
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- ================= NOTIFICATIONS ================= -->
+  <h2 class="section-title">Notifications</h2>
+
+  <div class="setting-item">
+    <div class="setting-info">
+      <h3>Email Notifications</h3>
+      <p>Receive important updates via email.</p>
+    </div>
+    <label class="switch">
+      <input type="checkbox" [(ngModel)]="emailNotifications" (change)="onToggleChange('emailNotifications')" disabled/>
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="setting-item">
+    <div class="setting-info">
+      <h3>Job Alert Notifications</h3>
+      <p>Be notified of new job opportunities.</p>
+    </div>
+    <label class="switch">
+      <input type="checkbox" [(ngModel)]="jobAlerts" (change)="onToggleChange('jobAlerts')" disabled/>
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="setting-item">
+    <div class="setting-info">
+      <h3>Announcement Alerts</h3>
+      <p>Receive announcements from TalentBridge Admin.</p>
+    </div>
+    <label class="switch">
+      <input type="checkbox" [(ngModel)]="announcementAlerts" (change)="onToggleChange('announcementAlerts')" disabled/>
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- ================= DISPLAY & ACCESSIBILITY ================= -->
+  <h2 class="section-title">Display & Accessibility</h2>
+
+  <div class="setting-item">
+    <div class="setting-info">
+      <h3>Dark Mode</h3>
+      <p>Switch to a dark color theme.</p>
+    </div>
+    <label class="switch">
+      <input type="checkbox" [(ngModel)]="darkMode" (change)="onToggleChange('darkMode')" />
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- ================= ACCOUNT & SECURITY ================= -->
+  <h2 class="section-title">Account & Security</h2>
+
+  <div class="setting-item">
+    <div class="setting-info">
+      <h3>Two-Factor Authentication</h3>
+      <p>Add extra security to your account.</p>
+    </div>
+    <label class="switch">
+      <input type="checkbox" [(ngModel)]="twoFactorAuth" (change)="onToggleChange('twoFactorAuth')" />
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="setting-item button-row">
+    <button class="settings-btn" (click)="changePassword()">Change Password</button>
+    <button class="settings-btn danger" (click)="deleteAccount()">Delete Account</button>
+  </div>
+  
+</div>

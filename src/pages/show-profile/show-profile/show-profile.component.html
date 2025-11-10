@@ -1,0 +1,99 @@
+<div class="show-profile-container">
+
+  <!-- Back Button -->
+  <div class="action-back-container">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+  </div>
+
+  <!-- Header with Avatar -->
+  <div class="profile-header">
+    <div class="avatar-container">
+      <img
+        src="../../../assets/avatar_employer.png"
+        alt="User Avatar"
+        class="avatar"
+        onerror="this.src='assets/images/default-avatar.png'"
+      />
+    </div>
+
+    <h2>{{ user.fullName }}</h2>
+    <p class="email">{{ user.email }}</p>
+    <span class="role">{{ user.role }}</span>
+    <p class="company">{{ user.companyName }}</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Personal Information -->
+  <div class="info-card">
+    <h3>Personal Information</h3>
+    <div class="info-row">
+      <label>Full Name</label>
+      <p>{{ user.fullName }}</p>
+    </div>
+
+    <div class="info-row">
+      <label>Email</label>
+      <p>{{ user.email }}</p>
+    </div>
+
+    <div class="info-row">
+      <label>Contact Number</label>
+      <p>{{ user.contactNumber }}</p>
+    </div>
+
+    <div class="info-row">
+      <label>Role</label>
+      <p>{{ user.role }}</p>
+    </div>
+  </div>
+
+  <!-- Company Information -->
+  <div class="info-card">
+    <h3>Company Information</h3>
+
+    <div class="info-row">
+      <label>Company Description</label>
+      <p>{{ user.companyDescription }}</p>
+    </div>
+
+    <div class="info-row">
+      <label>Tax Number</label>
+      <p>{{ user.taxNumber }}</p>
+    </div>
+
+    <div class="info-row">
+      <label>Registered Address</label>
+      <p>{{ user.registeredAddress }}</p>
+    </div>
+
+    <div class="info-row">
+      <label>Registration Document</label>
+      <p class="uploaded">Uploaded</p>
+    </div>
+
+    <div class="info-row">
+      <label>Tax Clearance Document</label>
+      <p class="uploaded">Uploaded</p>
+    </div>
+
+    <div class="info-row">
+      <label>Lease Agreement</label>
+      <p class="uploaded">Uploaded</p>
+    </div>
+  </div>
+
+</div>
+
+  <!-- Footer -->
+  <footer class="app-footer" style="font-family: 'Inter', sans-serif; padding: 15px;">
+    <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+    <div class="footer-links">
+      <a (click)="goTo('about')">About</a> |
+      <a (click)="goTo('contact')">Contact</a> |
+      <a (click)="goTo('privacy')">Privacy</a>
+    </div>
+
+  </footer>

@@ -33,18 +33,14 @@ login() {
   this.userService.login(this.email, this.password).subscribe({
     next: (response: any) => {
       this.loading.hide(); 
-
       localStorage.setItem('role', response.role);
       localStorage.setItem('email', this.email);
       localStorage.setItem('userId', response.userId);
-
-       
       if (this.rememberMe) {
         localStorage.setItem('token', response.token);
       } else {
         sessionStorage.setItem('token', response.token); 
       }
-
       if (response.role === 'ADMIN') {
         this.router.navigate(['/admin-dashboard']);
       } else if (response.role === 'EMPLOYER') {

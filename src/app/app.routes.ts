@@ -31,6 +31,8 @@ import { ForgotPasswordComponent } from '../pages/authentification/forgot-passwo
 import { OtpComponent } from '../pages/authentification/otp/otp/otp.component';
 import { ResetPasswordComponent } from '../pages/authentification/reset-password/reset-password/reset-password.component';
 import { MyInvitesComponent } from '../pages/my-invites/my-invites/my-invites.component';
+import { ShowProfileComponent } from '../pages/show-profile/show-profile/show-profile.component';
+import { SettingsComponent } from '../pages/settings/settings/settings.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -65,5 +67,7 @@ export const routes: Routes = [
     {path: 'otp', component:OtpComponent},
     {path: 'reset-password', component: ResetPasswordComponent},
     {path: 'candidate-invites', component: MyInvitesComponent},
+    {path: 'show-profile/:id', component: ShowProfileComponent},
+    {path: 'settings', component: SettingsComponent},
     {path: '**', redirectTo: '' },
 ];

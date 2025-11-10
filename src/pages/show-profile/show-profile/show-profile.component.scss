@@ -1,0 +1,123 @@
+.show-profile-container {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #f8f9fb;
+  padding: 30px;
+  border-radius: 16px;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+
+  .action-back-container {
+    margin-bottom: 15px;
+
+    .back-text {
+      cursor: pointer;
+      color: #007bff;
+      font-weight: 500;
+
+      i {
+        margin-right: 6px;
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .profile-header {
+    text-align: center;
+    margin-bottom: 25px;
+
+    .avatar-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+
+      .avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #007bff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    h2 {
+      font-size: 28px;
+      font-weight: 600;
+      color: #2b2d42;
+      margin-bottom: 4px;
+    }
+
+    .email {
+      font-size: 16px;
+      color: #666;
+      margin: 4px 0;
+    }
+
+    .role {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .company {
+      font-size: 18px;
+      font-weight: 500;
+      color: #444;
+      margin-top: 10px;
+    }
+  }
+
+  .divider {
+    height: 1px;
+    background: #ddd;
+    margin: 25px 0;
+  }
+
+  .info-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #2b2d42;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+
+      label {
+        font-weight: 500;
+        color: #555;
+      }
+
+      p {
+        margin: 0;
+        color: #333;
+        font-weight: 400;
+      }
+
+      .uploaded {
+        color: #28a745;
+        font-weight: 600;
+      }
+    }
+  }
+}

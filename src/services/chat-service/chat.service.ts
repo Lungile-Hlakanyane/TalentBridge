@@ -31,5 +31,12 @@ export class ChatService {
   markAsRead(messageId: number): Observable<void> {
     return this.http.put<void>(`${this.baseUrl}/read/${messageId}`, {});
   }
+
+  getInviteStatus(senderId: number, receiverId: number): Observable<string> {
+  return this.http.get(`${this.baseUrl}/status`, {
+    params: { senderId, receiverId },
+    responseType: 'text'
+  });
+}
   
 }

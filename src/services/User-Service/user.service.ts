@@ -93,6 +93,14 @@ getUserByEmail(email: string): Observable<any> {
   return this.http.get(`${this.apiUrl}/by-email`, { params: { email } });
 }
 
+getAllUsersStatus(): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/status/all`);
+}
+
+deleteAccount(userId: number) {
+  return this.http.delete(`${this.apiUrl}/delete/${userId}`, { responseType: 'text' });
+}
+
 
 
 }
