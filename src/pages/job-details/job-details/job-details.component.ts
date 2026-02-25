@@ -3,6 +3,8 @@ import { JobDetails } from '../../../models/JobDetails';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { JobService } from '../../../services/Job-Service/job.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-job-details',
@@ -17,34 +19,28 @@ export class JobDetailsComponent implements OnInit{
 
   constructor(
     private route: ActivatedRoute, 
-    private router: Router)
+    private router: Router,
+    private jobService:JobService,
+    private location: Location
+  )
     {}
 
   ngOnInit(): void {
      const jobId = Number(this.route.snapshot.paramMap.get('id'));
-     this.loadMockJob(jobId);
+    this.loadJob(jobId);
   }
+  
+  loadJob(id: number): void {
+  this.jobService.getJobById(id).subscribe({
+    next: (job) => {
+      this.job = job as JobDetails;
+    },
+    error: (err) => {
+      console.error('Error fetching job:', err);
+    }
+  });
+}
 
-   loadMockJob(id: number): void {
-    this.job = {
-      id,
-      title: 'Frontend Developer',
-      company: 'TechSoft Ltd',
-      location: 'Cape Town, SA',
-      description: 'We are looking for a skilled frontend developer to join our team and work on exciting projects.',
-      requirements: [
-        '3+ years experience with Angular or React',
-        'Strong HTML, CSS, and JavaScript knowledge',
-        'Experience with responsive design',
-        'Familiarity with Git and Agile workflows'
-      ],
-      applicants: 120,
-      shortlisted: 25,
-      rejected: 40,
-      postedDate: new Date('2025-08-15'),
-      status: 'pending'
-    };
-  }
 
    approveJob(): void {
     this.job.status = 'approved';
@@ -65,6 +61,10 @@ export class JobDetailsComponent implements OnInit{
 
   goTo(path: string): void {
     this.router.navigate([`/admin/${path}`]);
+  }
+
+  goBack() {
+    this.location.back();
   }
 
 }

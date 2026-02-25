@@ -13,17 +13,6 @@
   <!-- ================= PRIVACY & VISIBILITY ================= -->
   <h2 class="section-title">Privacy & Visibility</h2>
 
-  <div class="setting-item">
-    <div class="setting-info">
-      <h3>Hide Active Status</h3>
-      <p>Prevent others from seeing when you are online.</p>
-    </div>
-    <label class="switch">
-      <input type="checkbox" [(ngModel)]="hideActive" (change)="onToggleChange('hideActive')" />
-      <span class="slider"></span>
-    </label>
-  </div>
-
  <div class="setting-item">
   <div class="setting-info">
     <h3>Show Last Seen</h3>
@@ -110,7 +99,7 @@
       <p>Switch to a dark color theme.</p>
     </div>
     <label class="switch">
-      <input type="checkbox" [(ngModel)]="darkMode" (change)="onToggleChange('darkMode')" />
+      <input type="checkbox" [(ngModel)]="darkMode" (change)="onToggleChange('darkMode')" disabled/>
       <span class="slider"></span>
     </label>
   </div>
@@ -124,14 +113,24 @@
       <p>Add extra security to your account.</p>
     </div>
     <label class="switch">
-      <input type="checkbox" [(ngModel)]="twoFactorAuth" (change)="onToggleChange('twoFactorAuth')" />
+      <input type="checkbox" [(ngModel)]="twoFactorAuth" (change)="onToggleChange('twoFactorAuth')" disabled/>
       <span class="slider"></span>
     </label>
   </div>
 
   <div class="setting-item button-row">
-    <button class="settings-btn" (click)="changePassword()">Change Password</button>
     <button class="settings-btn danger" (click)="deleteAccount()">Delete Account</button>
   </div>
   
 </div>
+
+  <!-- Footer -->
+  <footer class="app-footer" style="font-family: 'Inter', sans-serif; padding:15px;">
+    <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+    <div class="footer-links">
+      <a (click)="goTo('about')">About</a> |
+      <a (click)="goTo('contact')">Contact</a> |
+      <a (click)="goTo('privacy')">Privacy</a>
+    </div>
+    
+  </footer>

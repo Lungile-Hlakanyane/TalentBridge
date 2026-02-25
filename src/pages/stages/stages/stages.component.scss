@@ -132,3 +132,47 @@ button {
 }
 
 
+// Interview dialog box
+.interview-modal {
+  width: 400px;
+  padding: 20px;
+}
+
+.interview-modal h3 {
+  margin-top: 0;
+}
+
+.interview-modal .form-group {
+  margin-bottom: 20px;
+}
+
+.interview-modal label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.interview-modal input, .interview-modal select {
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.interview-modal .modal-actions {
+  text-align: right;
+}
+
+.interview-modal button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #0056b3;
+  color: #fff;
+  cursor: pointer;
+}
+
+.interview-modal button:hover {
+  background-color: #0056b3;
+}
+// End dialog box styles

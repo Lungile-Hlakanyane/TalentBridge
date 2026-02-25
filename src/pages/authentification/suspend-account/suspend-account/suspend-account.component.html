@@ -1,0 +1,36 @@
+  <div class="action-back-container">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+  </div>
+<div class="suspended-account-wrapper">
+  <div class="suspended-account-left">
+    <div class="brand-logo">
+      <h2 class="brand">Talent<span>Bridge</span></h2>
+    </div>
+    <div class="suspended-text">
+      <h1>Account Suspended</h1>
+      <p>Your account has been suspended. Please contact support for more information.</p>
+    </div>
+    <div class="user-details">
+      <p><strong>Name:</strong> {{ user.name }} {{ user.surname }}</p>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p *ngIf="user.role === 'EMPLOYER'"><strong>Company:</strong> {{ user.companyName }}</p>
+      <p *ngIf="user.suspended"><strong>Suspension Expiry:</strong> {{ calculateDaysLeft(user.suspensionExpiry) }} days left</p>
+    </div>
+  </div>
+  <div class="suspended-account-right">
+    <img src="../../../../assets/login_banner_image.jpg" style="border-radius: 25px;" />
+  </div>
+</div>
+
+ <!-- Footer -->
+<footer class="app-footer">
+  <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+  <div class="footer-links">
+    <a (click)="goTo('about')">About</a> |
+    <a (click)="goTo('contact')">Contact</a> |
+    <a (click)="goTo('privacy')">Privacy</a>
+  </div>
+</footer>
+ <!-- End Footer -->

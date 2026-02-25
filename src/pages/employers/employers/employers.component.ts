@@ -58,9 +58,14 @@ export class EmployersComponent implements OnInit {
   }
 
   suspendEmployer(id: number): void {
-    this.updateStatus(id, 'suspended');
-  }
-
+  this.userService.suspendAccount(id, 30).subscribe({
+    next: (response) => {
+      console.log(response);
+      this.updateStatus(id, 'suspended');
+    },
+    error: (err) => console.error('Failed to suspend employer:', err)
+  });
+}
   deleteEmployer(id: number): void {
     this.employers = this.employers.filter(emp => emp.id !== id);
     alert(`Employer deleted successfully`);
@@ -83,24 +88,37 @@ export class EmployersComponent implements OnInit {
 
    // Execute action after confirming
   executeAction() {
-    if (!this.selectedEmployer || !this.modalAction) return;
-
-    switch (this.modalAction) {
-      case 'approve':
-        this.updateStatus(this.selectedEmployer.id, 'approved');
-        break;
-      case 'reject':
-        this.updateStatus(this.selectedEmployer.id, 'rejected');
-        break;
-      case 'suspend':
-        this.updateStatus(this.selectedEmployer.id, 'suspended');
-        break;
-      case 'delete':
-        this.employers = this.employers.filter(emp => emp.id !== this.selectedEmployer.id);
-        break;
-    }
-    this.closeModal();
+  if (!this.selectedEmployer || !this.modalAction) return;
+  switch (this.modalAction) {
+    case 'approve':
+      this.updateStatus(this.selectedEmployer.id, 'approved');
+      break;
+    case 'reject':
+      this.updateStatus(this.selectedEmployer.id, 'rejected');
+      break;
+    case 'suspend':
+  this.userService.suspendAccount(this.selectedEmployer.id, 30).subscribe({
+    next: (response) => {
+      console.log(response);
+      this.updateStatus(this.selectedEmployer.id, 'suspended');
+      this.closeModal();
+    },
+    error: (err) => console.error('Failed to suspend employer:', err)
+  });
+  break;
+    case 'delete':
+      this.userService.deleteAccount(this.selectedEmployer.id).subscribe({
+        next: (response) => {
+          console.log(response);
+          this.employers = this.employers.filter(emp => emp.id !== this.selectedEmployer.id);
+          this.filteredEmployers = this.filteredEmployers.filter(emp => emp.id !== this.selectedEmployer.id);
+          this.closeModal();
+        },
+        error: (err) => console.error('Failed to delete employer:', err)
+      });
+      break;
   }
+}
 
   closeModal() {
     this.showModal = false;
@@ -112,10 +130,18 @@ export class EmployersComponent implements OnInit {
     this.location.back();
   }
 
-   searchEmployers(): void {
-        this.filteredEmployers = this.employers.filter((employer) =>
-            employer.companyName.toLowerCase().includes(this.searchTerm.toLowerCase())
-        );
-    }
+  searchEmployers(): void {
+    this.filteredEmployers = this.employers.filter((employer) =>
+      employer.companyName.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
+  calculateDaysLeft(suspensionExpiry: string): number {
+   const expiryDate = new Date(suspensionExpiry);
+   const currentDate = new Date();
+   const timeDifference = expiryDate.getTime() - currentDate.getTime();
+   const daysLeft = Math.ceil(timeDifference / (1000 * 3600 * 24));
+   return daysLeft;
+  }
 
 }

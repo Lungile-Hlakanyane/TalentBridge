@@ -20,22 +20,20 @@
   <!-- Filters -->
   <section class="filters">
     <button [class.active]="selectedFilter==='all'" (click)="setFilter('all')">All</button>
-    <button [class.active]="selectedFilter==='active'" (click)="setFilter('active')">Active</button>
-    <button [class.active]="selectedFilter==='suspended'" (click)="setFilter('suspended')">Suspended</button>
-    <button [class.active]="selectedFilter==='flagged'" (click)="setFilter('flagged')">Flagged</button>
   </section>
 
   <!-- Candidate List -->
   <section class="candidate-list">
 
-    <div class="candidate-card" *ngFor="let candidate of filteredCandidates()" (click)="navigate('/candidate-details')">
+    <div class="candidate-card" *ngFor="let candidate of filteredCandidates()">
 
         <div class="candidate-info">
             <h3>{{ candidate.name }}</h3>
             <p class="email"><i class="fas fa-envelope"></i> {{ candidate.email }}</p>
-            <p class="status" [ngClass]="candidate.status">{{ candidate.status | titlecase }}</p>
+            <p class="status" [ngClass]="{'suspended': candidate.suspended}">
+              {{ candidate.suspended ? 'Suspended' : candidate.status | titlecase }}
+            </p>
         </div>
-
       
         <div class="candidate-actions">
             <button class="suspend-btn" (click)="confirmAction(candidate, 'suspend')">
@@ -63,7 +61,7 @@
   </div>
 
   <!-- Footer -->
-  <footer class="app-footer">
+  <footer class="app-footer" style="font-family: 'Inter', sans-serif; padding:15px;">
     <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
     <div class="footer-links">
       <a (click)="goTo('about')">About</a> |

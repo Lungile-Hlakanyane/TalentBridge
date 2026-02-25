@@ -101,6 +101,12 @@ deleteAccount(userId: number) {
   return this.http.delete(`${this.apiUrl}/delete/${userId}`, { responseType: 'text' });
 }
 
+suspendAccount(userId: number, days: number): Observable<string> {
+  return this.http.put(`${this.apiUrl}/suspend/${userId}`, null, {
+    params: { days },
+    responseType: 'text'
+  });
+}
 
 
 }

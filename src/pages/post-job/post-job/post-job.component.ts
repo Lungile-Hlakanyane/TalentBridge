@@ -18,15 +18,21 @@ import { LoadingSpinnerComponent } from '../../../re-usable-components/loading-s
 export class PostJobComponent implements OnInit{
 
   job = {
-    title: '',
-    company: '',
-    location: '',
-    type: '',
-    description: '',
-    requirements: [] as string[],
-    salary: '',
-    userId: 0
-  };
+  title: '',
+  company: '',
+  location: '',
+  type: '',
+  description: '',
+  requirements: [] as string[],
+  salary: '',
+  userId: 0,
+  numberOfYears: '',
+  qualifications: '',
+  skills: '',
+  otherRequirements: '',
+  nameOfQualification: ''
+};
+
 
   constructor(
     private router: Router,

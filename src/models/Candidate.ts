@@ -11,4 +11,5 @@ export interface Candidate {
   registeredDate?: Date;
   resumes?: Resume[];
   appliedJobs?: { id: number; title: string; company: string; location: string; status: string }[];
+  suspended?:any;
 }

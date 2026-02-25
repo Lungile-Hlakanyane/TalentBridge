@@ -10,13 +10,15 @@
   <!-- Job Details -->
   <div class="job-details-card">
     <h2 class="job-title">{{ job?.title }}</h2>
-    <p class="company">{{ job?.company }}</p>
+    <p class="company">{{ job?.company }} </p>
     <p class="location"><strong>Location:</strong> {{ job?.location }}</p>
     <p class="type"><strong>Type:</strong> {{ job?.type }}</p>
     <p class="description"><strong>Description:</strong> {{ job?.description }}</p>
+    <p class="salary"><strong>Salary: R{{job?.salary}}</strong></p>
     <p class="requirements"><strong>Requirements:</strong></p>
     <ul>
-      <li *ngFor="let req of job?.requirements">{{ req }}</li>
+     <li *ngFor="let skill of job?.skills.split(',')">{{ skill.trim() }}</li>
+     <li *ngFor="let req of job?.otherRequirements.split(',')">{{ req.trim() }}</li>
     </ul>
     <button (click)="openModal()">Apply</button>
   </div>

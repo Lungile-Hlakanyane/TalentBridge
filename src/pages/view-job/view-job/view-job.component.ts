@@ -61,37 +61,48 @@ export class ViewJobComponent implements OnInit{
     }
   }
 
-   submitApplication() {
-    if (!this.job) {
-      alert('Job not found.');
-      return;
-    }
-
-    const jobApplication: JobApplication = {
-      jobId: this.job.id!,
-      applicantName: this.application.name,
-      applicantEmail: this.application.email,
-      coverLetter: this.application.coverLetter,
-      resumePath: this.selectedFile ? this.selectedFile.name : undefined // later replace with upload
-    };
-
-    this.loading.show();
-    this.applicationService.applyForJob(jobApplication).subscribe({
-      next: (res) => {
-        console.log('Application submitted:', res);
-        alert(`Application submitted for "${this.job?.title}" at ${this.job?.company}`);
-        this.closeModal();
-        this.application = { name: '', email: '', coverLetter: '' };
-        this.selectedFile = null;
-        this.loading.hide();
-      },
-      error: (err) => {
-        console.error('Error submitting application:', err);
-        alert('Failed to submit application. Please try again.');
-        this.loading.hide();
-      }
-    });
+  submitApplication() {
+  if (!this.job) {
+    alert('Job not found.');
+    return;
   }
+  this.applicationService.getApplicationsForUser(this.application.email).subscribe({
+    next: (applications) => {
+      const hasApplied = applications.some((app: { jobId: number }) => app.jobId === this.job?.id);
+      if (hasApplied) {
+        alert(`You have already applied for ${this.job?.title}`);
+        return;
+      }
+      const jobApplication: JobApplication = {
+        jobId: this.job?.id!,
+        applicantName: this.application.name,
+        applicantEmail: this.application.email,
+        coverLetter: this.application.coverLetter,
+        resumePath: this.selectedFile ? this.selectedFile.name : undefined
+      };
+      this.loading.show();
+      this.applicationService.applyForJob(jobApplication).subscribe({
+        next: (res) => {
+          console.log('Application submitted:', res);
+          alert(`Application submitted for "${this.job?.title}" at ${this.job?.company}`);
+          this.closeModal();
+          this.application = { name: '', email: '', coverLetter: '' };
+          this.selectedFile = null;
+          this.loading.hide();
+        },
+        error: (err) => {
+          console.error('Error submitting application:', err);
+          alert('Failed to submit application. Please try again.');
+          this.loading.hide();
+        }
+      });
+    },
+    error: (err) => {
+      console.error('Error fetching user applications:', err);
+      alert('Failed to check application status. Please try again.');
+    }
+  });
+}
 
  ngOnInit() {
 
@@ -102,15 +113,21 @@ export class ViewJobComponent implements OnInit{
 
     const jobId = Number(this.route.snapshot.paramMap.get('id'));
     if (jobId) {
-      this.jobService.getJobById(jobId).subscribe({
-        next: (data) => {
-          this.job = data;
-          console.log('Loaded job:', data);
-        },
-        error: (err) => {
-          console.error('Error fetching job', err);
-        }
-      });
+     this.jobService.getJobById(jobId).subscribe({
+  next: (data) => {
+    this.job = {
+      ...data,
+      requirements: [
+        ...data.skills.split(',').map((skill: string) => skill.trim()),
+        ...data.otherRequirements.split(',').map((req: string) => req.trim())
+      ]
+    };
+    console.log('Loaded job:', data);
+  },
+  error: (err) => {
+    console.error('Error fetching job', err);
+  }
+});
     }
   }
 

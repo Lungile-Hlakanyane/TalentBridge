@@ -50,17 +50,27 @@ export class CandidateManagementComponent implements OnInit {
     this.showModal = true;
   }
 
-  executeAction() {
-    if (!this.selectedCandidate || !this.modalAction) return;
-
-    if (this.modalAction === 'suspend') {
-      this.selectedCandidate.status = 'suspended';
-    } else if (this.modalAction === 'delete') {
-      this.candidates = this.candidates.filter(c => c.id !== this.selectedCandidate.id);
-    }
-
-    this.closeModal();
+ executeAction() {
+  if (!this.selectedCandidate || !this.modalAction) return;
+  if (this.modalAction === 'suspend') {
+    this.usersService.suspendAccount(this.selectedCandidate.id, 30).subscribe({
+      next: (response) => {
+        this.selectedCandidate.status = 'suspended';
+        this.closeModal();
+      },
+      error: (err) => console.error('Failed to suspend candidate:', err)
+    });
+  } else if (this.modalAction === 'delete') {
+    this.usersService.deleteAccount(this.selectedCandidate.id).subscribe({
+      next: (response) => {
+        this.candidates = this.candidates.filter(c => c.id !== this.selectedCandidate.id);
+        this.closeModal();
+      },
+      error: (err) => console.error('Failed to delete candidate:', err)
+    });
   }
+}
+
 
   closeModal() {
     this.showModal = false;

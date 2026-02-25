@@ -40,7 +40,7 @@
         <h4>{{ job.title }}</h4>
         <p>{{ job.location }}</p>
         <p><strong>Applicants:</strong> {{ job.applicants }}</p>
-        <button (click)="manageJob(job.id)">Manage</button>
+        <button (click)="goTo('/applicants')">Manage</button>
       </div>
     </div>
   </section>

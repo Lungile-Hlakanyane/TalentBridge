@@ -7,8 +7,10 @@ import { forkJoin } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/User-Service/user.service';
 import { finalize } from 'rxjs/operators';
+import { FileService } from '../../../services/File-service/file.service';
 
 interface Applicant {
+encodedResumePath: any;
   id: number;
   applicantName: string;
   applicantEmail: string;
@@ -27,6 +29,7 @@ interface Applicant {
   styleUrl: './applicants.component.scss'
 })
 export class ApplicantsComponent implements OnInit{
+[x: string]: any;
 
   filteredApplicants: Applicant[] = [];
   searchTerm: string = '';
@@ -38,7 +41,8 @@ export class ApplicantsComponent implements OnInit{
     private router:Router,
     private applicationService: ApplicationService,
     private jobService: JobService,
-    private userService: UserService
+    private userService: UserService,
+    private fileService:FileService
   ){}
 
   ngOnInit() {
@@ -90,7 +94,8 @@ export class ApplicantsComponent implements OnInit{
                     experience: app.experience || 'N/A',
                     appliedAt: app.appliedAt,
                     resumePath: app.resumePath,
-                    phone: ''
+                    phone: '',
+                    encodedResumePath: undefined
                   });
                 });
               });
@@ -120,17 +125,31 @@ export class ApplicantsComponent implements OnInit{
   }
 
   
- filterApplicants() {
-    const term = this.searchTerm.toLowerCase().trim();
-    if (!term) {
-      this.filteredApplicants = [...this.applicants];
-      return;
-    }
-    this.filteredApplicants = this.applicants.filter((app) =>
-      app.applicantName.toLowerCase().includes(term) ||
-      app.applicantEmail.toLowerCase().includes(term) ||
-      app.appliedFor.toLowerCase().includes(term)
-    );
+filterApplicants() {
+  const term = this.searchTerm.toLowerCase().trim();
+  if (!term) {
+    this.filteredApplicants = [...this.applicants];
+    return;
   }
+  this.filteredApplicants = this.applicants.filter(applicant => {
+    return applicant.applicantName.toLowerCase().includes(term) ||
+           applicant.applicantEmail.toLowerCase().includes(term) ||
+           applicant.appliedFor.toLowerCase().includes(term);
+  });
+}
+
+  navigate(link:string){
+    this.router.navigateByUrl(link);
+  }
+
+  navigateToStages(applicant: any){
+   this.router.navigate(['/stages'], { state: { applicant } });
+  }
+
+viewResume(filename: string) {
+  this.fileService.openFile(filename);
+}
+
+
 
 }

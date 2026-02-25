@@ -24,20 +24,13 @@
       <div class="employer-info" (click)="navigate('/employer-details')">
         <h3>{{ employer.companyName }}</h3>
         <p class="email"><i class="fas fa-envelope"></i> {{ employer.email }}</p>
-        <p class="status" [ngClass]="employer.status">{{ employer.status | titlecase }}</p>
+        <p class="status" [ngClass]="{'suspended': employer.suspended}">{{ employer.suspended ? 'Suspended' : '' }}</p>
+        <p *ngIf="employer.suspended">{{ calculateDaysLeft(employer.suspensionExpiry) }} day{{ calculateDaysLeft(employer.suspensionExpiry) > 1 ? 's' : '' }} left for unsuspension</p>
       </div>
 
       <!-- Actions -->
       <div class="employer-actions">
-  <button class="approve-btn"  
-          (click)="confirmAction(employer, 'approve')">
-    <i class="fas fa-check"></i> Approve
-  </button>
 
-  <button class="reject-btn" 
-          (click)="confirmAction(employer, 'reject')">
-    <i class="fas fa-times"></i> Reject
-  </button>
 
   <button class="suspend-btn"  
           (click)="confirmAction(employer, 'suspend')">

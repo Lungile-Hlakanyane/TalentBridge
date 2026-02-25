@@ -3,6 +3,7 @@ import { CommonModule, Location } from '@angular/common';
 import { Chart } from 'chart.js/auto';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-employer-report',
@@ -20,9 +21,14 @@ export class EmployerReportComponent implements OnInit {
     pendingVerifications: 3
   };
 
-  constructor(private location: Location) { }
+  constructor(
+    private location: Location,
+     private router:Router,
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.renderChart();
+  }
 
   goBack(){
     this.location.back(); 
@@ -57,7 +63,7 @@ export class EmployerReportComponent implements OnInit {
     });
   }
 
-   downloadReport(format: string) {
+  downloadReport(format: string) {
     switch (format) {
       case 'pdf':
         alert('PDF Report Downloaded!');
@@ -71,6 +77,10 @@ export class EmployerReportComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  goTo(path: string) {
+    this.router.navigate([`/admin/${path}`]);
   }
 
 

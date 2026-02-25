@@ -1,3 +1,9 @@
+<div class="action-back-container">
+  <span class="back-text" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i> Back
+  </span>
+</div>
+
 <div class="job-details-container">
 
   <!-- Header -->
@@ -14,11 +20,11 @@
     </div>
     <div class="summary-card">
       <h3>Total Applicants</h3>
-      <p>{{ job.applicants }}</p>
+      <p>{{ job.applicants ?? 0 }}</p>
     </div>
     <div class="summary-card">
       <h3>Posted On</h3>
-      <p>{{ job.postedDate | date }}</p>
+      <p>{{ job.created | date }}</p>
     </div>
   </section>
 
@@ -31,9 +37,23 @@
   <!-- Requirements -->
   <section class="job-requirements">
     <h3>Requirements</h3>
-    <ul>
-      <li *ngFor="let req of job.requirements">{{ req }}</li>
-    </ul>
+    <p>{{ job.otherRequirements }}</p>
+  </section>
+
+    <!-- Requirements -->
+  <section class="job-requirements">
+    <h3>Number of Years</h3>
+    <p>{{ job.numberOfYears }}</p>
+  </section>
+
+   <section class="job-requirements">
+    <h3>Salary</h3>
+    <p>R{{ job.salary }}</p>
+  </section>
+
+  <section class="job-requirements">
+    <h3>Qualifications</h3>
+    <p>{{ job.qualifications }}</p>
   </section>
 
   <!-- Applicant Insights -->
@@ -42,17 +62,17 @@
     <div class="insight-cards">
       <div class="insight-card">
         <i class="fas fa-users"></i>
-        <span>{{ job.applicants }}</span>
+        <p>{{ job.applicants ?? 0 }}</p>
         <p>Total Applicants</p>
       </div>
       <div class="insight-card">
         <i class="fas fa-check-circle"></i>
-        <span>{{ job.shortlisted }}</span>
+        <p>{{ job.shortlisted ?? 0 }}</p>
         <p>Shortlisted</p>
       </div>
       <div class="insight-card">
         <i class="fas fa-times-circle"></i>
-        <span>{{ job.rejected }}</span>
+        <p>{{ job.rejected ?? 0 }}</p>
         <p>Rejected</p>
       </div>
     </div>
@@ -60,14 +80,8 @@
 
   <!-- Actions -->
   <section class="job-actions">
-    <button class="approve-btn" *ngIf="job.status === 'pending'" (click)="approveJob()">
-      <i class="fas fa-check"></i> Approve
-    </button>
     <button class="reject-btn" *ngIf="job.status === 'pending'" (click)="rejectJob()">
       <i class="fas fa-times"></i> Reject
-    </button>
-    <button class="edit-btn" (click)="editJob()">
-      <i class="fas fa-edit"></i> Edit
     </button>
     <button class="delete-btn" (click)="deleteJob()">
       <i class="fas fa-trash"></i> Delete

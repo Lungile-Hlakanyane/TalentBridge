@@ -1,0 +1,28 @@
+<div class="manage-interviews-container">
+  <!-- Header -->
+  <section class="page-header">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+    <h2>Interviews</h2>
+    <p>View and manage all scheduled interviews</p>
+  </section>
+  <!-- Interviews List -->
+  <section class="interviews-list">
+    <div class="interview-card" *ngFor="let interview of interviews">
+      <div class="interview-info">
+        <h3>{{ interview.interviewee }}</h3>
+        <p><strong>Email:</strong> {{ interview.interviewee }}</p>
+        <p><strong>Company Name:</strong> {{ companyName }}</p>
+        <p><strong>Interview Type:</strong> {{ interview.type }}</p>
+        <p *ngIf="interview.type==='FACE_TO_FACE'"><strong>Location:</strong> {{ interview.location }}</p>
+        <p><strong>Platform:</strong> {{ interview.platform }}</p>
+        <p><strong>Date:</strong> {{ interview.date }}</p>
+        <p><strong>Time:</strong> {{ interview.time }}</p>
+      </div>
+      <div class="interview-actions">
+        <button class="view-btn">View Details</button>
+      </div>
+    </div>
+  </section>
+</div>

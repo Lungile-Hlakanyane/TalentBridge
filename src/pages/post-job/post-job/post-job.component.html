@@ -13,10 +13,9 @@
     <p>Share your opportunity with thousands of job seekers</p>
   </section>
 
-  <!-- Job Form -->
-  <form (ngSubmit)="submitJob()" class="job-form">
-    
-    <div class="form-group">
+    <!-- Job Form -->
+ <form (ngSubmit)="submitJob()" class="job-form">
+  <div class="form-group">
       <label>Job Title</label>
       <input type="text" [(ngModel)]="job.title" name="title" required />
     </div>
@@ -52,10 +51,52 @@
       <textarea [(ngModel)]="job.description" name="description" rows="5" required></textarea>
     </div>
 
-    <div class="form-actions">
+
+  <!-- existing fields... -->
+  <div class="form-group">
+    <div class="requirements-container">
+      <div class="requirement-group">
+        <label>Number of years</label>
+        <select [(ngModel)]="job.numberOfYears" name="yearsOfExperience">
+          <option value="" disabled selected>Select years</option>
+          <option value="0-1">0-1 year</option>
+          <option value="1-3">1-3 years</option>
+          <option value="3-5">3-5 years</option>
+          <option value="5+">5+ years</option>
+        </select>
+      </div>
+      <div class="requirement-group">
+        <label>Qualifications</label>
+        <select [(ngModel)]="job.qualifications" name="qualifications">
+          <option value="" disabled selected>Select qualification</option>
+          <option value="High School">High School</option>
+          <option value="Diploma">Diploma</option>
+          <option value="Bachelor's Degree">Bachelor's Degree</option>
+          <option value="Master's Degree">Master's Degree</option>
+          <option value="PhD">PhD</option>
+        </select>
+      </div>
+
+       <div class="requirement-group">
+        <label>Name of Qualification</label>
+        <input type="text" [(ngModel)]="job.nameOfQualification" name="skills" placeholder="e.g. Information Technology" />
+      </div>
+      <div class="requirement-group">
+        <label>Skills</label>
+        <input type="text" [(ngModel)]="job.skills" name="skills" placeholder="e.g. Java, Python, JavaScript" />
+      </div>
+      <div class="requirement-group">
+        <label>Other</label>
+        <textarea [(ngModel)]="job.otherRequirements" name="otherRequirements" rows="2" placeholder="e.g. specific certifications, software proficiency"></textarea>
+      </div>
+    </div>
+  </div>
+
+   <div class="form-actions">
       <button type="submit" class="btn-submit">Post Job</button>
       <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
-    </div>
-  </form>
+    </div>  
+
+</form>
 
 </div>

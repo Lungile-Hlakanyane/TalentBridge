@@ -33,6 +33,9 @@ import { ResetPasswordComponent } from '../pages/authentification/reset-password
 import { MyInvitesComponent } from '../pages/my-invites/my-invites/my-invites.component';
 import { ShowProfileComponent } from '../pages/show-profile/show-profile/show-profile.component';
 import { SettingsComponent } from '../pages/settings/settings/settings.component';
+import { SuspendAccountComponent } from '../pages/authentification/suspend-account/suspend-account/suspend-account.component';
+import { InterviewsComponent } from '../pages/interviews/interviews/interviews.component';
+import { EmployeeInterviewsComponent } from '../pages/employee-interviews/employee-interviews/employee-interviews.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -69,5 +72,8 @@ export const routes: Routes = [
     {path: 'candidate-invites', component: MyInvitesComponent},
     {path: 'show-profile/:id', component: ShowProfileComponent},
     {path: 'settings', component: SettingsComponent},
+    {path: 'suspend-account',component: SuspendAccountComponent},
+    {path: 'interviews',component: InterviewsComponent},
+    {path: 'employee-interviews', component: EmployeeInterviewsComponent},
     {path: '**', redirectTo: '' },
 ];

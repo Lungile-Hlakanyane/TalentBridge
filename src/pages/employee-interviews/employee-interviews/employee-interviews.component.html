@@ -1,0 +1,24 @@
+<div class="manage-interviews-container">
+  <!-- Header -->
+  <section class="page-header">
+    <span class="back-text" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back
+    </span>
+    <h2>My Interviews</h2>
+    <p>View and manage all scheduled interviews</p>
+  </section>
+  <!-- Interviews List -->
+  <section class="interviews-list">
+    <div class="interview-card" *ngFor="let interview of interviews">
+      <div class="interview-info">
+        <h3>{{ interview.companyName }}</h3>
+        <p><strong>Employer Email:</strong> {{ interview.employerEmail }}</p>
+        <p><strong>Phone Number:</strong> {{ interview.phoneNumber }}</p>
+        <p><strong>Interview Type:</strong> {{ interview.interviewType }}</p>
+      </div>
+      <div class="interview-actions">
+        <button class="view-btn">View Details</button>
+      </div>
+    </div>
+  </section>
+</div>

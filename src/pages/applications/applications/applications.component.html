@@ -14,29 +14,27 @@
   </section>
 
   <!-- Search container -->
-  <div class="search-container">
-    <input
-      type="text"
-      placeholder="Search by applications here..."/>
-  </div>
+ <div class="search-container">
+  <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="filterApplications()" placeholder="Search by applications here..."/>
+</div>
 
-  <!-- Applications Table -->
-  <section class="applications-list">
-    <div class="application-card" *ngFor="let app of applications">
-      <div class="application-info">
-        <h3>{{ app.candidateName }}</h3>
-        <p><strong>Position:</strong> {{ app.position }}</p>
-        <p><strong>Company:</strong> {{ app.company }}</p>
-        <p><strong>Applied On:</strong> {{ app.appliedDate | date:'medium' }}</p>
+ <!-- Applications Table -->
+ <section class="applications-list">
+   <div class="application-card" *ngFor="let app of applications">
+     <div class="application-info">
+       <h3>{{ app.applicantName }}</h3>
+       <p><strong>Company:</strong> {{ app.jobDetails?.company }}</p>
+       <p><strong>Location:</strong> {{ app.jobDetails?.location }}</p>
+       <p><strong>Job Title:</strong> {{ app.jobDetails?.title }}</p>
+       <p><strong>Applied On:</strong> {{ app.appliedAt | date:'medium' }}</p>
       </div>
-
-      <!-- Actions -->
-      <div class="application-actions">
-        <button (click)="viewApplicantProfile(app.candidateId)">
-          <i class="fas fa-user"></i> View Applicant Profile
-        </button>
-      </div>
-    </div>
+     <!-- Actions -->
+     <div class="application-actions">
+       <button (click)="viewApplicantProfile(app.applicantEmail)">
+         <i class="fas fa-user"></i> View Applicant Profile
+       </button>
+     </div>
+   </div>
   </section>
 
   <!-- Footer -->

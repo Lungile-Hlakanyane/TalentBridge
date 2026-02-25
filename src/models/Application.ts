@@ -8,4 +8,8 @@ export interface Application {
   candidateName?:string;
   position?:string;
   jobId:any;
+  applicantName?: any;
+  appliedAt?: any;
+  applicantEmail?:any;
+  jobDetails?:any;
 }

@@ -13,4 +13,6 @@ export interface Job{
   approve?: any;
   status?:any;
   applications?: any;
+  skills?:any;
+ otherRequirements?:any;
 }

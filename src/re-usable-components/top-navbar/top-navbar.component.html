@@ -18,11 +18,8 @@
     
     <ul class="nav-links" *ngIf="userRole !== 'ADMIN' && userRole !== 'EMPLOYER'">
      <li><a (click)="navigate('candidate-invites')">My Invites</a></li>
-     <li><a (click)="navigate('dashboard')">Dashboard</a></li>
-     <li><a (click)="navigate('job-postings')">Job Postings</a></li>
-     <li><a (click)="navigate('candidates')">Candidates</a></li>
-     <li><a (click)="navigate('interviews')">Interviews</a></li>
-     <li><a (click)="navigate('employer-report')">Reports</a></li>
+     <li><a (click)="navigate('view-jobs')">Job Postings</a></li>
+     <li><a (click)="navigate('employee-interviews')">Interviews</a></li>
     </ul>
 
     <ul class="nav-links" *ngIf="userRole === 'ADMIN'">
@@ -41,6 +38,8 @@
       </div>
      </li>
      <li><a (click)="navigate('candidate-invites')">My Invites</a></li>
+     <li><a (click)="navigate('employer-report')">Reports</a></li>
+     <li><a (click)="navigate('interviews')">Interviews</a></li>
    </ul>
 
     <div class="icons">

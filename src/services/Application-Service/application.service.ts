@@ -35,5 +35,11 @@ export class ApplicationService {
   getApplicationById(id: number): Observable<any> {
    return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
+
+  getAllApplications(): Observable<any[]> {
+   return this.http.get<any[]>(`${this.apiUrl}`);
+  }
+
+  
  
 }

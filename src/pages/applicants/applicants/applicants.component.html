@@ -38,20 +38,13 @@
         <p><strong>Phone:</strong> {{ applicant.phone }}</p>
         <p><strong>Applied for:</strong> {{ applicant.appliedFor }}</p>
         <p><strong>Applied at:</strong> {{ applicant.appliedAt | date:'medium' }}</p>
-        <button class="analyze-btn">Analyze Resume</button>
+        <button class="analyze-btn" (click)="navigateToStages(applicant)">Proceed</button>
       </div>
 
       <div class="applicant-actions">
-        <button class="view-btn" (click)="viewProfile(applicant.id)">View Profile</button>
-        <a
-          *ngIf="applicant.resumePath"
-          [href]="'http://localhost:8080/uploads/' + applicant.resumePath"
-          target="_blank"
-          class="resume-btn"
-        >
-          View Resume
-        </a>
+        <button *ngIf="applicant.resumePath" (click)="viewResume(applicant.resumePath)" class="view-btn">View Resume</button>
       </div>
+
     </div>
   </section>
 

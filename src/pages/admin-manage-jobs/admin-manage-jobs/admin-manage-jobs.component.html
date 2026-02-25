@@ -12,12 +12,12 @@
     <p>Review, approve, or remove job postings</p>
   </section>
 
-  <div class="search-container">
-    <input
-      type="text"
-      placeholder="Search by job title, company, or location..."
-      [(ngModel)]="searchTerm"/>
-  </div>
+ <div class="search-container">
+  <input type="text" 
+  placeholder="Search by job title, company, or location..."
+   [(ngModel)]="searchTerm" (ngModelChange)="filterJobs()"/>
+</div>
+
 
   <!-- Loading and Error States -->
   <div *ngIf="isLoading" class="loading">

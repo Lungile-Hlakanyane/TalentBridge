@@ -30,16 +30,17 @@ export class LoginComponent implements OnInit{
 
 login() {
   this.loading.show();
+  localStorage.setItem('email', this.email);
   this.userService.login(this.email, this.password).subscribe({
     next: (response: any) => {
-      this.loading.hide(); 
+      this.loading.hide();
       localStorage.setItem('role', response.role);
       localStorage.setItem('email', this.email);
       localStorage.setItem('userId', response.userId);
       if (this.rememberMe) {
         localStorage.setItem('token', response.token);
       } else {
-        sessionStorage.setItem('token', response.token); 
+        sessionStorage.setItem('token', response.token);
       }
       if (response.role === 'ADMIN') {
         this.router.navigate(['/admin-dashboard']);
@@ -50,9 +51,13 @@ login() {
       }
     },
     error: (err) => {
-      this.loading.hide(); // hide spinner on error
-      alert(err.error || 'Invalid email or password');
-    }
+  this.loading.hide();
+  if (err.status === 400 && err.error.toLowerCase().includes('suspended')) {
+    this.router.navigate(['/suspend-account'], { queryParams: { email: this.email } });
+  } else {
+    alert(err.error || 'Invalid email or password');
+  }
+}
   });
 }
 

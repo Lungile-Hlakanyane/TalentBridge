@@ -7,4 +7,6 @@ export interface Employer {
   registeredDate?:any;
   jobs?:any;
   activityHistory?:any
+  suspended?: any;
+  suspensionExpiry?:any;
 }

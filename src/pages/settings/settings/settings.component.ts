@@ -15,7 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 export class SettingsComponent implements OnInit{
 
    // === Privacy & Visibility ===
-  hideActive: boolean = false;
+  hideActive: boolean = true;
   showLastSeen: boolean = true;
   profileVisibility: string = 'public';
 
@@ -114,5 +114,9 @@ export class SettingsComponent implements OnInit{
     });
   }
 }
+
+  goTo(path: string) {
+    this.router.navigate([`/admin/${path}`]);
+  }
 
 }
