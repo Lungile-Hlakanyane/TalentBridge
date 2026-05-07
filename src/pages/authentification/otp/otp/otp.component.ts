@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChildren,QueryList,ElementRef } from '@angular/core';
 import { UserService } from '../../../../services/User-Service/user.service';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -17,9 +17,12 @@ import { Location } from '@angular/common';
   styleUrl: './otp.component.scss'
 })
 export class OtpComponent implements OnInit {
+  @ViewChildren('otpField') otpInputs!: QueryList<ElementRef>;
+
   otp: string[] = ['', '', '', '', '', ''];
   otpArray = new Array(6);
   email: string = '';
+  otpTouched = false;
 
 
   constructor(
@@ -36,7 +39,7 @@ export class OtpComponent implements OnInit {
     
   }
 
-   moveToNext(event: any, index: number) {
+  moveToNext(event: any, index: number) {
     const input = event.target;
     if (input.value && index < 5) {
       const nextInput = input.parentElement.children[index + 1];
@@ -46,30 +49,91 @@ export class OtpComponent implements OnInit {
 
   isOtpComplete(): boolean {
    return this.otp.every(digit => digit !== '' && digit.length === 1);
- }
+  }
+  
+  markTouched() {
+    this.otpTouched = true;
+  }
+
+  showOtpError(): boolean {
+    return this.otpTouched &&!this.isOtpComplete();
+  }
 
 
  verifyOtp() {
-  if (!this.isOtpComplete() || !this.email) return;
-  const otpString = this.otp.join('');
-  this.loading.show();
-  this.userService.verifyResetCode(this.email, otpString).subscribe({
-    next: (res) => {
-      this.loading.hide();
-      console.log(res);
-      this.router.navigate(['/reset-password'], { state: { email: this.email, code: otpString } });
-    },
-    error: (err) => {
-      this.loading.hide();
-      console.error(err);
-      alert(err.error || "Invalid or expired code.");
-    }
-  });
-}
+    this.markTouched();
+    if (!this.isOtpComplete() ||!this.email) return;
+    const otpString = this.otp.join('');
+    this.loading.show();
+    this.userService.verifyResetCode(this.email, otpString).subscribe({
+      next: (res) => {
+        this.loading.hide();
+        this.router.navigate(['/reset-password'], { state: { email: this.email, code: otpString } });
+      },
+      error: (err) => {
+        this.loading.hide();
+        console.error(err);
+        this.otp = ['', '', '', '', '', ''];
+        this.otpTouched = false;
+        alert(err.error || "Invalid or expired code.");
+      }
+    });
+  }
 
+   onInput(event: any, index: number) {
+    const input = event.target;
+    const value = input.value;
+    if (!/^[0-9]*$/.test(value)) {
+      input.value = '';
+      this.otp[index] = '';
+      return;
+    }
+    this.otp[index] = value;
+    if (value && index < 5) {
+      const nextInput = input.parentElement.children[index + 1];
+      if (nextInput) nextInput.focus();
+    }
+  }
+
+  onKeyDown(event: KeyboardEvent, index: number) {
+    const input = event.target as HTMLInputElement;
+    if (event.key === 'Backspace' &&!input.value && index > 0) {
+      const prevInput = input.parentElement?.children[index - 1] as HTMLInputElement;
+      if (prevInput) {
+        prevInput.focus();
+        this.otp[index - 1] = '';
+      }
+    }
+  }
+
+  onPaste(event: ClipboardEvent) {
+    event.preventDefault();
+    const pastedData = event.clipboardData?.getData('text') || '';
+    const digits = pastedData.replace(/\D/g, '').slice(0, 6).split('');
+    digits.forEach((digit, i) => {
+      this.otp[i] = digit;
+    });
+    const focusIndex = Math.min(digits.length, 5);
+    const inputs = (event.target as HTMLElement).parentElement?.children;
+    if (inputs && inputs[focusIndex]) {
+      (inputs[focusIndex] as HTMLInputElement).focus();
+    }
+  }
 
   resendOtp() {
-    console.log('Resend OTP triggered');
+    this.loading.show();
+    this.userService.sendForgotPasswordEmail(this.email).subscribe({
+      next: () => {
+        this.loading.hide();
+        this.otp = ['', '', '', '', '', ''];
+        this.otpTouched = false;
+        alert('New OTP sent to your email');
+      },
+      error: () => {
+        this.loading.hide();
+        alert('Failed to resend OTP');
+      }
+    });
   }
 
   navigate(path: string) {

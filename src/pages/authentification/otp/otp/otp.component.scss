@@ -177,3 +177,60 @@
     }
   }
 }
+
+.otp-inputs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 1rem;
+  justify-content: center;
+
+  &.invalid.otp-box {
+    border-color: #e74c3c;
+    background-color: #fdf2f2;
+  }
+}
+
+.otp-box {
+  width: 50px;
+  height: 60px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s;
+
+  &:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  }
+
+  &.filled {
+    border-color: #2ecc71;
+  }
+}
+
+.error-msg {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.resend-text {
+  text-align: center;
+  margin-top: 1rem;
+
+  a {
+    color: #3498db;
+    cursor: pointer;
+    font-weight: 600;
+  }
+}

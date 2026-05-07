@@ -1,5 +1,24 @@
-<app-top-navbar></app-top-navbar>
+<div class="div nav-container">
+  <!-- Welcome Banner -->
+ <div *ngIf="isMobile" style="display:flex; justify-content: space-between;">
+  <!-- Brand app logo -->
+  <div class="brand-logo">
+    <h2 class="brand">Talent<span>Bridge</span></h2>
+  </div>
+  <!-- Menu icon -->
+  <div class="menu-icon" (click)="toggleSideMenu()">
+    <div class="bar1"></div>
+    <div class="bar2"></div>
+    <div class="bar3"></div>
+ </div>
+</div>
+
+
+<div class="admin-home-container">
+  <app-top-navbar></app-top-navbar>
 <div class="admin-dashboard-container">
+
+  
   <!-- Welcome Banner -->
   <section class="welcome-banner">
     <h2>Welcome back, {{ adminName }}</h2>
@@ -32,11 +51,12 @@
       <p>Applications</p>
     </div>
 
-    <div class="stat-card pending" (click)="goTo('pending-approvals')">
-      <i class="fas fa-hourglass-half"></i>
-      <h3>{{ stats.pendingApprovals }}</h3>
-      <p>Pending Approvals</p>
-    </div>
+    <div class="stat-card pending" (click)="goTo('admin-manage-jobs')">
+     <i class="fas fa-hourglass-half"></i>
+     <h3>{{ stats.pendingApprovals }}</h3>
+     <p>Pending Approvals</p>
+   </div>
+
   </section>
 
   <!-- Recent Activity -->
@@ -116,16 +136,29 @@
   </div>
 </div>
 
+<!-- Menu modal -->
+<div class="menu-modal" *ngIf="showMenu">
+  <ul>
+    <li (click)="navigate('/employer-profile'); toggleSideMenu()">Profile</li>
+    <li (click)="logout()">Exit</li>
+  </ul>
+</div>
 
-
-  <!-- Footer -->
-  <footer class="app-footer">
-    <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
-    <div class="footer-links">
-      <a (click)="goTo('about')">About</a> |
-      <a (click)="goTo('contact')">Contact</a> |
-      <a (click)="goTo('privacy')">Privacy</a>
-    </div>
-  </footer>
+<!-- Footer -->
+<footer class="app-footer">
+   <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
+   <div class="footer-links">
+    <a (click)="goTo('about')">About</a> |
+    <a (click)="goTo('contact')">Contact</a> |
+    <a (click)="goTo('privacy')">Privacy</a>
+   </div>
+</footer>
   
 </div>
+</div>
+
+<!-- Display cookie banner -->
+ <app-cookie-banner></app-cookie-banner>
+ <!-- End Cookie banner -->
+
+

@@ -8,11 +8,13 @@ import { UserService } from '../../../services/User-Service/user.service';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AnnouncementService } from '../../../app/announcement.service';
 import { ApplicationService } from '../../../services/Application-Service/application.service';
+import { LoadingService } from '../../../services/Loading-Service/loading.service';
+import { CookieBannerComponen } from '../../../re-usable-components/cookie-banner/cookie-banner/cookie-banner.component';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, TopNavbarComponent, ReactiveFormsModule],
+  imports: [CommonModule, RouterModule, TopNavbarComponent, ReactiveFormsModule,CookieBannerComponen],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss'
 })
@@ -20,6 +22,8 @@ export class AdminDashboardComponent implements OnInit{
 
  selectedIndex: number = -1;
  selectedUpdateId: number | null = null;
+ isMobile = false;
+ showMenu = false;
 
  isModalOpen = false;
   announcementForm = new FormGroup({
@@ -84,10 +88,12 @@ adminName: string = 'Admin';
     private jobService: JobService,
     private userService: UserService,
     private announcementSercice:AnnouncementService,
-    private applicationService:ApplicationService
+    private applicationService:ApplicationService,
+    private loading:LoadingService
   ){}
 
   ngOnInit() {
+    this.isMobile = window.innerWidth <= 768;
     this.loadDashboardData();
     this.loadStats();
     this.loadUpdatesData();
@@ -98,9 +104,15 @@ adminName: string = 'Admin';
 
   loadDashboardData(): void {
     this.jobService.getAllJobs().subscribe({
-      next: (jobs) => this.stats.totalJobs = jobs.length,
+      next: (jobs) => {
+        this.stats.totalJobs = jobs.length;
+        this.stats.pendingApprovals = jobs.filter(job => 
+          job.approve === 0 || job.approve === '0' || job.status !== 'approved'
+        ).length;
+      },
       error: (err) => console.error('Failed to load jobs:', err)
     });
+    
     this.userService.getEmployerCount().subscribe({
       next: (count) => this.stats.totalEmployers = count,
       error: (err) => console.error('Failed to load employer count:', err)
@@ -186,6 +198,23 @@ loadRecentActivity(): void {
       error:(err)=>console.error('Error fetching application count:',err)
     });
   }
+
+ logout() {
+    this.loading.show();
+    this.router.navigate(['/login']).then(() => {
+      localStorage.clear();
+      this.loading.hide();
+    });
+  }
+
+  toggleSideMenu() {
+   this.showMenu = !this.showMenu;
+  }
+
+  navigate(link:string){
+    this.router.navigate([link]);
+  }
+
 
 
 }

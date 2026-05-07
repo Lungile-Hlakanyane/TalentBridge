@@ -1,60 +1,54 @@
 <div class="messages-container">
 
-   <!-- Back Button -->
-  <span class="back-text" (click)="goBack()" style="cursor: pointer; color: #2b90d9; font-weight: 500;">
-    <i class="fas fa-arrow-left"></i> Back
+  <!-- Back Button -->
+  <span class="back-text" (click)="goBack()">
+    <p style="color:#fff;"> < </p>
   </span>
 
-  <div class="action-back-container" style="position: relative; top: 20px;">
-  <!-- 🌐 Connection Status on the far left -->
-  <div class="connection-status" [ngClass]="{ 'online': isOnline, 'offline': !isOnline }">
-    <img src="../../../assets/status-icon-svg.svg" alt="status" class="status-icon"/>
-    <span *ngIf="isOnline">Online</span>
-    <span *ngIf="!isOnline">Offline - No internet connection</span>
+  <div class="action-back-container">
+    <!-- Connection Status -->
+    <div class="connection-status" [ngClass]="{ 'online': isOnline, 'offline':!isOnline }">
+      <img src="../../../assets/status-icon-svg.svg" alt="status" class="status-icon"/>
+      <span *ngIf="isOnline">Online</span>
+      <span *ngIf="!isOnline">Offline - No internet connection</span>
+    </div>
   </div>
-
-</div>
-
 
   <h2 class="page-title">Messages</h2>
 
   <p class="messages-description">
     In order to send a message to the selected user (employer or employee/candidate),
-    you first need to send an 
+    you first need to send an
     <span class="invite-link" (click)="goToInvites()">invite</span>.
     After an invite has been accepted, you will then be able to communicate through texting.
   </p>
 
   <!-- Top Right Corner: Avatar + Settings -->
   <div class="top-right-icons">
+    <img src="../../../assets/avatar_employer.png" alt="Profile Avatar" class="top-avatar" (click)="viewMyProfile()"/>
 
-   <img src="../../../assets/avatar_employer.png" alt="Profile Avatar" class="top-avatar" (click)="viewMyProfile()"/>
+    <div style="position: relative; display: inline-block;">
+      <img
+        src="../../../assets/alert-icon-svg.svg"
+        alt="Alerts"
+        style="width: 30px; height: 30px; cursor: pointer;"
+        (click)="openAlerts()"
+      />
+      <span
+        *ngIf="alertCount > 0"
+        style="position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; padding: 3px 7px; font-size: 12px; font-weight: bold;">
+        {{ alertCount }}
+      </span>
+    </div>
 
-   <div style="position: relative; display: inline-block;">
-  <img 
-    src="../../../assets/alert-icon-svg.svg" 
-    alt="Alerts" 
-    style="width: 30px; height: 30px; cursor: pointer;" 
-    (click)="openAlerts()" 
-  />
-  <span 
-    *ngIf="alertCount > 0"
-     style=" position: absolute; top: -5px; right: -5px; background: red; color: white; border-radius: 50%; padding: 3px 7px; font-size: 12px;font-weight: bold;">
-    {{ alertCount }}
-  </span>
-</div>
-
-   <img src="../../../assets/settings-svg-icon.svg" alt="" style="width: 30px; height: 30px; cursor: pointer;" (click)="openSettings()"/>
-   
-
+    <img src="../../../assets/settings-svg-icon.svg" alt="" style="width: 30px; height: 30px; cursor: pointer;" (click)="openSettings()"/>
   </div>
 
-
-  <!-- ✅ Main wrapper holding both columns side-by-side -->
+  <!-- Main wrapper holding both columns side-by-side -->
   <div class="chat-wrapper">
 
-    <!-- LEFT: User List Panel -->
-    <div class="user-list-panel">
+    <!-- LEFT: User List Panel - hide on mobile when chat is open -->
+    <div class="user-list-panel" [class.mobile-hide]="activeUser">
 
       <!-- Search & Filter -->
       <div class="search-filter-container">
@@ -87,14 +81,14 @@
           <div class="chat-details">
             <h4>{{ user.name }} {{ user.surname }}</h4>
             <p class="company-name" *ngIf="user.userType === 'Employer' && user.companyName">{{ user.companyName }}</p>
-            <p class="user-status" [ngClass]="{'online': user.online, 'offline': !user.online}" style="font-weight: bold;">
-               {{ user.online ? 'Online' : 'Offline' }}
+            <p class="user-status" [ngClass]="{'online': user.online, 'offline':!user.online}" style="font-weight: bold;">
+               {{ user.online? 'Online' : 'Offline' }}
             </p>
           </div>
           <button class="send-invite-btn" (click)="sendInvite(user, $event)"
             [disabled]="user.inviteStatus === 'PENDING' || user.inviteStatus === 'ACCEPTED'">
-            {{ user.inviteStatus === 'ACCEPTED' ? 'Invited' :
-               user.inviteStatus === 'PENDING' ? 'Pending...' : 'Send Invite' }}
+            {{ user.inviteStatus === 'ACCEPTED'? 'Invited' :
+               user.inviteStatus === 'PENDING'? 'Pending...' : 'Send Invite' }}
           </button>
         </div>
       </div>
@@ -105,15 +99,20 @@
 
     </div> <!-- end user-list-panel -->
 
-    <!-- RIGHT: Chat Panel -->
-    <div class="chat-panel" *ngIf="activeUser">
+    <!-- RIGHT: Chat Panel - only show if activeUser exists -->
+    <div class="chat-panel" *ngIf="activeUser" [class.mobile-active]="activeUser">
       <div class="chat-header">
+        <!-- Mobile back to user list -->
+        <span class="back-to-list" (click)="closeChat()">
+          <i class="fas fa-arrow-left"></i>
+        </span>
+
         <div class="chat-header-info">
           <h3>{{ activeUser.name }} {{ activeUser.surname }}</h3>
           <p class="chat-role">
             {{ activeUser.userType }}
             <span *ngIf="activeUser.userType === 'Employer' && activeUser.companyName">
-              • {{ activeUser.companyName }}
+              - {{ activeUser.companyName }}
             </span>
           </p>
         </div>
@@ -128,7 +127,7 @@
         <div
           *ngFor="let msg of messages"
           [class.sent]="msg.senderId === currentUserId"
-          [class.received]="msg.senderId !== currentUserId"
+          [class.received]="msg.senderId!== currentUserId"
           class="chat-bubble"
         >
           <p>{{ msg.message }}</p>
@@ -142,14 +141,16 @@
           type="text"
           placeholder="Type your message..."
           [(ngModel)]="newMessage"
+          (keyup.enter)="sendMessage()"
         />
         <button (click)="sendMessage()">
           <img src="../../../assets/send-message-icon.svg" style="width:25px; height:25px;">
         </button>
       </div>
+
     </div>
 
-    <!-- Empty Chat State -->
+    <!-- Empty Chat State - only show on desktop -->
     <div class="chat-panel empty" *ngIf="!activeUser">
       <p>Select a user to start chatting 💬</p>
     </div>
@@ -157,10 +158,11 @@
   </div> <!-- end chat-wrapper -->
 
 </div>
-  <!-- Footer -->
+
+<!-- Footer -->
 <footer class="app-footer" style="font-family: 'Inter', sans-serif; padding: 15px;">
   <p>&copy; 2025 TalentBridge. All Rights Reserved.</p>
-   <div class="footer-links">
+  <div class="footer-links">
     <a (click)="goTo('about')">About</a> |
     <a (click)="goTo('contact')">Contact</a> |
     <a (click)="goTo('privacy')">Privacy</a>

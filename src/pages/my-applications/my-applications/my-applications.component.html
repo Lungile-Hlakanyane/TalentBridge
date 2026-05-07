@@ -10,13 +10,31 @@
   <h2 class="page-title">My Applications</h2>
   
   <div class="applications-list">
-    <div class="application-card" *ngFor="let app of applications">
-        <h4>{{ app.title }}</h4>
-        <p class="company">{{ app.company }}</p>
-        <p class="status">Status: <span [ngClass]="app.status.toLowerCase()">{{ app.status }}</span></p>
-        <p class="applied-date">Applied on: {{ app.appliedDate | date:'mediumDate' }}</p>
-        <button (click)="viewApplication(app.id)">View</button>
-    </div>
+
+<div class="application-card" *ngFor="let app of applications">
+  <div class="application-header">
+    <h4>{{ app.title }}</h4>
+    <span class="job-type-badge">{{ app.type }}</span>
+  </div>
+  
+  <p class="company">{{ app.company }}</p>
+  
+  <div class="application-details">
+    <p class="detail-item">
+      <i class="fas fa-map-marker-alt"></i>
+      <span>{{ app.location }}</span>
+    </p>
+    <p class="detail-item">
+      <i class="fas fa-money-bill-wave"></i>
+      <span>R{{ app.salary | number }} / month</span>
+    </p>
+    <p class="detail-item">
+      <i class="fas fa-calendar"></i>
+      <span>Applied {{ app.appliedAt | date:'mediumDate' }}</span>
+    </p>
+  </div>
+</div>
+
   </div>
 
 

@@ -1,0 +1,346 @@
+// 1. Theme Variables - KEEP IDENTICAL TO OTHER PAGES
+$primary: #2563EB;
+$primary-dark: #1D4ED8;
+$secondary: #0F172A;
+$accent: #10B981;
+$bg: #F8FAFC;
+$white: #FFFFFF;
+$border: #E2E8F0;
+$text-muted: #64748B;
+$radius: 12px;
+$container: 1200px;
+
+// Status colors
+$status-new: #F59E0B;
+$status-progress: #3B82F6;
+$status-resolved: #10B981;
+
+// 2. Base - same as other pages
+.enquiries-page {
+  background: $bg;
+  color: $secondary;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: $container;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: $secondary;
+}
+
+h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+h3 { font-size: 1.125rem; margin: 0; }
+
+p { line-height: 1.7; color: $text-muted; margin: 0; }
+.text-primary { color: $primary; }
+
+section { padding: 5rem 0; }
+
+// 3. Hero - matches other pages
+.hero {
+  background: $white;
+  border-bottom: 1px solid $border;
+  padding: 4rem 0;
+
+ .subheading {
+    font-size: 1.125rem;
+    max-width: 650px;
+  }
+}
+
+// 4. Toolbar
+.toolbar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+
+ .search-box {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+
+   .material-icons {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $text-muted;
+    }
+
+    input {
+      width: 95%;
+      padding: 0.75rem 1rem 0.75rem 3rem;
+      border: 1px solid $border;
+      border-radius: 8px;
+      font-size: 1rem;
+
+      &:focus {
+        outline: none;
+        border-color: $primary;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+    }
+  }
+
+ .filters select {
+    padding: 0.75rem 1rem;
+    border: 1px solid $border;
+    border-radius: 8px;
+    background: $white;
+    font-size: 1rem;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-color: $primary;
+    }
+  }
+}
+
+// 5. Main Grid
+.enquiries-section {
+  padding-top: 3rem;
+
+ .grid {
+    display: grid;
+    gap: 2rem;
+    @media (min-width: 1024px) { grid-template-columns: 400px 1fr; }
+  }
+}
+
+// 6. Enquiries List
+.enquiries-list {
+  background: $white;
+  border: 1px solid $border;
+  border-radius: $radius;
+  overflow: hidden;
+
+ .list-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid $border;
+    font-weight: 600;
+    color: $secondary;
+  }
+}
+
+.empty-state {
+  padding: 4rem 2rem;
+  text-align: center;
+  color: $text-muted;
+
+ .material-icons {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.enquiry-card {
+  padding: 1.5rem;
+  border-bottom: 1px solid $border;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: $bg; }
+  &.active { 
+    background: rgba(37, 99, 235, 0.05);
+    border-left: 3px solid $primary;
+  }
+
+ .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 0.5rem;
+  }
+
+ .meta {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+ .subject {
+    font-weight: 500;
+    color: $secondary;
+    margin-bottom: 0.5rem;
+  }
+
+ .date {
+    font-size: 0.8125rem;
+  }
+}
+
+// 7. Status Badges
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &.status-new {
+    background: rgba(245, 158, 11, 0.1);
+    color: $status-new;
+  }
+  &.status-in-progress {
+    background: rgba(59, 130, 246, 0.1);
+    color: $status-progress;
+  }
+  &.status-resolved {
+    background: rgba(16, 185, 129, 0.1);
+    color: $status-resolved;
+  }
+}
+
+// 8. Details Panel
+.details-panel {
+  background: $white;
+  border: 1px solid $border;
+  border-radius: $radius;
+  position: sticky;
+  top: 2rem;
+
+  @media (max-width: 1023px) {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    border-radius: 0;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+
+    &.open { transform: translateX(0); }
+  }
+}
+
+.details-placeholder {
+  padding: 4rem 2rem;
+  text-align: center;
+  color: $text-muted;
+
+ .material-icons {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.details-content {
+  padding: 2rem;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+}
+
+.details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 2rem;
+
+ .close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $text-muted;
+    padding: 0.25rem;
+
+    &:hover { color: $secondary; }
+  }
+}
+
+.detail-group {
+  margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $secondary;
+    margin-bottom: 0.5rem;
+  }
+
+  a {
+    color: $primary;
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
+}
+
+.message-box {
+  background: $bg;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 1rem;
+  white-space: pre-wrap;
+}
+
+.detail-actions {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid $border;
+
+  label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $secondary;
+    margin-bottom: 0.75rem;
+  }
+}
+
+.status-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-status {
+  padding: 0.5rem 1rem;
+  border: 1px solid $border;
+  background: $white;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover { background: $bg; }
+  &.active {
+    background: $primary;
+    color: $white;
+    border-color: $primary;
+  }
+}
+
+// 9. Buttons - same as other pages
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+
+  &.btn-primary {
+    background: $primary;
+    color: $white;
+    &:hover { background: $primary-dark; }
+  }
+}
+
+// 10. Responsive
+@media (max-width: 768px) {
+  h1 { font-size: 2rem; }
+  section { padding: 3rem 0; }
+  .toolbar { flex-direction: column; }
+}

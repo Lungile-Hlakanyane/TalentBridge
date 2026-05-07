@@ -3,6 +3,19 @@
 
 <div class="employer-home-container">
 
+  <div *ngIf="isMobile" style="display:flex; justify-content: space-between;">
+    <!-- Brand app logo -->
+    <div class="brand-logo">
+      <h2 class="brand">Talent<span>Bridge</span></h2>
+    </div>
+    <!-- Menu icon  -->
+     <div class="menu-icon" (click)="toggleMenu()">
+      <div class="bar1"></div>
+      <div class="bar2"></div>
+     <div class="bar3"></div>
+    </div> 
+  </div>
+
   <!-- Welcome Banner -->
  <section class="welcome-banner">
   <h2>Welcome back, {{ employerName }}</h2>
@@ -65,4 +78,20 @@
       <a (click)="goTo('privacy')">Privacy</a>
     </div>
   </footer>
+  <!-- Menu modal -->
+   <div class="menu-modal" *ngIf="showMenu">
+  <ul>
+    <li (click)="navigate('/candidate-invites')">My Invites</li>
+    <li (click)="navigate('/interviews')">Interviews</li>
+    <li (click)="navigate('/employer-profile')">Profile</li>
+    <li (click)="logout()">Exit</li>
+  </ul>
+</div>
+
+  <!-- End Menu modal -->
+
+  <!-- Display cookies -->
+  <app-cookie-banner></app-cookie-banner>
+  <!-- End Cookies -->
+
 </div>

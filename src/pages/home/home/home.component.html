@@ -1,10 +1,21 @@
 <app-top-navbar></app-top-navbar>
+
 <div class="home-container">
+
   <!-- Welcome Banner -->
-  <section class="welcome-banner">
-    <h2>Welcome back, {{ userName }}</h2>
-    <p>Find your next career opportunity today</p>
-  </section>
+<div *ngIf="isMobile" style="display:flex; justify-content: space-between;">
+  <!-- Brand app logo -->
+  <div class="brand-logo">
+    <h2 class="brand">Talent<span>Bridge</span></h2>
+  </div>
+  <!-- Menu icon -->
+  <div class="menu-icon" (click)="toggleMenu()">
+    <div class="bar1"></div>
+    <div class="bar2"></div>
+    <div class="bar3"></div>
+  </div>
+  
+</div>
 
   <!-- Quick Actions -->
   <section class="quick-actions">
@@ -68,4 +79,19 @@
     <a (click)="goTo('privacy')">Privacy</a>
   </div>
 </footer>
+
+<!-- will investigate how I implemented this modal below -->
+<!-- Menu modal -->
+<div class="menu-modal" *ngIf="showMenu">
+  <ul>
+    <li (click)="navigate('/candidate-invites'); toggleMenu()">My Invites</li>
+    <li (click)="navigate('/view-jobs'); toggleMenu()">Job Postings</li>
+    <li (click)="navigate('/interviews'); toggleMenu()">Interviews</li>
+    <li (click)="navigate('/profile'); toggleMenu()">Profile</li>
+    <li (click)="logout()">Exit</li>
+  </ul>
+</div>
+<!-- displaying cookies banner here -->
+ <app-cookie-banner></app-cookie-banner>
+ <!-- end cooking banner here -->
 <router-outlet></router-outlet>

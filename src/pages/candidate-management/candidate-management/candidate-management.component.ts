@@ -21,7 +21,7 @@ export class CandidateManagementComponent implements OnInit {
   selectedFilter: 'all' | 'active' | 'suspended' | 'flagged' = 'all';
 
   showModal = false;
-  modalAction: 'suspend' | 'delete' | null = null;
+  modalAction: 'approve' | 'reject' | 'suspend' | 'unsuspend' | 'delete' | null = null;
   selectedCandidate!: Candidate;
 
   constructor(
@@ -44,32 +44,57 @@ export class CandidateManagementComponent implements OnInit {
   }
 
 
-  confirmAction(candidate: Candidate, action: 'suspend' | 'delete') {
+confirmAction(candidate: Candidate, action: 'approve' | 'reject' | 'suspend' | 'unsuspend' | 'delete') {
     this.selectedCandidate = candidate;
     this.modalAction = action;
     this.showModal = true;
   }
 
- executeAction() {
-  if (!this.selectedCandidate || !this.modalAction) return;
-  if (this.modalAction === 'suspend') {
-    this.usersService.suspendAccount(this.selectedCandidate.id, 30).subscribe({
-      next: (response) => {
-        this.selectedCandidate.status = 'suspended';
+  executeAction() {
+    if (!this.selectedCandidate ||!this.modalAction) return;
+    switch (this.modalAction) {
+      case 'suspend':
+        this.usersService.suspendAccount(this.selectedCandidate.id, 30).subscribe({
+          next: (response) => {
+            this.selectedCandidate.status = 'suspended';
+            this.selectedCandidate.suspended = true;
+            this.selectedCandidate.suspensionExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+            this.closeModal();
+          },
+          error: (err) => console.error('Failed to suspend candidate:', err)
+        });
+        break;
+      case 'unsuspend':
+        this.usersService.unsuspendAccount(this.selectedCandidate.id).subscribe({
+          next: (response) => {
+            this.selectedCandidate.status = 'active';
+            this.selectedCandidate.suspended = false;
+            this.selectedCandidate.suspensionExpiry = null;
+            this.closeModal();
+          },
+          error: (err) => console.error('Failed to unsuspend candidate:', err)
+        });
+        break;
+      case 'delete':
+        this.usersService.deleteAccount(this.selectedCandidate.id).subscribe({
+          next: (response) => {
+            this.candidates = this.candidates.filter(c => c.id!== this.selectedCandidate.id);
+            this.closeModal();
+          },
+          error: (err) => console.error('Failed to delete candidate:', err)
+        });
+        break;
+      case 'approve':
+        this.selectedCandidate.status = 'active';
+        this.selectedCandidate.suspended = false;
         this.closeModal();
-      },
-      error: (err) => console.error('Failed to suspend candidate:', err)
-    });
-  } else if (this.modalAction === 'delete') {
-    this.usersService.deleteAccount(this.selectedCandidate.id).subscribe({
-      next: (response) => {
-        this.candidates = this.candidates.filter(c => c.id !== this.selectedCandidate.id);
+        break;
+      case 'reject':
+        this.selectedCandidate.status = 'rejected';
         this.closeModal();
-      },
-      error: (err) => console.error('Failed to delete candidate:', err)
-    });
+        break;
+    }
   }
-}
 
 
   closeModal() {
@@ -93,6 +118,15 @@ export class CandidateManagementComponent implements OnInit {
     return this.candidates.filter(candidate => 
         candidate.name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
+  }
+
+   calculateDaysLeft(suspensionExpiry: string): number {
+    if (!suspensionExpiry) return 0;
+    const expiryDate = new Date(suspensionExpiry);
+    const currentDate = new Date();
+    const timeDifference = expiryDate.getTime() - currentDate.getTime();
+    const daysLeft = Math.ceil(timeDifference / (1000 * 3600 * 24));
+    return daysLeft > 0? daysLeft : 0;
   }
 
 }

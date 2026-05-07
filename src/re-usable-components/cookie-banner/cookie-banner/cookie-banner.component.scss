@@ -1,0 +1,136 @@
+// 1. Theme Variables - KEEP IDENTICAL TO OTHER PAGES
+$primary: #2563EB;
+$primary-dark: #1D4ED8;
+$secondary: #0F172A;
+$bg: #F8FAFC;
+$white: #FFFFFF;
+$border: #E2E8F0;
+$text-muted: #64748B;
+$radius: 12px;
+$container: 1200px;
+
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: $white;
+  border-top: 1px solid $border;
+  box-shadow: 0 -4px 6px -1px rgb(0 0 0 / 0.1);
+  padding: 1.5rem 0;
+  font-family: 'Inter', sans-serif;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.container {
+  max-width: $container;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.cookie-content {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+}
+
+.cookie-text {
+  flex: 1;
+
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: $secondary;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.2;
+  }
+
+  p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: $text-muted;
+    margin: 0;
+  }
+
+  .text-primary {
+    color: $primary;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      color: $primary-dark;
+      text-decoration: underline;
+    }
+  }
+}
+
+.cookie-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    .btn {
+      flex: 1;
+    }
+  }
+}
+
+// 8. Buttons - same as other pages
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 0.9rem;
+  white-space: nowrap;
+
+  &.btn-primary {
+    background: $primary;
+    color: $white;
+
+    &:hover {
+      background: $primary-dark;
+    }
+  }
+
+  &.btn-outline {
+    background: $white;
+    color: $secondary;
+    border-color: $border;
+
+    &:hover {
+      background: $bg;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .cookie-banner {
+    padding: 1rem 0;
+  }
+  
+  .cookie-text h3 {
+    font-size: 1rem;
+  }
+  
+  .cookie-text p {
+    font-size: 0.85rem;
+  }
+}

@@ -1,0 +1,66 @@
+<main class="privacy-page">
+
+    <div class="back-buuton-container" style="padding:20px;">
+     <p style="color: #1D4ED8;" (click)="goBack()"> Back</p>
+    </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>Privacy <span class="text-primary">Policy</span></h1>
+      <p class="subheading">
+        Your trust matters. Here’s how TalentBridge collects, uses, and protects your data.
+      </p>
+      <p class="last-updated">Last updated: {{ lastUpdated }}</p>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="policy-content">
+    <div class="container grid">
+      <!-- Side Nav -->
+      <aside class="policy-nav">
+        <h3>Contents</h3>
+        <ul>
+          <li *ngFor="let section of sections">
+            <a (click)="scrollTo(section.id)">{{ section.title }}</a>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Main Policy -->
+      <div class="policy-text">
+        <div class="intro">
+          <p>
+            TalentBridge ("we", "us") is committed to protecting your privacy. This policy explains
+            what data we collect from job seekers and employers, how we use it, and your rights
+            under South African POPIA and global standards.
+          </p>
+        </div>
+
+        <div class="section" *ngFor="let section of sections" [id]="section.id">
+          <h2>{{ section.title }}</h2>
+          <ul>
+            <li *ngFor="let item of section.content">{{ item }}</li>
+          </ul>
+        </div>
+
+        <div class="notice">
+          <p>
+            By using TalentBridge, you agree to this Privacy Policy. We may update it periodically.
+            Material changes will be emailed to active users 30 days before taking effect.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container text-center">
+      <h2>Questions about your data?</h2>
+      <p>Our team is here to help you understand your privacy rights.</p>
+      <a routerLink="/contact" class="btn btn-secondary">Contact Us</a>
+    </div>
+  </section>
+</main>

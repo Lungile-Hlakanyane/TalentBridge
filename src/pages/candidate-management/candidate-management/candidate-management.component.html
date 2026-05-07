@@ -25,40 +25,56 @@
   <!-- Candidate List -->
   <section class="candidate-list">
 
-    <div class="candidate-card" *ngFor="let candidate of filteredCandidates()">
+  <div class="candidate-card" *ngFor="let candidate of filteredCandidates()">
 
-        <div class="candidate-info">
-            <h3>{{ candidate.name }}</h3>
-            <p class="email"><i class="fas fa-envelope"></i> {{ candidate.email }}</p>
-            <p class="status" [ngClass]="{'suspended': candidate.suspended}">
-              {{ candidate.suspended ? 'Suspended' : candidate.status | titlecase }}
-            </p>
-        </div>
-      
-        <div class="candidate-actions">
-            <button class="suspend-btn" (click)="confirmAction(candidate, 'suspend')">
-                <i class="fas fa-ban"></i> Suspend
-            </button>
-            <button class="delete-btn" (click)="confirmAction(candidate, 'delete')">
-                <i class="fas fa-trash"></i> Delete
-            </button>
-        </div>
+      <div class="candidate-info">
+          <h3>{{ candidate.name }}</h3>
+          <p class="email"><i class="fas fa-envelope"></i> {{ candidate.email }}</p>
+          <p class="status" [ngClass]="{'suspended': candidate.suspended}">
+            {{ candidate.suspended? 'Suspended' : candidate.status | titlecase }}
+          </p>
+          <!-- Show days left if suspended -->
+          <p *ngIf="candidate.suspended && candidate.suspensionExpiry">
+            {{ calculateDaysLeft(candidate.suspensionExpiry) }} day{{ calculateDaysLeft(candidate.suspensionExpiry) > 1? 's' : '' }} left
+          </p>
+      </div>
 
-    </div>
+      <div class="candidate-actions">
+          <!-- Show Suspend only if NOT suspended -->
+          <button class="suspend-btn"
+                  *ngIf="!candidate.suspended"
+                  (click)="confirmAction(candidate, 'suspend')">
+              <i class="fas fa-ban"></i> Suspend
+          </button>
 
-  </section>
+          <!-- Show Unsuspend only if suspended -->
+          <button class="unsuspend-btn"
+                  *ngIf="candidate.suspended"
+                  (click)="confirmAction(candidate, 'unsuspend')">
+              <i class="fas fa-unlock"></i> Unsuspend
+          </button>
+
+          <button class="delete-btn" (click)="confirmAction(candidate, 'delete')">
+              <i class="fas fa-trash"></i> Delete
+          </button>
+      </div>
+  </div>
+</section>
 
   <!-- Confirmation Modal -->
-  <div class="modal-backdrop" *ngIf="showModal">
-    <div class="modal">
-      <h3>Confirm Action</h3>
-      <p>Are you sure you want to <strong>{{ modalAction | titlecase }}</strong> candidate "{{ selectedCandidate.name }}"?</p>
-      <div class="modal-actions">
-        <button class="confirm-btn" (click)="executeAction()">Yes</button>
-        <button class="cancel-btn" (click)="closeModal()">No</button>
-      </div>
+<div class="modal-backdrop" *ngIf="showModal">
+  <div class="modal">
+    <h3>Confirm Action</h3>
+    <p>Are you sure you want to
+      <strong>{{ modalAction === 'unsuspend'? 'Lift Suspension For' : (modalAction | titlecase) }}</strong>
+      candidate "{{ selectedCandidate.name }}"?
+    </p>
+    <div class="modal-actions">
+      <button class="confirm-btn" (click)="executeAction()">Yes</button>
+      <button class="cancel-btn" (click)="closeModal()">No</button>
     </div>
   </div>
+</div>
 
   <!-- Footer -->
   <footer class="app-footer" style="font-family: 'Inter', sans-serif; padding:15px;">

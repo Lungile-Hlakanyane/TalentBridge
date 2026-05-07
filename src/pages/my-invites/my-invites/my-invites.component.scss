@@ -16,6 +16,7 @@
     color: #666;
     margin-bottom: 25px;
     font-size: 14px;
+    line-height: 1.5;
   }
 
   .search-container {
@@ -27,6 +28,7 @@
     padding: 10px 15px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     margin-bottom: 25px;
+    gap: 10px;
 
     input {
       border: none;
@@ -34,6 +36,7 @@
       font-size: 14px;
       flex: 1;
       color: #333;
+      min-width: 0; // allows shrinking
     }
 
     .total-invites {
@@ -41,6 +44,8 @@
       color: #2b90d9;
       font-weight: 500;
       margin-left: 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
   }
 
@@ -59,6 +64,7 @@
     padding: 15px 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease;
+    gap: 15px;
 
     &:hover {
       transform: translateY(-3px);
@@ -68,26 +74,37 @@
       display: flex;
       align-items: center;
       gap: 15px;
+      flex: 1;
+      min-width: 0; // for text truncate
 
       .avatar {
         width: 50px;
         height: 50px;
         border-radius: 50%;
         object-fit: cover;
+        flex-shrink: 0;
       }
 
       .invite-details {
+        min-width: 0;
+        
         h4 {
           margin: 0;
           font-size: 16px;
           font-weight: 600;
           color: #333;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         p {
           margin: 3px 0 0;
           color: #666;
           font-size: 13px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
       }
     }
@@ -95,6 +112,7 @@
     .invite-actions {
       display: flex;
       gap: 10px;
+      flex-shrink: 0;
 
       button {
         padding: 6px 14px;
@@ -104,6 +122,7 @@
         font-size: 13px;
         font-weight: 500;
         transition: background-color 0.2s ease;
+        white-space: nowrap;
       }
 
       .accept-btn {
@@ -145,24 +164,132 @@
 }
 
 .action-back-container {
-     margin-bottom: 20px;
-     font-family: 'Poppins', sans-serif;
-    .back-text {
-      color: #4cafef;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+  margin-bottom: 20px;
+  font-family: 'Poppins', sans-serif;
+  
+  .back-text {
+    color: #4cafef;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+    z-index: 10;
 
-      i {
-        font-size: 1rem;
-      }
+    i {
+      font-size: 1rem;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.app-footer {
+  margin-top: 40px;
+  text-align: center;
+  padding: 15px 0;
+  font-size: 0.85rem;
+  color: #777;
+
+  .footer-links {
+    margin-top: 5px;
+    a {
+      color: #2b90d9;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 500;
 
       &:hover {
         text-decoration: underline;
       }
     }
   }
+}
 
-  
+/* ------------------- MOBILE RESPONSIVE ------------------- */
+@media (max-width: 768px) {
+  .my-invites-container {
+    padding: 15px;
+
+    .page-title {
+      font-size: 20px;
+      text-align: center;
+    }
+
+    .page-subtitle {
+      font-size: 13px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .search-container {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+      padding: 12px;
+
+      input {
+        width: 100%;
+        font-size: 16px; // prevents iOS zoom
+        padding: 8px 0;
+      }
+
+      .total-invites {
+        margin-left: 0;
+        text-align: center;
+        font-size: 13px;
+      }
+    }
+
+    .invite-card {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 15px;
+      gap: 12px;
+
+      .invite-info {
+        width: 100%;
+
+        .avatar {
+          width: 45px;
+          height: 45px;
+        }
+
+        .invite-details {
+          h4 { font-size: 15px; }
+          p { font-size: 12px; }
+        }
+      }
+
+      .invite-actions {
+        width: 100%;
+        flex-direction: column;
+        gap: 8px;
+
+        button {
+          width: 100%;
+          padding: 10px;
+          font-size: 14px;
+          border-radius: 8px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .my-invites-container {
+    padding: 12px;
+
+    .invite-card .invite-info {
+      gap: 12px;
+      
+      .invite-details h4 {
+        white-space: normal; // allow wrapping on very small screens
+      }
+    }
+  }
+}

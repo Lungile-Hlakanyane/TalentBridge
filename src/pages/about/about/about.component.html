@@ -1,0 +1,79 @@
+<main class="about-page">
+
+  <div class="back-button-container" style="padding:20px;">
+    <p (click)=" goBack()" style="color:#1D4ED8;">Back</p>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>About <span class="text-primary">TalentBridge</span></h1>
+      <p class="subheading">
+        We bridge the gap between exceptional talent and forward-thinking companies. 
+        Faster hiring, better matches, zero hassle.
+      </p>
+    </div>
+  </section>
+
+  <!-- Mission -->
+  <section class="mission">
+    <div class="container grid">
+      <div class="mission-content">
+        <h2>Our Mission</h2>
+        <p>
+          TalentBridge was built to fix recruitment. No more ghosting, endless resumes, 
+          or mismatched roles. We use smart matching + human expertise to make hiring 
+          feel effortless for both candidates and employers.
+        </p>
+        <div class="stats">
+          <div class="stat" *ngFor="let stat of stats">
+            <p class="stat-value">{{ stat.value }}</p>
+            <p class="stat-label">{{ stat.label }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="mission-image"></div>
+    </div>
+  </section>
+
+  <!-- What We Do -->
+  <section class="features">
+    <div class="container">
+      <h2>What We Do</h2>
+      <div class="feature-grid">
+        <div class="feature-card" *ngFor="let feature of features">
+          <span class="material-icons">{{ feature.icon }}</span>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.desc }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Our Story -->
+  <section class="story">
+    <div class="container text-center">
+      <h2>Our Story</h2>
+      <p>
+        Founded in 2025 by a team of ex-recruiters and engineers, TalentBridge started after 
+        we saw how broken hiring was on both sides. Candidates felt invisible. Companies 
+        wasted months on bad fits. We knew tech + empathy could solve it. Today, we’re the 
+        fastest growing recruitment platform in Bloemfontein, Free State, with plans to expand across SA.
+      </p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container text-center">
+      <h2>Ready to build your bridge?</h2>
+      <p>Join thousands who’ve already found their next opportunity with us.</p>
+      <div class="cta-actions">
+        <a (click)=" goBack()" class="btn btn-primary">Find a Job</a>
+        <a (click)=" goBack()" class="btn btn-secondary">Hire Talent</a>
+      </div>
+    </div>
+
+  </section>
+
+</main>

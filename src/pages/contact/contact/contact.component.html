@@ -1,0 +1,143 @@
+<app-loading-spinner></app-loading-spinner>
+
+<main class="contact-page">
+  <div class="back-button-container" style="padding:20px;">
+    <p (click)=" goBack()" style="color:#1D4ED8;">Back</p>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>Get in <span class="text-primary">Touch</span></h1>
+      <p class="subheading">
+        Have a question about hiring or finding your next role?
+        Our team is here to help you bridge the gap.
+      </p>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact-section">
+    <div class="container grid">
+      <!-- Left: Form -->
+      <div class="contact-form-wrapper">
+        <h2>Send us a message</h2>
+        <p>Fill out the form and we’ll respond within 24 hours.</p>
+
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input
+                id="name"
+                type="text"
+                formControlName="name"
+                [class.error]="submitted && f['name'].errors"
+                placeholder="John Doe">
+              <div class="error-msg" *ngIf="submitted && f['name'].errors">
+                <span *ngIf="f['name'].errors['required']">Name is required</span>
+                <span *ngIf="f['name'].errors['minlength']">Min 2 characters</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email *</label>
+              <input
+                id="email"
+                type="email"
+                formControlName="email"
+                [class.error]="submitted && f['email'].errors"
+                placeholder="john@company.com">
+              <div class="error-msg" *ngIf="submitted && f['email'].errors">
+                <span *ngIf="f['email'].errors['required']">Email is required</span>
+                <span *ngIf="f['email'].errors['email']">Enter valid email</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="company">Company</label>
+              <input
+                id="company"
+                type="text"
+                formControlName="company"
+                placeholder="Company name">
+            </div>
+
+            <div class="form-group">
+              <label for="subject">Subject *</label>
+              <select
+                id="subject"
+                formControlName="subject"
+                [class.error]="submitted && f['subject'].errors">
+                <option value="" disabled>Select a topic</option>
+                <option value="hiring">I want to hire talent</option>
+                <option value="job">I’m looking for a job</option>
+                <option value="partnership">Partnership inquiry</option>
+                <option value="support">Platform support</option>
+              </select>
+              <div class="error-msg" *ngIf="submitted && f['subject'].errors">
+                Please select a subject
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Message *</label>
+            <textarea
+              id="message"
+              rows="5"
+              formControlName="message"
+              [class.error]="submitted && f['message'].errors"
+              placeholder="Tell us how we can help..."></textarea>
+            <div class="error-msg" *ngIf="submitted && f['message'].errors">
+              <span *ngIf="f['message'].errors['required']">Message is required</span>
+              <span *ngIf="f['message'].errors['minlength']">Min 10 characters</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" [disabled]="success">
+            {{ success? 'Message Sent!' : 'Send Message' }}
+          </button>
+
+          <div class="success-msg" *ngIf="success">
+            Thanks! We’ll get back to you within 24 hours.
+          </div>
+          
+        </form>
+      </div>
+
+      <!-- Right: Info -->
+      <div class="contact-info">
+        <h2>Contact Information</h2>
+        <p>Reach out directly or visit our office in Gauteng.</p>
+
+        <div class="info-list">
+          <div class="info-item" *ngFor="let item of contactInfo">
+            <span class="material-icons">{{ item.icon }}</span>
+            <div>
+              <h3>{{ item.title }}</h3>
+              <p>{{ item.detail }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-placeholder">
+          <p>Google Maps Embed</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container text-center">
+      <h2>Prefer to talk to sales directly?</h2>
+      <p>Book a 15-min call with our team to discuss your hiring needs.</p>
+      <a routerLink="/book-demo" class="btn btn-secondary">Book a Demo</a>
+    </div>
+  </section>
+
+
+</main>

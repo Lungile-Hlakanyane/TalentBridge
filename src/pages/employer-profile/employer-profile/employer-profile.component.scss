@@ -14,6 +14,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 25px;
+    gap: 20px;
 
     .profile-avatar img {
       width: 80px;
@@ -21,20 +22,25 @@
       border-radius: 50%;
       object-fit: cover;
       border: 3px solid #4285f4;
+      flex-shrink: 0;
     }
 
     .profile-info {
       flex: 1;
-      margin-left: 20px;
+      margin-left: 0; // remove fixed margin for mobile
+      min-width: 0; // allow text truncate
 
       h2 {
         margin: 0;
         color: #222;
+        font-size: 1.5rem;
+        word-break: break-word;
       }
 
       .email {
         color: #777;
         font-size: 14px;
+        word-break: break-all;
       }
 
       .role {
@@ -42,9 +48,15 @@
         font-weight: 500;
         font-size: 14px;
       }
+
+      p {
+        margin: 4px 0;
+      }
     }
 
     .edit-btn-section {
+      flex-shrink: 0;
+      
       .edit-btn {
         background-color: #4285f4;
         color: #fff;
@@ -53,6 +65,7 @@
         border-radius: 8px;
         cursor: pointer;
         transition: 0.2s;
+        white-space: nowrap;
 
         &:hover {
           background-color: #357ae8;
@@ -86,34 +99,73 @@
           font-weight: 600;
           color: #555;
           font-size: 13px;
+          display: block;
         }
         p {
           margin: 4px 0 0;
           color: #333;
           font-size: 14px;
+          word-break: break-word;
+        }
+
+        &.resume-item {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+
+          .download-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            align-self: flex-start;
+
+            &:hover {
+              transform: scale(1.1);
+            }
+          }
         }
       }
     }
 
     .documents-list {
       display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
+      flex-direction: column;
+      gap: 10px;
 
       .document-card {
-        background-color: #f1f5ff;
-        border-radius: 8px;
-        padding: 10px 16px;
         display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 14px;
-        color: #333;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        justify-content: space-between;
+        padding: 12px 15px;
+        background: #f4f6f8;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 
         .doc-icon {
-          color: #4285f4;
+          margin-right: 10px;
+          color: #007bff;
           font-size: 18px;
+          flex-shrink: 0;
+        }
+
+        span {
+          flex: 1;
+          margin-right: 10px;
+          word-break: break-word;
+        }
+
+        .download-icon {
+          width: 24px;
+          height: 24px;
+          cursor: pointer;
+          transition: transform 0.2s;
+          flex-shrink: 0;
+
+          &:hover {
+            transform: scale(1.2);
+            filter: brightness(0.8);
+          }
         }
       }
     }
@@ -132,31 +184,18 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  padding: 20px; /* for spacing on small screens */
+  padding: 20px;
 
   .modal-content {
     background: #fff;
     padding: 30px 35px;
     border-radius: 16px;
     width: 500px;
-    max-height: 90vh; /* limit modal height to viewport */
-    overflow-y: auto; /* enable vertical scrolling */
+    max-width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     animation: fadeIn 0.25s ease-in-out;
-    scrollbar-width: thin;
-    scrollbar-color: #ccc transparent;
-
-    /* for WebKit browsers */
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-    &::-webkit-scrollbar-thumb {
-      background-color: #ccc;
-      border-radius: 10px;
-    }
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
 
     h2 {
       color: #222;
@@ -164,11 +203,12 @@
       border-left: 4px solid #4285f4;
       padding-left: 10px;
       position: sticky;
-      top: 0;
+      top: -30px; // account for padding
       background: #fff;
-      padding-top: 5px;
+      padding-top: 15px;
       padding-bottom: 10px;
       z-index: 5;
+      margin-top: -15px;
     }
 
     .form-group {
@@ -203,24 +243,6 @@
         resize: vertical;
         min-height: 80px;
       }
-
-      .file-status {
-        font-size: 13px;
-        color: #4285f4;
-        margin-top: 4px;
-      }
-    }
-
-    .documents-section {
-      margin-top: 25px;
-
-      h3 {
-        font-size: 16px;
-        color: #222;
-        border-left: 3px solid #4285f4;
-        padding-left: 8px;
-        margin-bottom: 10px;
-      }
     }
 
     .modal-actions {
@@ -229,17 +251,17 @@
       gap: 12px;
       margin-top: 20px;
       position: sticky;
-      bottom: 0;
+      bottom: -30px; // account for padding
       background: #fff;
-      padding-top: 10px;
-      padding-bottom: 5px;
+      padding-top: 15px;
+      padding-bottom: 0;
 
       .cancel-btn {
         background: #ccc;
         color: #222;
         border: none;
         border-radius: 8px;
-        padding: 8px 16px;
+        padding: 10px 16px;
         cursor: pointer;
         transition: 0.2s;
 
@@ -253,7 +275,7 @@
         color: #fff;
         border: none;
         border-radius: 8px;
-        padding: 8px 16px;
+        padding: 10px 16px;
         cursor: pointer;
         transition: 0.2s;
 
@@ -265,63 +287,29 @@
   }
 }
 
-
 .action-back-container {
-     margin-bottom: 20px;
-     font-family: 'Poppins', sans-serif;
-    .back-text {
-      color: #4cafef;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+  margin-bottom: 20px;
+  font-family: 'Poppins', sans-serif;
+  
+  .back-text {
+    color: #4cafef;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+    z-index: 10;
 
-      i {
-        font-size: 1rem;
-      }
+    i {
+      font-size: 1rem;
+    }
 
-      &:hover {
-        text-decoration: underline;
-      }
+    &:hover {
+      text-decoration: underline;
     }
   }
-
-  .edit-company-btn{
-     margin-bottom: 20px;
-     font-family: 'Poppins', sans-serif;
-    .back-text {
-      color: #4cafef;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-
-      i {
-        font-size: 1rem;
-      }
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-
-  .edit-company-btn {
-        background: #4285f4;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        padding: 8px 16px;
-        cursor: pointer;
-        transition: 0.2s;
-
-        &:hover {
-          background: #357ae8;
-        }
-      }
-
+}
 
 @keyframes fadeIn {
   from {
@@ -334,187 +322,106 @@
   }
 }
 
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
+/* ------------------- MOBILE RESPONSIVE ------------------- */
+@media (max-width: 768px) {
+  .employer-profile-container {
+    padding: 15px;
 
-.modal-content.company-modal {
-  background: #fff;
-  padding: 25px;
-  border-radius: 12px;
-  width: 500px;
-  max-width: 90%;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  animation: fadeIn 0.3s ease;
-}
+    .profile-header {
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      padding: 20px;
+      gap: 15px;
 
-.form-group {
-  margin-bottom: 15px;
-}
+      .profile-avatar {
+        align-self: center;
+        
+        img {
+          width: 70px;
+          height: 70px;
+        }
+      }
 
-textarea,
-input[type="text"],
-input[type="file"] {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-}
+      .profile-info {
+        width: 100%;
+        text-align: center;
+        margin-left: 0;
 
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-}
+        h2 {
+          font-size: 1.3rem;
+        }
+      }
 
-.cancel-btn {
-  background: #ccc;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.save-btn {
-  background: #007bff;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  background: rgba(0, 0, 0, 0.35);
-}
-
-.modal-backdrop.edit-modal {
-  z-index: 1001; // separate layer for edit modal
-}
-
-.modal-backdrop.company-modal {
-  z-index: 1002; // ensure it's above or distinct
-}
-
-.modal-content.company-modal {
-  background: #fff;
-  padding: 25px;
-  border-radius: 12px;
-  width: 500px;
-  max-width: 90%;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  animation: fadeIn 0.3s ease;
-}
-
-.documents-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  .document-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    background: #f4f6f8;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-
-    .doc-icon {
-      margin-right: 10px;
-      color: #007bff;
-    }
-
-    .download-icon {
-      cursor: pointer;
-      color: #28a745;
-      font-size: 1.1em;
-
-      &:hover {
-        color: #1e7e34;
+      .edit-btn-section {
+        width: 100%;
+        
+        .edit-btn {
+          width: 100%;
+          padding: 12px;
+        }
       }
     }
 
-    span {
-      flex: 1;
+    .profile-section {
+      padding: 20px;
+
+      h3 {
+        font-size: 16px;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr; // single column on mobile
+        gap: 12px;
+      }
+
+      .documents-list .document-card {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+    }
+  }
+
+  .modal-backdrop {
+    padding: 10px;
+
+    .modal-content {
+      padding: 20px;
+      width: 100%;
+
+      h2 {
+        font-size: 1.2rem;
+        top: -20px;
+        margin-top: -10px;
+      }
+
+      .modal-actions {
+        flex-direction: column;
+        bottom: -20px;
+
+        .cancel-btn,
+        .save-btn {
+          width: 100%;
+          padding: 12px;
+        }
+      }
     }
   }
 }
 
-.document-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  background-color: #fafafa;
+@media (max-width: 480px) {
+  .employer-profile-container {
+    padding: 10px;
 
-  .doc-icon {
-    margin-right: 10px;
-  }
+    .profile-header .profile-info {
+      .email, .role, p {
+        font-size: 13px;
+      }
+    }
 
-  .download-icon {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    transition: transform 0.2s;
-
-    &:hover {
-      transform: scale(1.2);
-      filter: brightness(0.8);
+    .profile-section .info-grid .info-item {
+      label { font-size: 12px; }
+      p { font-size: 13px; }
     }
   }
 }
-
-.resume-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  .download-icon {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-
-    &:hover {
-      transform: scale(1.1);
-    }
-  }
-}
-
-
-
-

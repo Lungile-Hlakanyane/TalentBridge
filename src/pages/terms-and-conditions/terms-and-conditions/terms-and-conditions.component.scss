@@ -1,0 +1,183 @@
+// 1. Theme Variables - KEEP IDENTICAL TO PRIVACY PAGE
+$primary: #2563EB;
+$primary-dark: #1D4ED8;
+$secondary: #0F172A;
+$accent: #10B981;
+$bg: #F8FAFC;
+$white: #FFFFFF;
+$border: #E2E8F0;
+$text-muted: #64748B;
+$radius: 12px;
+$container: 1200px;
+
+// 2. Base - same as About/Contact/Privacy
+.privacy-page {
+  background: $bg;
+  color: $secondary;
+  font-family: 'Inter', sans-serif;
+}
+
+.container {
+  max-width: $container;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+h1, h2, h3 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: $secondary;
+}
+
+h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+h2 { font-size: 1.5rem; margin: 2.5rem 0 1rem; }
+h3 { font-size: 1.125rem; margin-bottom: 1rem; }
+
+p, li { line-height: 1.7; color: $text-muted; }
+.text-primary { color: $primary; }
+.text-center { text-align: center; }
+
+section { padding: 5rem 0; }
+
+// 3. Hero - matches other pages
+.hero {
+  background: $white;
+  border-bottom: 1px solid $border;
+  padding: 6rem 0;
+  text-align: center;
+
+ .subheading {
+    font-size: 1.125rem;
+    max-width: 650px;
+    margin: 0 auto 1rem;
+  }
+
+ .last-updated {
+    font-size: 0.875rem;
+    color: $text-muted;
+  }
+}
+
+// 4. Policy Content Layout
+.policy-content {
+ .grid {
+    display: grid;
+    gap: 4rem;
+    align-items: start;
+    @media (min-width: 992px) { grid-template-columns: 250px 1fr; }
+  }
+}
+
+// 5. Side Nav
+.policy-nav {
+  position: sticky;
+  top: 2rem;
+  background: $white;
+  border: 1px solid $border;
+  border-radius: $radius;
+  padding: 1.5rem;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li { margin-bottom: 0.75rem; }
+
+  a {
+    color: $text-muted;
+    text-decoration: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover { color: $primary; }
+  }
+
+  @media (max-width: 991px) {
+    display: none;
+  }
+}
+
+// 6. Policy Text
+.policy-text {
+  background: $white;
+  border: 1px solid $border;
+  border-radius: $radius;
+  padding: 2.5rem;
+
+ .intro {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid $border;
+    margin-bottom: 1.5rem;
+
+    p { font-size: 1.0625rem; color: $secondary; }
+  }
+
+ .section {
+    scroll-margin-top: 2rem;
+
+    ul {
+      padding-left: 1.25rem;
+      margin: 0;
+    }
+
+    li { margin-bottom: 0.75rem; }
+  }
+
+ .notice {
+    background: rgba(37, 99, 235, 0.05);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 3rem;
+
+    p { color: $secondary; margin: 0; }
+  }
+}
+
+// 7. CTA - same as other pages
+.cta {
+  background: $secondary;
+  color: $white;
+
+  h2 { color: $white; }
+  p { color: #CBD5E1; margin-bottom: 2rem; }
+}
+
+// 8. Buttons - same as other pages
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &.btn-secondary {
+    background: $white;
+    color: $secondary;
+    &:hover { background: #F1F5F9; }
+  }
+}
+
+// 9. Responsive
+@media (max-width: 768px) {
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.375rem; }
+  section { padding: 3rem 0; }
+ .policy-text { padding: 1.5rem; }
+}
+
+// Back button fix - matches Privacy
+.back-buuton-container p {
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}

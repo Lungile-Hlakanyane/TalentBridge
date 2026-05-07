@@ -1,0 +1,24 @@
+<div class="cookie-banner" *ngIf="showBanner">
+  <div class="container">
+    <div class="cookie-content">
+      <div class="cookie-text">
+        <h3>Cookies & Privacy</h3>
+        <p>
+          We use cookies to run TalentBridge, analyze traffic, and improve your experience. 
+          By clicking “Accept All”, you consent to our use of cookies. 
+          Read our <a (click)="navigate('/privacy')" class="text-primary">Privacy Policy</a> 
+          and <a (click)="navigate('/terms-and-conditions')" class="text-primary">Terms</a>.
+        </p>
+      </div>
+      
+      <div class="cookie-actions">
+        <button class="btn btn-outline" (click)="acceptNecessary()">
+          Necessary Only
+        </button>
+        <button class="btn btn-primary" (click)="acceptAll()">
+          Accept All
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

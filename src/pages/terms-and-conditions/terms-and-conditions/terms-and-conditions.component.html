@@ -1,0 +1,66 @@
+<main class="privacy-page">
+
+  <div class="back-buuton-container" style="padding:20px;">
+    <p style="color: #1D4ED8;" (click)="goBack()"> Back</p>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>Terms & <span class="text-primary">Conditions</span></h1>
+      <p class="subheading">
+        The rules for using TalentBridge as an employer, agency partner, or job seeker.
+      </p>
+      <p class="last-updated">Last updated: {{ lastUpdated }}</p>
+    </div>
+  </section>
+
+  <!-- Content -->
+  <section class="policy-content">
+    <div class="container grid">
+      <!-- Side Nav -->
+      <aside class="policy-nav">
+        <h3>Contents</h3>
+        <ul>
+          <li *ngFor="let section of sections">
+            <a (click)="scrollTo(section.id)">{{ section.title }}</a>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Main Policy -->
+      <div class="policy-text">
+        <div class="intro">
+          <p>
+            These Terms and Conditions govern your use of TalentBridge. By accessing the platform,
+            posting jobs, or submitting candidates, you agree to be bound by these terms and our
+            Privacy Policy. TalentBridge operates under South African law.
+          </p>
+        </div>
+
+        <div class="section" *ngFor="let section of sections" [id]="section.id">
+          <h2>{{ section.title }}</h2>
+          <ul>
+            <li *ngFor="let item of section.content">{{ item }}</li>
+          </ul>
+        </div>
+
+        <div class="notice">
+          <p>
+            By using TalentBridge, you agree to these Terms. We may update them periodically.
+            Material changes to fees or liability will be emailed to active clients 30 days before taking effect.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="container text-center">
+      <h2>Questions about these terms?</h2>
+      <p>Our team will walk you through the agency agreement before you post your first role.</p>
+      <a routerLink="/contact" class="btn btn-secondary">Contact Us</a>
+    </div>
+  </section>
+</main>

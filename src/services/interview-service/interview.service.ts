@@ -9,7 +9,8 @@ import { InterviewDTO } from '../../models/InterviewDTO';
 })
 export class InterviewService {
 
-  private apiUrl = 'http://localhost:8080/api/interviews'
+  private apiUrl = 'http://localhost:8080/api/interviews';
+  private baseUrl =  'http://localhost:8080/api/applications';
 
   constructor(private http:HttpClient) { }
 
@@ -33,16 +34,49 @@ export class InterviewService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  declineCandidate(email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/applications/send-rejection-email`, email);
+
+ sendRejectionEmail(
+  candidate: any,
+  jobTitle: string,
+  companyName: string
+): Observable<any> {
+
+  return this.http.post(
+    `${this.baseUrl}/send-rejection-email`,
+    {
+      email: candidate.email,
+      candidateName: candidate.name,
+      jobTitle: jobTitle,
+      companyName: companyName
+    }
+  );
+}
+  sendBackgroundCheckEmail(candidate: any): Observable<any> {
+   return this.http.post(
+    `${this.baseUrl}/send-background-check-email`,
+    {
+      email: candidate.email,
+      name: candidate.name
+    }
+   );
   }
 
-  sendBackgroundCheckEmail(email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/applications/send-background-check-email`, email);
+sendOfferEmail(offerData: any): Observable<any> {
+  return this.http.post(
+    `${this.baseUrl}/send-offer-email`,
+    offerData,
+    {
+      responseType: 'text'
+    }
+  );
+}
+
+  getInterviewCountByUserId(userId: number): Observable<number> {
+   return this.http.get<number>(`${this.apiUrl}/count/user/${userId}`);
   }
 
-  sendOfferEmail(email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/applications/send-offer-email`, email);
+  getInterviewsByEmail(email: string): Observable<InterviewDTO[]> {
+   return this.http.get<InterviewDTO[]>(`${this.apiUrl}/email/${email}`);
   }
 
 }

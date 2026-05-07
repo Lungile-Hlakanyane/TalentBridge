@@ -14,5 +14,6 @@ export interface Job{
   status?:any;
   applications?: any;
   skills?:any;
- otherRequirements?:any;
+  otherRequirements?:any;
+  
 }

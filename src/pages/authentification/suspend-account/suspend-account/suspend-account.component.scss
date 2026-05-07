@@ -131,3 +131,34 @@
       }
     }
   }
+
+  .btn-unsuspend {
+  margin-top: 16px;
+  padding: 10px 20px;
+  background: #10b981;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &:hover:not(:disabled) {
+    background: #059669;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.status-message {
+  margin-top: 12px;
+  font-size: 14px;
+
+  &.success { color: #10b981; }
+  &.error { color: #ef4444; }
+}

@@ -108,5 +108,11 @@ suspendAccount(userId: number, days: number): Observable<string> {
   });
 }
 
+unsuspendAccount(userId: number): Observable<string> {
+  return this.http.put(`${this.apiUrl}/unsuspend/${userId}`, null, {
+    responseType: 'text'
+  });
+}
+
 
 }

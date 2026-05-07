@@ -36,6 +36,11 @@ import { SettingsComponent } from '../pages/settings/settings/settings.component
 import { SuspendAccountComponent } from '../pages/authentification/suspend-account/suspend-account/suspend-account.component';
 import { InterviewsComponent } from '../pages/interviews/interviews/interviews.component';
 import { EmployeeInterviewsComponent } from '../pages/employee-interviews/employee-interviews/employee-interviews.component';
+import { AboutComponent } from '../pages/about/about/about.component';
+import { ContactComponent } from '../pages/contact/contact/contact.component';
+import { PrivacyComponent } from '../pages/privacy/privacy/privacy.component';
+import { AdminEnquiriesComponent } from '../pages/admin-enquiries/admin-enquiries/admin-enquiries.component';
+import { TermsAndConditionsComponent } from '../pages/terms-and-conditions/terms-and-conditions/terms-and-conditions.component';
 
 export const routes: Routes = [
     {path: '', component: HomeComponent},
@@ -75,5 +80,10 @@ export const routes: Routes = [
     {path: 'suspend-account',component: SuspendAccountComponent},
     {path: 'interviews',component: InterviewsComponent},
     {path: 'employee-interviews', component: EmployeeInterviewsComponent},
+    {path: 'about', component:AboutComponent},
+    {path: 'contact',component:ContactComponent},
+    {path: 'privacy', component:PrivacyComponent},
+    {path: 'admin-enquiries', component:AdminEnquiriesComponent},
+    {path: 'terms-and-conditions', component:TermsAndConditionsComponent},
     {path: '**', redirectTo: '' },
 ];

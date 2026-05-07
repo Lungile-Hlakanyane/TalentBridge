@@ -136,7 +136,6 @@
   }
 }
 
-
 .search-container {
   display: flex;
   justify-content: center;
@@ -149,7 +148,6 @@
     font-size: 0.95rem;
     outline: none;
     transition: border 0.2s ease;
-
     &:focus {
       border-color: #4cafef;
     }

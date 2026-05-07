@@ -209,3 +209,23 @@
 .suspended {
   color: red;
 }
+
+
+.unsuspend-btn {
+  background: #10b981;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+
+  &:hover {
+    background: #059669;
+  }
+
+  i { font-size: 14px; }
+}

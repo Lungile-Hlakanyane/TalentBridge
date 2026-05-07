@@ -11,7 +11,10 @@ import { ApplicationService } from '../../../services/Application-Service/applic
 import { JobApplication } from '../../../models/JobApplication';
 import { LoadingService } from '../../../services/Loading-Service/loading.service';
 import { LoadingSpinnerComponent } from '../../../re-usable-components/loading-spinner/loading-spinner/loading-spinner.component';
-
+import { switchMap } from 'rxjs';
+import { throwError} from 'rxjs';
+import { take } from 'rxjs/operators';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-view-job',
@@ -31,13 +34,20 @@ export class ViewJobComponent implements OnInit{
   showModal: boolean = false;
   selectedFile: File | null = null;
 
+   // New flags for UI messages
+  success: boolean = false;
+  errorMsg: string = '';
+  submitBtnDisabled: boolean = false;
+  showSuccessModal: boolean = false;
+
   constructor(
    private route:ActivatedRoute,
    private router: Router,
    private jobService:JobService,
    private subscriptionService:SubscriptionService,
    private applicationService: ApplicationService,
-   private loading:LoadingService
+   private loading:LoadingService,
+   private cdr: ChangeDetectorRef,
   ){}
 
   application = {
@@ -54,52 +64,75 @@ export class ViewJobComponent implements OnInit{
     this.showModal = false;
   }
 
-   onFileSelected(event: Event) {
+  navigate(link:string){
+    this.router.navigateByUrl(link);
+  }
+
+  onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
     }
   }
 
-  submitApplication() {
+ submitApplication() {
+  this.closeModal();
+  if (this.submitBtnDisabled) return; // Prevent double submit
+
   if (!this.job) {
-    alert('Job not found.');
+    this.errorMsg = 'Job not found.';
     return;
   }
-  this.applicationService.getApplicationsForUser(this.application.email).subscribe({
-    next: (applications) => {
+  if (!this.selectedFile) {
+    this.errorMsg = 'Please upload your resume/CV.';
+    return;
+  }
+
+  this.submitBtnDisabled = true;
+  this.success = false;
+  this.errorMsg = '';
+
+  this.applicationService.getApplicationsForUser(this.application.email).pipe(
+    take(1),
+    switchMap(applications => {
       const hasApplied = applications.some((app: { jobId: number }) => app.jobId === this.job?.id);
       if (hasApplied) {
-        alert(`You have already applied for ${this.job?.title}`);
-        return;
+        return throwError(() => new Error(`You have already applied for ${this.job?.title}`));
       }
+      
       const jobApplication: JobApplication = {
         jobId: this.job?.id!,
         applicantName: this.application.name,
         applicantEmail: this.application.email,
-        coverLetter: this.application.coverLetter,
-        resumePath: this.selectedFile ? this.selectedFile.name : undefined
+        coverLetter: this.application.coverLetter
       };
-      this.loading.show();
-      this.applicationService.applyForJob(jobApplication).subscribe({
-        next: (res) => {
-          console.log('Application submitted:', res);
-          alert(`Application submitted for "${this.job?.title}" at ${this.job?.company}`);
-          this.closeModal();
-          this.application = { name: '', email: '', coverLetter: '' };
-          this.selectedFile = null;
-          this.loading.hide();
-        },
-        error: (err) => {
-          console.error('Error submitting application:', err);
-          alert('Failed to submit application. Please try again.');
-          this.loading.hide();
-        }
-      });
+      this.showSuccessModal = true;
+      return this.applicationService.applyForJob(jobApplication, this.selectedFile!).pipe(take(1));
+    })
+  ).subscribe({
+    next: (res) => {
+      console.log('Got response:', res); // Check if this logs
+      this.success = true;
+      this.submitBtnDisabled = false;
+      this.application = { name: '', email: '', coverLetter: '' };
+      this.selectedFile = null;
+      this.cdr.detectChanges(); // Force UI update
+
+      setTimeout(() => {
+        this.closeModal();
+        this.success = false;
+        this.cdr.detectChanges();
+      }, 3000);
     },
     error: (err) => {
-      console.error('Error fetching user applications:', err);
-      alert('Failed to check application status. Please try again.');
+      this.submitBtnDisabled = false;
+      if (err.message?.includes('already applied')) {
+        this.errorMsg = err.message;
+      } else {
+        this.errorMsg = 'Failed to submit application. Please try again.';
+      }
+      this.cdr.detectChanges();
+      console.error('Error:', err);
     }
   });
 }

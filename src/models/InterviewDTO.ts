@@ -10,4 +10,8 @@ export interface InterviewDTO{
   interviewee: string;
   date: string | null;
   time: string | null;
+  employerName?:any;
+  employerEmail?:any;
+  phoneNumber?:any;
+  interviewType?:any;
 }

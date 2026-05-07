@@ -28,13 +28,21 @@
         <p *ngIf="employer.suspended">{{ calculateDaysLeft(employer.suspensionExpiry) }} day{{ calculateDaysLeft(employer.suspensionExpiry) > 1 ? 's' : '' }} left for unsuspension</p>
       </div>
 
-      <!-- Actions -->
-      <div class="employer-actions">
+     <!-- Actions -->
+<div class="employer-actions">
 
-
+  <!-- Show Suspend only if NOT suspended -->
   <button class="suspend-btn"  
+          *ngIf="!employer.suspended"
           (click)="confirmAction(employer, 'suspend')">
     <i class="fas fa-ban"></i> Suspend
+  </button>
+
+  <!-- Show Unsuspend only if suspended -->
+  <button class="unsuspend-btn"  
+          *ngIf="employer.suspended"
+          (click)="confirmAction(employer, 'unsuspend')">
+    <i class="fas fa-unlock"></i> Unsuspend
   </button>
 
   <button class="delete-btn" 
@@ -48,19 +56,22 @@
 
   </section>
 
-  <!-- Confirmation Modal -->
+ <!-- Confirmation Modal -->
 <div class="modal-backdrop" *ngIf="showModal">
   <div class="modal">
     <h3>Confirm Action</h3>
     <p>Are you sure you want to 
-      <strong>{{ modalAction | titlecase }}</strong> 
+      <strong>{{ modalAction === 'unsuspend'? 'Lift Suspension For' : (modalAction | titlecase) }}</strong> 
       this employer "{{ selectedEmployer.companyName }}"?
     </p>
+
     <div class="modal-actions">
       <button class="confirm-btn" (click)="executeAction()">Yes</button>
       <button class="cancel-btn" (click)="closeModal()">No</button>
     </div>
+
   </div>
+
 </div>
 
 

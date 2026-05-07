@@ -18,8 +18,6 @@ type FileField = 'registrationDocument' | 'taxClearanceDocument' | 'leaseAgreeme
   templateUrl: './top-navbar.component.html',
   styleUrl: './top-navbar.component.scss'
 })
-
-
 export class TopNavbarComponent implements OnInit {
   @ViewChild('registrationDocumentInput') registrationDocumentInput!: ElementRef<HTMLInputElement>;
   @ViewChild('taxClearanceDocumentInput') taxClearanceDocumentInput!: ElementRef<HTMLInputElement>;
@@ -32,7 +30,11 @@ export class TopNavbarComponent implements OnInit {
   userRole: string | null = null;
   showAddCompanyModal = false;
 
-  
+    // Search state
+  searchQuery = '';
+  searchScope: 'all' | 'jobs' | 'candidates' | 'companies' = 'all';
+  exploreOpen = false;
+
   constructor(
     private location: Location,
     private router: Router,
@@ -54,6 +56,20 @@ export class TopNavbarComponent implements OnInit {
    this.companyDropdownOpen = false;
   }
 
+  onSearch(): void {
+    if (!this.searchQuery.trim()) return;
+    this.router.navigate(['/search'], {
+      queryParams: { 
+        q: this.searchQuery, 
+        scope: this.searchScope 
+      }
+    });
+    this.searchQuery = '';
+  }
+
+  toggleExplore(): void {
+    this.exploreOpen = !this.exploreOpen;
+  }
 
 openEditCompanyModal() {
   this.companyDropdownOpen = false;
@@ -150,12 +166,16 @@ openEditCompanyModal() {
     this.router.navigate([link]);
   }
 
- @HostListener('document:click', ['$event'])
+  // Update your existing HostListener to close explore too
+  @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    if (!target.closest('.profile-dropdown') && !target.closest('.company-dropdown')) {
+    if (!target.closest('.profile-dropdown') && 
+        !target.closest('.company-dropdown') && 
+        !target.closest('.explore-dropdown')) {
       this.dropdownOpen = false;
       this.companyDropdownOpen = false;
+      this.exploreOpen = false; // add this
     }
   }
 

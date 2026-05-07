@@ -4,8 +4,6 @@ import { CommonModule } from '@angular/common';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Location } from '@angular/common';
 import { FormGroup, FormsModule, FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { InterviewService } from '../../../services/interview-service/interview.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../../../services/User-Service/user.service';
@@ -13,6 +11,9 @@ import { InterviewDTO } from '../../../models/InterviewDTO';
 import { InterviewType } from '../../../enums/InterviewType';
 import { LoadingService } from '../../../services/Loading-Service/loading.service';
 import { LoadingSpinnerComponent } from '../../../re-usable-components/loading-spinner/loading-spinner/loading-spinner.component';
+import { HiredCandidateServiceService } from '../../../services/hire-candidate-service/hired-candidate-service.service';
+import { switchMap, tap, catchError } from 'rxjs';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-stages',
@@ -48,12 +49,11 @@ export class StagesComponent implements OnInit{
   applicant: any;
 
   constructor(
-    private route:ActivatedRoute,
     private location: Location,
-    private http:HttpClient,
     private interviewService:InterviewService,
     private userService:UserService,
-    private loadingService:LoadingService
+    private loadingService:LoadingService,
+    private hiredCandidateServiceService:HiredCandidateServiceService
   ) {
   }
 
@@ -72,6 +72,7 @@ export class StagesComponent implements OnInit{
     });
 
   this.applicant = history.state.applicant;
+  console.log("Applicant Object: ", this.applicant)
   if (this.applicant) {
     this.stages[0].candidates.push({
       id: this.applicant.id,
@@ -135,7 +136,7 @@ export class StagesComponent implements OnInit{
  proceedToBackgroundCheck() {
   const candidate = this.stages[1].candidates[0];
   if (confirm(`Are you sure you want to proceed with the background check for ${candidate.name}?`)) {
-    this.interviewService.sendBackgroundCheckEmail(candidate.email)
+   this.interviewService.sendBackgroundCheckEmail(candidate)
       .subscribe(response => {
         console.log(response);
       }, error => {
@@ -144,28 +145,63 @@ export class StagesComponent implements OnInit{
   }
 }
 
-declineCandidate() {
-  const candidate = this.stages[2].candidates[0];
-  if (confirm(`Are you sure you want to decline ${candidate.name}?`)) {
-    this.interviewService.declineCandidate(candidate.email)
-      .subscribe(response => {
-        console.log(response);
-      }, error => {
-        console.error('Error declining candidate:', error);
-      });
-  }
-}
+
 
 sendOffer() {
   const candidate = this.stages[3].candidates[0];
-  if (confirm(`Are you sure you want to send an offer to ${candidate.name}?`)) {
-    this.interviewService.sendOfferEmail(candidate.email)
-      .subscribe(response => {
-        console.log(response);
-      }, error => {
-        console.error('Error sending offer email:', error);
-      });
+  const employerUserId = Number(localStorage.getItem('userId'));
+  const position = this.applicant?.appliedFor || candidate.appliedFor || 'Position';
+
+  if (!candidate) {
+    alert('No candidate in Offer stage');
+    return;
   }
+  if (!confirm(`Are you sure you want to send an offer to ${candidate.name}?`)) {
+    return;
+  }
+  if (!employerUserId) {
+    alert('Employer not logged in');
+    return;
+  }
+  if (!candidate.id) {
+    alert('Candidate userId missing. Make sure candidate.id is set when adding to stages');
+    return;
+  }
+  this.loadingService.show();
+  this.interviewService.sendOfferEmail(
+    {
+     email: candidate.email,
+     candidateName: candidate.name,
+     companyName: this.companyName,
+     jobTitle: position
+    }
+   ).pipe(
+    tap(response => console.log('Offer email sent:', response)),
+    switchMap(() => {
+      return this.hiredCandidateServiceService.hireCandidate(
+        employerUserId,
+        candidate.email,
+        position
+      );
+    }),
+    catchError(err => {
+      this.loadingService.hide();
+      console.error('Error in hire process:', err);
+      alert('Failed to complete hiring: ' +
+      (err.error?.message || err.message)
+     );
+      return of(null);
+    })
+  ).subscribe({
+    next: (hireResponse) => {
+      this.loadingService.hide();
+      if (hireResponse) {
+        console.log('Candidate hired:', hireResponse);
+        alert(`Offer sent and ${candidate.name} has been marked as hired!`);
+        this.stages[3].candidates = this.stages[3].candidates.filter(c => c.id!== candidate.id);
+      }
+    }
+  });
 }
 
   onTypeChange(type: string) {
@@ -182,7 +218,6 @@ scheduleInterview() {
     console.error('Applicant email is not available');
     return;
   }
-
   const interview: InterviewDTO = {
     userId: Number(localStorage.getItem('userId')),
     type: this.interviewForm.get('type')!.value as InterviewType,
@@ -206,6 +241,19 @@ scheduleInterview() {
       alert('Error creating Interview, try again...')
       console.error('Error creating interview:', error);
     });
+}
+
+
+declineCandidate() {
+  const candidate = this.stages[2].candidates[0];
+  if (confirm(`Are you sure you want to decline ${candidate.name}?`)) {
+    this.interviewService.sendRejectionEmail(candidate, this.applicant.appliedFor, this.companyName)
+      .subscribe(response => {
+        console.log(response);
+      }, error => {
+        console.error('Error declining candidate:', error);
+      });
+  }
 }
 
 closeInterviewModal() {

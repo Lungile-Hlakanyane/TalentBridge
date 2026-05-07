@@ -12,9 +12,19 @@ export class ApplicationService {
 
   constructor(private http: HttpClient) {}
 
-  applyForJob(application: JobApplication): Observable<any> {
-    return this.http.post(`${this.apiUrl}/apply`, application);
-  }
+applyForJob(data: JobApplication, resumeFile: File): Observable<any> {
+  const formData = new FormData();
+  const { resumePath,...dtoWithoutResume } = data;
+  formData.append('data', new Blob([JSON.stringify(dtoWithoutResume)], {
+    type: 'application/json'
+  }));
+  formData.append('resume', resumeFile);
+  return this.http.post(
+    'http://localhost:8080/api/applications/apply',
+    formData,
+    { responseType: 'text' } 
+  );
+}
 
   getApplicationsForJob(jobId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/job/${jobId}`);
@@ -40,6 +50,9 @@ export class ApplicationService {
    return this.http.get<any[]>(`${this.apiUrl}`);
   }
 
-  
+
+  getUniqueApplicantCount(jobId: number): Observable<number> {
+  return this.http.get<number>(`${this.apiUrl}/job/${jobId}/applicant-count`);
+}
  
 }

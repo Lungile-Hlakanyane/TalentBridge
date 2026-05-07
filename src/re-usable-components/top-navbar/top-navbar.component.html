@@ -1,18 +1,48 @@
 <app-loading-spinner></app-loading-spinner>
 <nav class="navbar">
-  <div class="navbar-left">
-    <div class="search-section">
-      <a href="#" class="search-link">Search</a>
-      <div class="search-box">
-        <select>
-          <option value="">Select</option>
-        </select>
-      </div>
-      <button class="explore-btn">
-        Explore <span class="arrow">&#9662;</span>
-      </button>
+  <div class="logo-container">
+    <div class="logo">
+      <h1 style="font-size:18px; font-weight:bold;">Talent <span style="color:#2b90d9;">Bridge</span> </h1>
     </div>
   </div>
+
+ <div class="navbar-left">
+  <div class="search-section">
+    <!-- Global search input -->
+    <div class="search-box">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" 
+              stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <input 
+        type="text" 
+        placeholder="Search for featured jobs..."
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="onSearch()"
+        class="search-input"
+      />
+      <select [(ngModel)]="searchScope" class="search-scope">
+        <option value="all">All</option>
+        <option value="jobs">Jobs</option>
+        <option value="candidates">Candidates</option>
+        <option value="companies">Companies</option>
+      </select>
+    </div>
+
+    <!-- Explore dropdown for quick views -->
+    <div class="explore-dropdown" [class.open]="exploreOpen">
+      <button class="explore-btn" (click)="toggleExplore()">
+        Explore <span class="arrow" [class.rotated]="exploreOpen">&#9662;</span>
+      </button>
+      <div class="explore-menu" *ngIf="exploreOpen">
+        <a (click)="navigate('new-applicants')">New Applicants</a>
+        <a (click)="navigate('active-jobs')">Active Jobs</a>
+        <a (click)="navigate('interviews-today')">Interviews Today</a>
+        <a (click)="navigate('placements-month')">Placements This Month</a>
+      </div>
+    </div>
+  </div>
+</div>
 
   <div class="navbar-right">
     
@@ -28,6 +58,7 @@
 
     <ul class="nav-links" *ngIf="userRole === 'ADMIN'">
      <li><a (click)="navigate('candidate-invites')">My Invites</a></li>
+     <li><a (click)="navigate('admin-enquiries')">Enquiries</a></li>
     </ul>
 
    <ul class="nav-links" *ngIf="userRole === 'EMPLOYER'">

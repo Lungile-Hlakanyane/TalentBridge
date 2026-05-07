@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../../services/User-Service/user.service';
 import { LoadingSpinnerComponent } from '../../../../re-usable-components/loading-spinner/loading-spinner/loading-spinner.component';
 import { LoadingService } from '../../../../services/Loading-Service/loading.service';
+import { NgForm } from '@angular/forms';
+
 
 @Component({
   selector: 'app-login',
@@ -14,6 +16,9 @@ import { LoadingService } from '../../../../services/Loading-Service/loading.ser
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit{
+  @ViewChild('loginForm') loginForm!: NgForm;
+
+
   rememberMe: boolean = false;
   email: string = '';
   password: string = '';
@@ -29,6 +34,15 @@ export class LoginComponent implements OnInit{
   }
 
 login() {
+
+  if (this.loginForm.invalid) {
+    // Mark all fields as touched to show errors
+    Object.keys(this.loginForm.controls).forEach(key => {
+      this.loginForm.controls[key].markAsTouched();
+    });
+    return;
+  }
+
   this.loading.show();
   localStorage.setItem('email', this.email);
   this.userService.login(this.email, this.password).subscribe({

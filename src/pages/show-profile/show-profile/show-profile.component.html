@@ -51,7 +51,7 @@
   </div>
 
   <!-- Company Information -->
-  <div class="info-card">
+  <div class="info-card" *ngIf="userRole === 'ADMIN'">
     <h3>Company Information</h3>
 
     <div class="info-row">

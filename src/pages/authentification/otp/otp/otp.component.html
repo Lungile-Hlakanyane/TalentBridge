@@ -13,21 +13,32 @@
     </div>
 
     <form (ngSubmit)="verifyOtp()" #otpForm="ngForm">
-      <div class="otp-inputs">
-        <input
-          *ngFor="let digit of otpArray; let i = index"
-          type="text"
-          maxlength="1"
-          [(ngModel)]="otp[i]"
-          name="otp{{ i }}"
-          required
-          (input)="moveToNext($event, i)"
-          class="otp-box"
-        />
-      </div>
+  <div class="otp-inputs" [class.invalid]="showOtpError()">
+    <input
+      *ngFor="let digit of otpArray; let i = index"
+      type="text"
+      inputmode="numeric"
+      pattern="[0-9]*"
+      maxlength="1"
+      [(ngModel)]="otp[i]"
+      name="otp{{ i }}"
+      #otpField="ngModel"
+      required
+      (input)="onInput($event, i)"
+      (keydown)="onKeyDown($event, i)"
+      (paste)="onPaste($event)"
+      (blur)="markTouched()"
+      class="otp-box"
+      [class.filled]="otp[i]"
+    />
+  </div>
 
-      <button type="submit" [disabled]="!isOtpComplete()">Verify OTP</button>
-    </form>
+  <div class="error-msg" *ngIf="showOtpError()">
+    <span>Enter the complete 6-digit OTP</span>
+  </div>
+
+  <button type="submit" [disabled]="!isOtpComplete()">Verify OTP</button>
+</form>
 
     <p class="resend-text">
       Didn’t receive the code?

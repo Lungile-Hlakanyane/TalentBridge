@@ -22,7 +22,7 @@ export class EmployersComponent implements OnInit {
 
    // Modal state
   showModal = false;
-  modalAction: 'approve' | 'reject' | 'suspend' | 'delete' | null = null;
+  modalAction: 'approve' | 'reject' | 'suspend' | 'unsuspend' | 'delete' | null = null;
   selectedEmployer!: Employer;
   
   constructor(
@@ -43,7 +43,7 @@ export class EmployersComponent implements OnInit {
 
 
   // Open confirmation modal
-  confirmAction(employer: Employer, action: 'approve' | 'reject' | 'suspend' | 'delete') {
+  confirmAction(employer: Employer, action: 'approve' | 'reject' | 'suspend' | 'unsuspend' | 'delete') {
     this.selectedEmployer = employer;
     this.modalAction = action;
     this.showModal = true;
@@ -88,37 +88,57 @@ export class EmployersComponent implements OnInit {
 
    // Execute action after confirming
   executeAction() {
-  if (!this.selectedEmployer || !this.modalAction) return;
-  switch (this.modalAction) {
-    case 'approve':
-      this.updateStatus(this.selectedEmployer.id, 'approved');
-      break;
-    case 'reject':
-      this.updateStatus(this.selectedEmployer.id, 'rejected');
-      break;
-    case 'suspend':
-  this.userService.suspendAccount(this.selectedEmployer.id, 30).subscribe({
-    next: (response) => {
-      console.log(response);
-      this.updateStatus(this.selectedEmployer.id, 'suspended');
-      this.closeModal();
-    },
-    error: (err) => console.error('Failed to suspend employer:', err)
-  });
-  break;
-    case 'delete':
-      this.userService.deleteAccount(this.selectedEmployer.id).subscribe({
-        next: (response) => {
-          console.log(response);
-          this.employers = this.employers.filter(emp => emp.id !== this.selectedEmployer.id);
-          this.filteredEmployers = this.filteredEmployers.filter(emp => emp.id !== this.selectedEmployer.id);
-          this.closeModal();
-        },
-        error: (err) => console.error('Failed to delete employer:', err)
-      });
-      break;
+    if (!this.selectedEmployer || !this.modalAction) return;
+    
+    switch (this.modalAction) {
+      case 'approve':
+        this.updateStatus(this.selectedEmployer.id, 'approved');
+        this.closeModal();
+        break;
+        
+      case 'reject':
+        this.updateStatus(this.selectedEmployer.id, 'rejected');
+        this.closeModal();
+        break;
+        
+      case 'suspend':
+        this.userService.suspendAccount(this.selectedEmployer.id, 30).subscribe({
+          next: (response) => {
+            console.log(response);
+            this.updateStatus(this.selectedEmployer.id, 'suspended');
+            this.selectedEmployer.suspensionExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+            this.closeModal();
+          },
+          error: (err) => console.error('Failed to suspend employer:', err)
+        });
+        break;
+
+      case 'unsuspend':
+        this.userService.unsuspendAccount(this.selectedEmployer.id).subscribe({
+          next: (response) => {
+            console.log(response);
+            this.selectedEmployer.suspended = false;
+            this.selectedEmployer.suspensionExpiry = null;
+            this.updateStatus(this.selectedEmployer.id, 'approved');
+            this.closeModal();
+          },
+          error: (err) => console.error('Failed to unsuspend employer:', err)
+        });
+        break;
+        
+      case 'delete':
+        this.userService.deleteAccount(this.selectedEmployer.id).subscribe({
+          next: (response) => {
+            console.log(response);
+            this.employers = this.employers.filter(emp => emp.id !== this.selectedEmployer.id);
+            this.filteredEmployers = this.filteredEmployers.filter(emp => emp.id !== this.selectedEmployer.id);
+            this.closeModal();
+          },
+          error: (err) => console.error('Failed to delete employer:', err)
+        });
+        break;
+    }
   }
-}
 
   closeModal() {
     this.showModal = false;

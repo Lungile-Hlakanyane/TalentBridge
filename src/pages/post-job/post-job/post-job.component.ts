@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule, Location } from '@angular/common';
-import { Job } from '../../../models/Job';
 import { JobService } from '../../../services/Job-Service/job.service';
 import { LoadingService } from '../../../services/Loading-Service/loading.service';
 import { LoadingSpinnerComponent } from '../../../re-usable-components/loading-spinner/loading-spinner/loading-spinner.component';
@@ -16,6 +15,7 @@ import { LoadingSpinnerComponent } from '../../../re-usable-components/loading-s
   styleUrl: './post-job.component.scss'
 })
 export class PostJobComponent implements OnInit{
+  @ViewChild('jobForm') jobForm!:NgForm;
 
   job = {
   title: '',
@@ -51,20 +51,21 @@ export class PostJobComponent implements OnInit{
   }
 
   submitJob() {
-    if (!this.job.title || !this.job.company || !this.job.location) {
-      alert('Please fill in all required fields.');
+    if (this.jobForm.invalid) {
+      Object.keys(this.jobForm.controls).forEach(key => {
+        this.jobForm.controls[key].markAsTouched();
+      });
       return;
     }
-
     this.loading.show();
     this.jobService.createJob(this.job).subscribe({
       next: (response) => {
-        this.loading.hide(); 
+        this.loading.hide();
         alert('Job posted successfully!');
         this.router.navigate(['/employer-dashboard']);
       },
       error: (err) => {
-        this.loading.hide(); 
+        this.loading.hide();
         console.error('Error posting job', err);
         alert('Failed to post job. Please try again.');
       }

@@ -21,6 +21,28 @@
     }
   }
 
+  .search-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+
+    input {
+      width: 60%;
+      max-width: 500px;
+      padding: 10px 15px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+
+      &:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+      }
+    }
+  }
+
   .job-list {
     display: flex;
     flex-direction: column;
@@ -33,14 +55,17 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.05);
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
       transition: transform 0.2s ease;
+      cursor: pointer;
 
       &:hover {
         transform: translateY(-3px);
       }
 
       .job-info {
+        flex: 1;
+        
         h3 {
           margin: 0;
           font-size: 1.2rem;
@@ -65,25 +90,40 @@
           }
         }
 
-        .status {
+        .job-meta {
           margin-top: 8px;
+          font-size: 0.9rem;
+          color: #555;
+
+          p {
+            margin: 2px 0;
+          }
+
+          strong {
+            color: #222;
+          }
+        }
+
+        .status {
+          margin-top: 10px;
           font-size: 0.85rem;
           font-weight: 600;
           padding: 5px 10px;
           border-radius: 8px;
           display: inline-block;
+          text-transform: capitalize;
 
           &.approved {
-            background: #e0f7e9;
-            color: #2e7d32;
+            background: #d7f8df;
+            color: #1a7f37;
           }
           &.pending {
-            background: #fff4e5;
-            color: #ff9800;
+            background: #fff2b3;
+            color: #aa8c00;
           }
-          &.rejected {
-            background: #fdecea;
-            color: #c62828;
+          &.declined {
+            background: #fbd4d4;
+            color: #a82b2b;
           }
         }
       }
@@ -91,6 +131,7 @@
       .job-actions {
         display: flex;
         gap: 10px;
+        flex-shrink: 0;
 
         button {
           border: none;
@@ -100,6 +141,7 @@
           font-size: 0.85rem;
           font-weight: 500;
           transition: background 0.2s ease, transform 0.2s ease;
+          white-space: nowrap;
 
           i {
             margin-right: 5px;
@@ -118,16 +160,18 @@
           background: #ff9800;
           color: white;
         }
-        .edit-btn {
-          background: #2b90d9;
-          color: white;
-        }
         .delete-btn {
           background: #e53935;
           color: white;
         }
       }
     }
+  }
+
+  .loading, .error, .no-jobs {
+    text-align: center;
+    padding: 40px 20px;
+    color: #777;
   }
 
   .app-footer {
@@ -153,100 +197,98 @@
   }
 }
 
-
 .action-back-container {
-     margin-bottom: 20px;
-     font-family: 'Poppins', sans-serif;
-    .back-text {
-      color: #4cafef;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      i {
-        font-size: 1rem;
-      }
-      &:hover {
-        text-decoration: underline;
-      }
+  margin-bottom: 20px;
+  font-family: 'Poppins', sans-serif;
+  
+  .back-text {
+    color: #4cafef;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    
+    i {
+      font-size: 1rem;
     }
-  }
-
-  .job-meta {
-  margin-top: 8px;
-  font-size: 0.9rem;
-  color: #555;
-
-  p {
-    margin: 2px 0;
-  }
-
-  strong {
-    color: #222;
-  }
-}
-
-.status {
-  margin-top: 10px;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-.status.approved {
-  color: green;
-}
-
-.status.rejected {
-  color: red;
-}
-
-.status.pending {
-  color: orange;
-}
-
-
-.search-container {
-  display: flex;
-  justify-content: center;
-  margin: 20px 0;
-
-  input {
-    width: 60%;
-    max-width: 500px;
-    padding: 10px 15px;
-    border-radius: 20px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-    transition: all 0.2s ease;
-
-    &:focus {
-      border-color: #007bff;
-      outline: none;
-      box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+    &:hover {
+      text-decoration: underline;
     }
   }
 }
 
-.status {
-  font-weight: bold;
-  padding: 4px 8px;
-  border-radius: 8px;
-  text-transform: capitalize;
+/* ------------------- MOBILE RESPONSIVE ------------------- */
+@media (max-width: 768px) {
+  .manage-jobs-container {
+    padding: 15px;
+
+    .page-header {
+      margin-bottom: 20px;
+      h2 { font-size: 1.5rem; }
+      p { font-size: 0.9rem; }
+    }
+
+    .search-container {
+      margin: 15px 0;
+      input {
+        width: 100%;
+        font-size: 0.95rem;
+      }
+    }
+
+    .job-list {
+      gap: 12px;
+
+      .job-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px;
+
+        .job-info {
+          h3 { font-size: 1.1rem; }
+          .company { font-size: 0.9rem; }
+          .location { font-size: 0.85rem; }
+          .job-meta {
+            font-size: 0.85rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px 12px;
+          }
+          .status {
+            margin-top: 8px;
+            font-size: 0.8rem;
+          }
+        }
+
+        .job-actions {
+          margin-top: 15px;
+          flex-direction: column;
+          gap: 8px;
+          width: 100%;
+
+          button {
+            width: 100%;
+            padding: 10px;
+            font-size: 0.9rem;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+    }
+  }
 }
 
-.status.approved {
-  color: #1a7f37;
-  background: #d7f8df;
-}
+@media (max-width: 480px) {
+  .manage-jobs-container {
+    padding: 12px;
 
-.status.declined {
-  color: #a82b2b;
-  background: #fbd4d4;
+    .job-list .job-card {
+      .job-info .job-meta {
+        grid-template-columns: 1fr; // stack meta on very small screens
+      }
+    }
+  }
 }
-
-.status.pending {
-  color: #aa8c00;
-  background: #fff2b3;
-}
-

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../../../services/User-Service/user.service';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoadingSpinnerComponent } from '../../../../re-usable-components/loading-spinner/loading-spinner/loading-spinner.component';
 import { LoadingService } from '../../../../services/Loading-Service/loading.service';
@@ -15,6 +15,7 @@ import { Location } from '@angular/common';
   styleUrl: './forgot-password.component.scss'
 })
 export class ForgotPasswordComponent implements OnInit{
+  @ViewChild('forgotForm') forgotForm!: NgForm;
   email: string = '';
 
   constructor(
@@ -32,22 +33,27 @@ export class ForgotPasswordComponent implements OnInit{
    
   }
 
-submit() {
-  if (!this.email) return;
-  this.loading.show(); 
-  this.userService.sendForgotPasswordEmail(this.email).subscribe({
-    next: (res) => {
-      this.loading.hide();
-      console.log(res);
-      this.router.navigate(['/otp'], { state: { email: this.email } });
-    },
-    error: (err) => {
-      this.loading.hide();
-      console.error(err);
-      alert(err.error || "Something went wrong. Please try again.");
+ submit() {
+    if (this.forgotForm.invalid) {
+      Object.keys(this.forgotForm.controls).forEach(key => {
+        this.forgotForm.controls[key].markAsTouched();
+      });
+      return;
     }
-  });
-}
+    this.loading.show();
+    this.userService.sendForgotPasswordEmail(this.email).subscribe({
+      next: (res) => {
+        this.loading.hide();
+        this.router.navigate(['/otp'], { state: { email: this.email } });
+      },
+      error: (err) => {
+        this.loading.hide();
+        console.error(err);
+        alert(err.error || "Something went wrong. Please try again.");
+      }
+    });
+  }
+
 
 
   navigate(link: string) {

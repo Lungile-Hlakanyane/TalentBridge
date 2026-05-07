@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { UserService } from '../../../services/User-Service/user.service';
+import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
 
@@ -14,10 +13,9 @@ import { CommonModule } from '@angular/common';
 export class ShowProfileComponent implements OnInit{
 
   user!: any;
+  userRole:string | null = null;
 
   constructor(
-    private userServivice: UserService,
-    private route: ActivatedRoute,
     private router: Router,
     private location: Location
   ) {}
@@ -28,8 +26,12 @@ export class ShowProfileComponent implements OnInit{
 
 
   ngOnInit(): void {
+
+    // fetching user role from the local storage
+    this.userRole = localStorage.getItem('role');
+
     this.user = {
-      fullName: 'Luyanda Baartman',
+      fullName: 'Fikile Faith',
       email: 'lungilevincenthlakanyane@gmail.com',
       role: 'EMPLOYER',
       companyName: 'Vincent Technologies PTY (LTD)',

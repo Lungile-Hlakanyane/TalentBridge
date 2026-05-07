@@ -6,6 +6,9 @@ import { ChartConfiguration } from 'chart.js';
 import { UserService } from '../../../services/User-Service/user.service';
 import { JobService } from '../../../services/Job-Service/job.service';
 import { Job } from '../../../models/Job';
+import { InterviewService } from '../../../services/interview-service/interview.service';
+import { ApplicationService } from '../../../services/Application-Service/application.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-employer-analytics',
@@ -24,16 +27,19 @@ export class EmployerAnalyticsComponent implements OnInit {
     private router: Router,
     private userService: UserService,
     private jobService: JobService,
+    private interviewService:InterviewService,
+    private applicationService:ApplicationService
   ){}
 
   activeJobs: Job[] = [];
 
   insights = {
     jobsPosted: 0,
-    applications: 0,
-    interviews: 10,
+    totalApplicants: 0,
+    interviews: 0,
     jobOffers: 1,
-    rejections: 9
+    rejections: 9,
+    applications: 0
   };
 
 
@@ -44,6 +50,7 @@ export class EmployerAnalyticsComponent implements OnInit {
   ngOnInit(){
     this.loadEmployerName();
     this.loadActiveJobs();
+    this.loadInterviewCount();
   }
 
   pieChartLabels = ['Jobs', 'Applications', 'Interviews', 'Offers', 'Rejections'];
@@ -52,7 +59,7 @@ export class EmployerAnalyticsComponent implements OnInit {
   datasets: [{
     data: [
       this.insights.jobsPosted,
-      this.insights.applications,
+      this.insights.totalApplicants,
       this.insights.interviews,
       this.insights.jobOffers,
       this.insights.rejections
@@ -112,24 +119,61 @@ export class EmployerAnalyticsComponent implements OnInit {
     }
   }
 
- loadActiveJobs() {
+//  loadActiveJobs() {
+//   const userId = localStorage.getItem('userId');
+//   if (userId) {
+//     this.jobService.getJobsByUserId(Number(userId)).subscribe({
+//       next: (jobs) => {
+//         this.activeJobs = jobs.sort(
+//           (a, b) => new Date(b.created ?? 0).getTime() - new Date(a.created ?? 0).getTime()
+//         );
+//         this.insights.jobsPosted = this.activeJobs.length;
+//         this.insights.totalApplicants = this.activeJobs.reduce(
+//           (sum, job) => sum + (job.applications || 0),
+//           0
+//         );
+//         this.updateChartData();
+//       },
+//       error: (err) => {
+//         console.error('Error fetching jobs:', err);
+//       }
+//     });
+//   } else {
+//     console.warn('No userId found in localStorage');
+//   }
+// }
+
+loadActiveJobs() {
   const userId = localStorage.getItem('userId');
   if (userId) {
     this.jobService.getJobsByUserId(Number(userId)).subscribe({
       next: (jobs) => {
+        if (!jobs || jobs.length === 0) {
+          this.activeJobs = [];
+          return;
+        }
+        // Sort jobs (latest first)
         this.activeJobs = jobs.sort(
           (a, b) => new Date(b.created ?? 0).getTime() - new Date(a.created ?? 0).getTime()
         );
         this.insights.jobsPosted = this.activeJobs.length;
-        this.insights.applications = this.activeJobs.reduce(
-          (sum, job) => sum + (job.applications || 0),
-          0
-        );
-        this.updateChartData();
+        const applicationRequests = this.activeJobs.map((job) => this.applicationService.getApplicationsForJob(job.id));
+        forkJoin(applicationRequests).subscribe({
+          next: (results) => {
+            this.insights.totalApplicants = 0;
+            results.forEach((applications, index) => {
+              const job = this.activeJobs[index];
+              const count = applications ? applications.length : 0;
+              (job as any).applicants = count;
+              this.insights.totalApplicants += count;
+            });
+            this.insights.applications = this.insights.totalApplicants; // Update applications
+            this.updateChartData();
+          },
+          error: (err) => console.error('Error fetching application counts:', err)
+        });
       },
-      error: (err) => {
-        console.error('Error fetching jobs:', err);
-      }
+      error: (err) => console.error('Error fetching jobs:', err)
     });
   } else {
     console.warn('No userId found in localStorage');
@@ -140,7 +184,7 @@ export class EmployerAnalyticsComponent implements OnInit {
 updateChartData() {
   this.pieChartData.datasets[0].data = [
     this.insights.jobsPosted,
-    this.insights.applications,
+    this.insights.totalApplicants,
     this.insights.interviews,
     this.insights.jobOffers,
     this.insights.rejections
@@ -151,11 +195,29 @@ updateChartData() {
 updateStats() {
   this.stats = [
     { label: 'Jobs Posted', value: this.insights.jobsPosted },
-    { label: 'Applications', value: this.insights.applications },
+    { label: 'Applications', value: this.insights.totalApplicants }, // Update this line
     { label: 'Interviews', value: this.insights.interviews },
     { label: 'Job Offers', value: this.insights.jobOffers },
     { label: 'Rejections', value: this.insights.rejections }
   ];
 }
+
+loadInterviewCount() {
+  const userId = Number(localStorage.getItem('userId'));
+  if (userId) {
+    this.interviewService.getInterviewCountByUserId(userId)
+      .subscribe((count: any) => {
+        this.insights.interviews = count;
+        this.updateChartData(); // Add this line
+      }, (error:any) => {
+        console.error('Error fetching interview count:', error);
+      });
+  } else {
+    console.warn('No userId found in localStorage');
+  }
+}
+
+
+
 
 }

@@ -13,34 +13,48 @@
     </div>
 
     <form (ngSubmit)="login()" #loginForm="ngForm">
-      <div class="input-group">
-        <input 
-          type="email" 
-          id="email" 
-          name="email" 
-          [(ngModel)]="email" 
-          required 
-          placeholder="Email address" 
-        />
-      </div>
+  <div class="input-group">
+    <input
+      type="email"
+      id="email"
+      name="email"
+      [(ngModel)]="email"
+      required
+      email
+      #emailField="ngModel"
+      placeholder="Email address"
+      [class.invalid]="emailField.invalid && emailField.touched"
+    />
+    <div class="error-msg" *ngIf="emailField.invalid && emailField.touched">
+      <span *ngIf="emailField.errors?.['required']">Email is required</span>
+      <span *ngIf="emailField.errors?.['email']">Enter a valid email</span>
+    </div>
+  </div>
 
-      <div class="input-group">
-        <input 
-          type="password" 
-          id="password" 
-          name="password" 
-          [(ngModel)]="password" 
-          required 
-          placeholder="Password" 
-        />
-      </div>
+  <div class="input-group">
+    <input
+      type="password"
+      id="password"
+      name="password"
+      [(ngModel)]="password"
+      required
+      minlength="6"
+      #passwordField="ngModel"
+      placeholder="Password"
+      [class.invalid]="passwordField.invalid && passwordField.touched"
+    />
+    <div class="error-msg" *ngIf="passwordField.invalid && passwordField.touched">
+      <span *ngIf="passwordField.errors?.['required']">Password is required</span>
+      <span *ngIf="passwordField.errors?.['minlength']">Password must be at least 6 characters</span>
+    </div>
+  </div>
 
-      <div class="options">
-        <a (click)="navigate('/forgot-password')" >Forgot Password?</a>
-      </div>
+  <div class="options">
+    <a (click)="navigate('/forgot-password')">Forgot Password?</a>
+  </div>
 
-      <button type="submit" [disabled]="!loginForm.form.valid">Sign In</button>
-    </form>
+  <button type="submit" [disabled]="loginForm.invalid">Sign In</button>
+</form>
 
     <p class="signup-text">
       Don’t have an account? <a (click)="navigate('/create-profile')">Sign Up</a>

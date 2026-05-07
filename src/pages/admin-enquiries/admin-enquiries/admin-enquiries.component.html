@@ -1,0 +1,146 @@
+<app-loading-spinner></app-loading-spinner>
+<main class="enquiries-page">
+
+  <div class="back-button-container" style="padding:20px">
+    <p style="color:#1D4ED8;" (click)="goBack()"> Back</p>
+  </div>
+  
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>Contact <span class="text-primary">Enquiries</span></h1>
+      <p class="subheading">
+        View and manage messages submitted through the TalentBridge contact form.
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="enquiries-section">
+    <div class="container">
+      <!-- Filters -->
+      <div class="toolbar">
+        <div class="search-box">
+          <input 
+            type="text" 
+            placeholder="Search by name, email, or company..."
+            [(ngModel)]="searchTerm"
+            (input)="applyFilters()">
+        </div>
+        
+        <div class="filters">
+        <select [(ngModel)]="statusFilter" (change)="loadEnquiries()">
+         <option value="all">All Status</option>
+         <option value="NEW">New</option>
+         <option value="IN_PROGRESS">In Progress</option>
+         <option value="RESOLVED">Resolved</option>
+        </select>
+        </div>
+
+      </div>
+
+      <div class="grid">
+        <!-- Enquiries List -->
+        <div class="enquiries-list">
+          <div class="list-header">
+            <span>{{ filteredEnquiries.length }} Enquiries</span>
+          </div>
+
+          <div class="empty-state" *ngIf="filteredEnquiries.length === 0">
+            <span class="material-icons">inbox</span>
+            <p>No enquiries found</p>
+          </div>
+
+          <div 
+            class="enquiry-card" 
+            *ngFor="let enquiry of filteredEnquiries"
+            [class.active]="selectedEnquiry?.id === enquiry.id"
+            (click)="selectEnquiry(enquiry)">
+            <div class="card-header">
+              <h3>{{ enquiry.name }}</h3>
+              <span class="badge" [ngClass]="getStatusClass(enquiry.status)">
+                {{ enquiry.status | titlecase }}
+              </span>
+            </div>
+            <p class="meta">{{ enquiry.email }} • {{ enquiry.company || 'No company' }}</p>
+            <p class="subject">{{ subjectLabels[enquiry.subject] }}</p>
+            <p class="date">{{ enquiry.createdAt | date:'MMM d, y h:mm a' }}</p>
+          </div>
+        </div>
+
+        <!-- Details Panel -->
+        <div class="details-panel" [class.open]="selectedEnquiry">
+          <div *ngIf="!selectedEnquiry" class="details-placeholder">
+            <span class="material-icons">mail_outline</span>
+            <p>Select an enquiry to view details</p>
+          </div>
+
+          <div *ngIf="selectedEnquiry" class="details-content">
+            <div class="details-header">
+              <h2>{{ selectedEnquiry.name }}</h2>
+              <button class="close-btn" (click)="closeDetails()">
+                <span class="material-icons">close</span>
+              </button>
+            </div>
+
+            <div class="detail-group">
+              <label>Email</label>
+              <p><a [href]="'mailto:' + selectedEnquiry.email">{{ selectedEnquiry.email }}</a></p>
+            </div>
+
+            <div class="detail-group" *ngIf="selectedEnquiry.company">
+              <label>Company</label>
+              <p>{{ selectedEnquiry.company }}</p>
+            </div>
+
+            <div class="detail-group">
+              <label>Subject</label>
+              <p>{{ subjectLabels[selectedEnquiry.subject] }}</p>
+            </div>
+
+            <div class="detail-group">
+              <label>Submitted</label>
+              <p>{{ selectedEnquiry.createdAt | date:'full' }}</p>
+            </div>
+
+            <div class="detail-group">
+              <label>Message</label>
+              <div class="message-box">{{ selectedEnquiry.message }}</div>
+            </div>
+
+            <div class="detail-actions">
+              <label>Update Status</label>
+              <!-- Status buttons - use backend enum values -->
+<div class="status-buttons">
+  <button
+    class="btn-status"
+    [class.active]="selectedEnquiry.status === 'NEW'"
+    (click)="updateStatus(selectedEnquiry, 'NEW')">
+    New
+  </button>
+  <button
+    class="btn-status"
+    [class.active]="selectedEnquiry.status === 'IN_PROGRESS'"
+    (click)="updateStatus(selectedEnquiry, 'IN_PROGRESS')">
+    In Progress
+  </button>
+  <button
+    class="btn-status"
+    [class.active]="selectedEnquiry.status === 'RESOLVED'"
+    (click)="updateStatus(selectedEnquiry, 'RESOLVED')">
+    Resolved
+  </button>
+</div>
+            </div>
+
+            <div class="detail-actions">
+              <a [href]="'mailto:' + selectedEnquiry.email" class="btn btn-primary">
+                Reply via Email
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
