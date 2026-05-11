@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { InterviewDTO } from '../../models/InterviewDTO';
+import { environment } from '../../environment/environment';
 
 
 @Injectable({
@@ -9,8 +10,8 @@ import { InterviewDTO } from '../../models/InterviewDTO';
 })
 export class InterviewService {
 
-  private apiUrl = 'http://localhost:8080/api/interviews';
-  private baseUrl =  'http://localhost:8080/api/applications';
+  private apiUrl = `${environment.apiUrl}/api/interviews`;
+  private baseUrl = `${environment.apiUrl}/api/applications`;
 
   constructor(private http:HttpClient) { }
 

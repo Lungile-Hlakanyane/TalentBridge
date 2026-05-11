@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
 
-   private baseUrl = 'http://localhost:8080/uploads';
+   private baseUrl = `${environment.apiUrl}/uploads`;
+   
+  //  private baseUrl = 'http://http://10.28.168.224:80800/uploads';
 
   constructor(private http: HttpClient) { }
 

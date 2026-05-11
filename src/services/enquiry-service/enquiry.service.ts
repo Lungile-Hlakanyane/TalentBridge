@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { EnquiryRequest } from '../../models/EnquiryRequest';
 import { Observable } from 'rxjs';
 import { Enquiry } from '../../models/Enquiry';
+import { environment } from '../../environment/environment';
 
 
 @Injectable({
@@ -10,7 +11,7 @@ import { Enquiry } from '../../models/Enquiry';
 })
 export class EnquiryService {
 
-  private apiUrl = 'http://localhost:8080/api/enquiries';
+  private apiUrl = `${environment.apiUrl}/api/enquiries`;
 
   constructor(private http:HttpClient) { }
 

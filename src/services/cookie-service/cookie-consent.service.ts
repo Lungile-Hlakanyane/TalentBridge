@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environment/environment';
 type ConsentValue = 'all' | 'necessary'; 
 type ConsentType = ConsentValue | null;  
 
@@ -22,7 +23,7 @@ export class CookieConsentService {
 
    setConsent(type: ConsentValue): void { 
     localStorage.setItem(this.CONSENT_KEY, type);
-    this.http.post('http://localhost:8080/api/consent/cookies', { 
+    this.http.post(`${environment.apiUrl}/api/consent/cookies`, { 
       consent: type, 
       timestamp: new Date().toISOString() 
     }).subscribe();

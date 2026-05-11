@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JobApplication } from '../../models/JobApplication';
+import { environment } from '../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApplicationService {
 
-  private apiUrl = 'http://localhost:8080/api/applications';
+  private apiUrl = `${environment.apiUrl}/api/applications`;
 
   constructor(private http: HttpClient) {}
 
@@ -20,7 +21,7 @@ applyForJob(data: JobApplication, resumeFile: File): Observable<any> {
   }));
   formData.append('resume', resumeFile);
   return this.http.post(
-    'http://localhost:8080/api/applications/apply',
+    'http://http://10.28.168.224:8080/api/applications/apply',
     formData,
     { responseType: 'text' } 
   );
@@ -35,7 +36,7 @@ applyForJob(data: JobApplication, resumeFile: File): Observable<any> {
   }
 
   getJobDetails(jobId: number): Observable<any> {
-    return this.http.get(`http://localhost:8080/api/jobs/${jobId}`);
+    return this.http.get(`http://http://10.28.168.224:8080/api/jobs/${jobId}`);
   }
 
   getApplicationCount(): Observable<number> {

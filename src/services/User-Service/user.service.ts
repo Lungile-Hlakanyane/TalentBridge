@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { LoginResponse } from '../../models/LoginResponse';
+import { environment } from '../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private apiUrl = 'http://localhost:8080/api/users';
+  private apiUrl = `${environment.apiUrl}/api/users`;
 
   constructor(private http: HttpClient) {}
 
@@ -60,7 +61,7 @@ getAllEmployees(): Observable<any> {
 }
 
 downloadResume(userId: number): Observable<Blob> {
-  return this.http.get(`http://localhost:8080/api/users/download-resume/${userId}`, {
+  return this.http.get(`${environment.apiUrl}/api/users/download-resume/${userId}`, {
     responseType: 'blob'
   });
 }

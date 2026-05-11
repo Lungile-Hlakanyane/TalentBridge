@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ChatMessage } from '../../models/ChatMessage';
+import { environment } from '../../environment/environment';
 
 
 @Injectable({
@@ -9,7 +10,7 @@ import { ChatMessage } from '../../models/ChatMessage';
 })
 export class ChatService {
 
-  private baseUrl = 'http://localhost:8080/api/chat';
+  private baseUrl = `${environment.apiUrl}/api/chat`;
 
   constructor(private http: HttpClient) {}
 
